@@ -9,6 +9,6 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: 빌드 및 테스트
         run: ./scripts/build.sh
