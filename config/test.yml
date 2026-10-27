@@ -1,0 +1,5 @@
+log:
+  level: error
+
+database:
+  name: my_project_test

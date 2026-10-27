@@ -1,0 +1,28 @@
+name: 버그 신고
+description: 동작 오류를 알려 주세요
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: 현상
+      description: 어떤 문제가 발생했나요?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 방법
+      placeholder: |
+        1. ...
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대한 동작
+  - type: input
+    id: version
+    attributes:
+      label: 버전 / 환경

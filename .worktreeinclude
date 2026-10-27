@@ -1,0 +1,5 @@
+# Codex가 관리하는 로컬 worktree를 만들 때 복사할 Git 제외 파일의 견본입니다.
+# 아래 항목은 실제 프로젝트에서 .gitignore 등에 등록해 Git이 무시할 때만 복사됩니다.
+# 직접 실행하는 git worktree 명령에는 적용되지 않습니다.
+.env
+.env.local

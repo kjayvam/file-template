@@ -1,0 +1,12 @@
+app:
+  name: my-project
+  port: 3000
+
+log:
+  level: info
+
+database:
+  host: localhost
+  port: 5432
+  name: my_project
+  # user, password는 환경 변수로 주입합니다 (DATABASE_USER, DATABASE_PASSWORD)

@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  # 언어와 패키지 매니저를 정한 뒤 해당 설정을 추가하세요 (npm, pip, gomod 등).
+  # npm 예시: 루트에 package.json을 추가한 뒤 아래 주석을 해제하세요.
+  # - package-ecosystem: "npm"
+  #   directory: "/"
+  #   schedule:
+  #     interval: "weekly"
