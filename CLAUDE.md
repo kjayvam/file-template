@@ -9,6 +9,7 @@
 - `config/`: 환경별 설정 YAML (비밀 값 없음). 이를 읽는 코드는 `src/config/`
 - `migrations/`: DB 마이그레이션 SQL (`NNNN_설명.up.sql` / `NNNN_설명.down.sql`)
 - `docker/`: Dockerfile, docker-compose
+- `external/`: GitHub 저장소와 기타 외부 자료 목록 (`external/README.md`)
 - `docs/`, `scripts/`, `examples/`, `.github/`
 
 ## 명령어
@@ -24,6 +25,7 @@
 - 이미 적용된 마이그레이션 파일은 수정하지 않고, 새 번호의 up/down 파일 쌍을 추가합니다.
 - 커밋 메시지는 `type: 요약` 형식입니다. (`feat:`, `fix:` 등, CONTRIBUTING.md 참고)
 - 새 폴더나 명령어를 추가하면 README.md의 폴더 표도 함께 갱신합니다.
+- GitHub 저장소와 기타 외부 자료의 링크·설명은 `external/`에 기록합니다. 항목마다 이름, URL, 용도를 적습니다.
 
 ## 서브에이전트 (`.claude/agents/`)
 
