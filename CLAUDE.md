@@ -10,7 +10,8 @@
 - `migrations/`: DB 마이그레이션 SQL (`NNNN_설명.up.sql` / `NNNN_설명.down.sql`)
 - `docker/`: Dockerfile, docker-compose
 - `external/`: GitHub 저장소와 기타 외부 자료 목록 (`external/README.md`)
-- `docs/`, `scripts/`, `examples/`, `.github/`
+- `docs/`: 프로젝트 문서 (아키텍처, API 가이드, 개발 가이드 등)
+- `scripts/`, `examples/`, `.github/`
 
 ## 명령어
 
