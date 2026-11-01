@@ -1,6 +1,6 @@
 # my-project
 
-Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드, PostgreSQL 기반의 풀스택 템플릿입니다. 초기 상태에서 어디서든 활용 가능한 뼈대로 구성되어 있습니다.
+Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스택 템플릿입니다. DB(SQLite, PostgreSQL 등)는 프로젝트 상황에 맞게 자유롭게 선택할 수 있으며, 초기 상태에서 어디서든 활용 가능한 뼈대로 구성되어 있습니다.
 
 ## 폴더 구조
 

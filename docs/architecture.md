@@ -2,7 +2,7 @@
 
 ## 1. 시스템 개요
 
-본 프로젝트는 고성능 안정성을 보장하는 **Rust 백엔드 API**와 반응형 사용자 인터페이스를 제공하는 **React (TypeScript) 프론트엔드**, 그리고 **PostgreSQL** 데이터베이스로 구성된 풀스택 템플릿 아키텍처입니다.
+본 프로젝트는 고성능 안정성을 보장하는 **Rust 백엔드 API**와 반응형 사용자 인터페이스를 제공하는 **React (TypeScript) 프론트엔드**, 그리고 상황에 맞게 유연하게 선택할 수 있는 **데이터베이스 계층(SQLite, PostgreSQL, MySQL 등)**으로 구성된 풀스택 템플릿 아키텍처입니다.
 
 ```mermaid
 flowchart TD
@@ -20,7 +20,7 @@ flowchart TD
         end
 
         subgraph DataLayer["영속성 / 데이터베이스"]
-            Database[("PostgreSQL 16")<br/>Port: 5432]
+            Database[("Database Layer<br/>• 임베디드: SQLite (단독 볼륨 파일)<br/>• 서버형: PostgreSQL / MySQL")]
         end
 
         subgraph AgentLayer["에이전트 인프라"]
@@ -30,7 +30,7 @@ flowchart TD
 
     Browser -->|HTTP/HTTPS| Frontend
     Frontend -->|/api/* 리버스 프록시| Backend
-    Backend -->|SQL / Connection Pool| Database
+    Backend -->|SQL 질의 / 커넥션| Database
     MCPRunner -.->|내부 진단 및 쿼리| Backend & Database
 ```
 
@@ -41,8 +41,8 @@ flowchart TD
 | 모듈 | 디렉터리 경로 | 기술 스택 | 주요 역할 |
 |---|---|---|---|
 | **Frontend** | [`frontend/`](../../frontend) | React, TypeScript, Vite, Tailwind/CSS | 클라이언트 UI, 사용자 인터랙션, 상태 관리 |
-| **Backend** | [`backend/`](../../backend) | Rust, Axum, Tokio, SQLx/Serde | 비즈니스 로직 처리, RESTful API 제공, DB 연결 풀 관리 |
-| **Database** | [`migrations/`](../../migrations) | PostgreSQL 16 | 정규화된 데이터 저장, 마이그레이션 관리 |
+| **Backend** | [`backend/`](../../backend) | Rust, Axum, Tokio, SQLx/Serde | 비즈니스 로직 처리, RESTful API 제공, DB 연동 |
+| **Database** | [`migrations/`](../../migrations) | 선택적 SQL DB (SQLite, PostgreSQL 등) | 영속 데이터 저장, 스키마 마이그레이션 관리 |
 | **Docker** | [`docker/`](../../docker) | Docker, Docker Compose, Nginx | 컨테이너화, 멀티스테이지 빌드 파이프라인, MCP 연계 |
 | **에이전트 연동** | [`docker/mcp/`](../../docker/mcp) | MCP (Model Context Protocol) | 격리된 컨테이너 환경 내 에이전트 도구 제공 |
 
@@ -55,7 +55,7 @@ flowchart TD
 2. **API 호출**:
    * 브라우저의 `/api/*` 요청은 프론트엔드 Nginx를 통해 백엔드 컨테이너(`backend:8080`)로 프록시되어 CORS 제약 없이 안전하게 전달됩니다.
 3. **비즈니스 로직 및 DB 연동**:
-   * Rust 백엔드는 요청을 역직렬화하고, 비즈니스 규칙을 수행한 뒤 PostgreSQL 커넥션 풀을 통해 트랜잭션을 처리합니다.
+   * Rust 백엔드는 요청을 역직렬화하고, 비즈니스 규칙을 수행한 뒤 선택한 데이터베이스(임베디드 SQLite 파일 또는 서버형 DB)와 통신하여 트랜잭션을 처리합니다.
 4. **결과 반환**:
    * 표준 JSON 규격([API 설계 가이드](api/overview.md) 참조)에 맞춰 클라이언트로 응답을 전송합니다.
 

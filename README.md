@@ -1,6 +1,6 @@
 # file-template
 
-Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드, PostgreSQL 기반의 풀스택 파일 구조 템플릿입니다. 초기 상태에서 어디서든 복제하여 사용할 수 있도록 설계되었습니다.
+Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스택 파일 구조 템플릿입니다. 데이터베이스(SQLite, PostgreSQL 등)는 상황에 따라 유연하게 선택하여 사용할 수 있도록 엔진 중립적으로 설계되었습니다.
 
 ## 폴더 구조
 

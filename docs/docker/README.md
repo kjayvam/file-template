@@ -1,6 +1,6 @@
 # Docker 활용 가이드
 
-이 문서는 본 템플릿(Rust + TypeScript/React + PostgreSQL)을 다양한 환경에서 컨테이너 기반으로 개발·빌드·배포하고, 필요에 따라 `도커 공유 템플릿`과 연계하는 방식을 안내합니다.
+이 문서는 본 템플릿(Rust + TypeScript/React + 유연한 데이터베이스 계층)을 다양한 환경에서 컨테이너 기반으로 개발·빌드·배포하고, 필요에 따라 `도커 공유 템플릿`과 연계하는 방식을 안내합니다.
 
 본 템플릿은 **초기 상태로 어디서든 바로 사용할 수 있는 뼈대**로 설계되었으며, 특정 호스트 환경이나 공유 볼륨을 강제하지 않습니다.
 
@@ -39,13 +39,13 @@ flowchart LR
     subgraph DockerNetwork["Compose Network (app-network)"]
         Frontend["Frontend (React + TS)<br/>• Dev: Vite (:5173)<br/>• Prod: Nginx (:80)"]
         Backend["Backend (Rust API)<br/>• Port: :8080<br/>• Axum / Tokio"]
-        Database[("PostgreSQL 16<br/>• Port: :5432")]
+        Database[("Database<br/>• SQLite: 로컬 파일/볼륨<br/>• 또는 PostgreSQL/MySQL")]
         MCPAgent["Agent / MCP Runner<br/>(docker/mcp)"]
     end
 
     Client -->|웹 접속 및 정적 에셋| Frontend
     Frontend -->|/api/* 리버스 프록시| Backend
-    Backend -->|SQL 질의| Database
+    Backend -->|SQL 질의 / I/O| Database
     MCPAgent -.->|격리 환경 내 진단/테스트| Backend
     MCPAgent -.->|DB 상태 조회| Database
 ```
@@ -58,7 +58,7 @@ flowchart LR
 
 | 볼륨 용도 | 단독 실행 기본 이름 | 공유 템플릿 연계 시 권장 이름 | 특성 |
 |---|---|---|---|
-| **PostgreSQL 데이터** | `db-data` | `p_db_data_<프로젝트명>` | 프로젝트 영속 데이터 |
+| **데이터베이스 데이터** (SQLite 파일 또는 DB 컨테이너) | `db-data` | `p_db_data_<프로젝트명>` | 프로젝트 영속 데이터 |
 | **Rust Crate/빌드 캐시** | `cargo-cache` | `sync_cargo_cache` | 호스트 단위 공유 시 빌드 속도 대폭 향상 |
 | **프론트엔드 캐시** | `node-cache` | `p_node_cache_<프로젝트명>` | 프로젝트별 의존성 격리 |
 | **에이전트 인증** | (해당 없음) | `sync_agent_auth` | 호스트 공용 에이전트 로그인 재사용 |

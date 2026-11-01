@@ -1,37 +1,56 @@
 # 데이터베이스 가이드
 
-## 개요
+## 1. 개요
 
-프로젝트의 데이터베이스 설계 원칙, 명명 규칙, 그리고 마이그레이션 관리 지침을 정의합니다.
+본 프로젝트는 상황에 따라 데이터베이스 엔진(SQLite, PostgreSQL, MySQL 등)을 유연하게 선택할 수 있도록 설계되었습니다. 이 문서는 엔진 선택 기준, 공통 설계 원칙, 명명 규칙 및 마이그레이션 관리 지침을 정의합니다.
 
-## 기본 명명 규칙
+---
+
+## 2. 데이터베이스 엔진 선택 기준
+
+본 템플릿은 특정 DB를 강제하지 않으며, 프로젝트 요구사항과 규모에 따라 적합한 엔진을 선택합니다.
+
+| 분류 | 엔진 예시 | 적합한 상황 / 특징 |
+|---|---|---|
+| **임베디드 파일 DB** | **SQLite** | • 별도의 DB 컨테이너/서버가 필요 없는 단독 경량 애플리케이션<br/>• 로컬 도구, 프로토타입, 단일 인스턴스 서비스<br/>• 파일(`app.db`) 또는 Docker 볼륨 마운트만으로 즉시 구동 |
+| **클라이언트/서버형 DB** | **PostgreSQL, MySQL** | • 대규모 동시성 트랜잭션, 복잡한 인덱싱 및 확장이 필요한 서비스<br/>• 다중 백엔드 인스턴스 클러스터링<br/>• Docker Compose의 `db` 서비스 활성화로 연동 |
+
+---
+
+## 3. 기본 명명 규칙
 
 | 대상 | 표기법 | 예시 | 비고 |
 | --- | --- | --- | --- |
 | **테이블 (Tables)** | `snake_case` (복수형) | `users`, `order_items` | 단수형 지양 |
 | **컬럼 (Columns)** | `snake_case` | `email`, `created_at` | 약어 지양 |
-| **기본키 (Primary Key)** | `id` | `id` | UUID 또는 BIGINT/IDENTITY |
+| **기본키 (Primary Key)** | `id` | `id` | 정수형 AUTOINCREMENT/IDENTITY 또는 UUID |
 | **외래키 (Foreign Key)** | `{참조테이블_단수}_id` | `user_id`, `order_id` | 참조 대상 명시 |
 | **인덱스 (Index)** | `idx_{테이블}_{컬럼}` | `idx_users_email` | 복합 인덱스는 순서대로 나열 |
 | **유니크 인덱스 (Unique)** | `uq_{테이블}_{컬럼}` | `uq_users_email` | 유니크 제약 조건 |
 
-## 필수 공통 컬럼
+---
+
+## 4. 필수 공통 컬럼
 
 모든 엔티티 테이블에는 다음 메타데이터 컬럼을 포함하는 것을 권장합니다:
 
-- `created_at`: 레코드 생성 시각 (`TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP`)
-- `updated_at`: 레코드 최종 수정 시각 (`TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP`)
+- `created_at`: 레코드 생성 시각 (ANSI SQL: `TIMESTAMP DEFAULT CURRENT_TIMESTAMP` 또는 엔진별 타임존 함수)
+- `updated_at`: 레코드 최종 수정 시각
 - `deleted_at`: 논리 삭제(Soft Delete) 적용 시 사용 (선택 사항)
 
-## 마이그레이션 규칙 (`migrations/`)
+---
+
+## 5. 마이그레이션 규칙 (`migrations/`)
 
 1. **파일 쌍 구성**: 새 마이그레이션은 항상 `NNNN_설명.up.sql`과 `NNNN_설명.down.sql` 쌍으로 생성합니다.
    - 예: `0001_create_users.up.sql`, `0001_create_users.down.sql`
-2. **불변성**: 이미 적용되었거나 main 브랜치에 병합된 마이그레이션 파일은 절대 수정하지 않습니다. 수정이 필요할 경우 새 번호의 마이그레이션을 추가합니다.
-3. **완전한 롤백 보장**: `down.sql`은 `up.sql`의 변경 사항을 완벽히 되돌릴 수 있어야 합니다.
-4. **트랜잭션 안전성**: 데이터가 많은 테이블에 `ALTER TABLE`이나 인덱스 생성을 진행할 때는 락(Lock) 경합을 최소화하는 쿼리를 작성합니다.
+2. **선택한 DB 문법 준수**: 마이그레이션 SQL은 프로젝트에서 채택한 데이터베이스(SQLite, PostgreSQL 등)의 표준 문법에 맞게 작성합니다.
+3. **불변성**: 이미 적용되었거나 main 브랜치에 병합된 마이그레이션 파일은 절대 수정하지 않습니다. 수정이 필요할 경우 새 번호의 마이그레이션을 추가합니다.
+4. **완전한 롤백 보장**: `down.sql`은 `up.sql`의 변경 사항을 완벽히 되돌릴 수 있어야 합니다.
 
-## 성능 및 인덱스 가이드
+---
+
+## 6. 성능 및 인덱스 가이드
 
 - `WHERE`, `JOIN`, `ORDER BY` 절에 자주 사용되는 컬럼은 인덱스 지정을 고려합니다.
 - 과도한 인덱스는 `INSERT`/`UPDATE` 성능을 저하시키므로 실제 쿼리 패턴과 실행 계획(`EXPLAIN`)을 기반으로 추가합니다.

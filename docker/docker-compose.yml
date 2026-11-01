@@ -5,13 +5,13 @@ services:
       dockerfile: Dockerfile
     env_file: ../.env
     environment:
-      DATABASE_HOST: db
       PORT: 8080
+      DATABASE_URL: ${DATABASE_URL:-sqlite:///app/data/app.db}
     ports:
       - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
+    volumes:
+      # SQLite 사용 시 파일 저장 및 앱 데이터 보존 볼륨
+      - db-data:/app/data
 
   frontend:
     build:
@@ -24,12 +24,13 @@ services:
     depends_on:
       - backend
 
+  # [선택] 서버형 데이터베이스가 필요한 경우 사용 (SQLite 사용 시 미사용)
   db:
     image: postgres:16-alpine
     environment:
       POSTGRES_DB: ${DATABASE_NAME:-my_project}
       POSTGRES_USER: ${DATABASE_USER:-my_project}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?DATABASE_PASSWORD 값이 필요합니다}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-change-me}
     ports:
       - "5432:5432"
     volumes:

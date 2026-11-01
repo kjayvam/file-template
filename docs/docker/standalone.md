@@ -28,7 +28,9 @@ docker compose -f docker/docker-compose.dev.yml up --build
 
 * **Frontend**: `http://localhost:5173` (Vite 개발 서버 + HMR)
 * **Backend**: `http://localhost:8080` (Rust API 서버)
-* **Database**: `localhost:5432` (PostgreSQL 16)
+* **Database**:
+  * **SQLite 선택 시**: 별도 컨테이너 불필요 (로컬 볼륨/파일로 직접 I/O)
+  * **서버형 DB(PostgreSQL/MySQL) 선택 시**: Compose의 `db` 서비스 사용 (`localhost:5432`)
 
 ### 개발 모드 볼륨 마운트 구조
 * `./frontend` → 컨테이너 내부 `/app` (코드 수정 시 브라우저 즉시 갱신)

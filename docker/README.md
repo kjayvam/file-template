@@ -1,6 +1,8 @@
 # Docker 실행 설정
 
-본 디렉토리는 Rust 백엔드, React(TypeScript) 프론트엔드, PostgreSQL 및 에이전트 도구를 위한 Docker 구성 파일을 관리합니다.
+본 디렉토리는 Rust 백엔드, React(TypeScript) 프론트엔드, 선택적 데이터베이스 및 에이전트 도구를 위한 Docker 구성 파일을 관리합니다.
+
+* **DB 선택의 유연성**: SQLite를 사용할 경우 별도의 `db` 컨테이너 없이 볼륨 마운트만으로 동작하며, PostgreSQL이나 MySQL 등 서버형 DB가 필요한 경우에만 `db` 서비스를 기동합니다.
 
 자세한 아키텍처 및 운용 방법은 [Docker 활용 가이드](../docs/docker/README.md)를 참고하세요.
 
