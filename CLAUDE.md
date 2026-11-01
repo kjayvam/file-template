@@ -8,7 +8,7 @@
 - `tests/`: `unit/`, `integration/`, `e2e/`, `fixtures/`
 - `config/`: 환경별 설정 YAML (비밀 값 없음). 이를 읽는 코드는 `src/config/`
 - `migrations/`: DB 마이그레이션 SQL (`NNNN_설명.up.sql` / `NNNN_설명.down.sql`)
-- `docker/`: Dockerfile, docker-compose
+- `docker/`: Dockerfile, docker-compose, `mcp/` (컨테이너 내 에이전트용)
 - `external/`: GitHub 저장소와 기타 외부 자료 목록 (`external/README.md`)
 - `docs/`: 프로젝트 문서 (아키텍처, API 가이드, 개발 가이드 등)
 - `scripts/`, `examples/`, `.github/`

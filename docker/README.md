@@ -2,6 +2,7 @@
 
 - `Dockerfile`: 앱 이미지
 - `docker-compose.yml`: 앱 + PostgreSQL 개발 환경
+- `mcp/`: 컨테이너 내부 에이전트용 MCP 설정 및 가이드 (`docker/mcp/README.md`)
 
 ## 실행 (저장소 루트에서)
 
