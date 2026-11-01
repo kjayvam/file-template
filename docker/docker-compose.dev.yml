@@ -1,0 +1,51 @@
+services:
+  backend:
+    image: rust:1.80-alpine
+    working_dir: /app
+    command: sh -c "apk add --no-cache musl-dev && cargo run"
+    volumes:
+      - ../backend:/app
+      - cargo-cache:/usr/local/cargo/registry
+    env_file: ../.env
+    environment:
+      DATABASE_HOST: db
+      PORT: 8080
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - ../frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_BACKEND_URL: http://backend:8080
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME:-my_project}
+      POSTGRES_USER: ${DATABASE_USER:-my_project}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-change-me}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-my_project}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  db-data:
+  cargo-cache:

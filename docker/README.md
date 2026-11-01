@@ -1,19 +1,44 @@
-# Docker
+# Docker 실행 설정
 
-- `Dockerfile`: 앱 이미지
-- `docker-compose.yml`: 앱 + PostgreSQL 개발 환경
-- `mcp/`: 컨테이너 내부 에이전트용 MCP 설정 및 가이드 (`docker/mcp/README.md`)
+본 디렉토리는 Rust 백엔드, React(TypeScript) 프론트엔드, PostgreSQL 및 에이전트 도구를 위한 Docker 구성 파일을 관리합니다.
 
-## 실행 (저장소 루트에서)
+자세한 아키텍처 및 운용 방법은 [Docker 활용 가이드](../docs/docker/README.md)를 참고하세요.
+
+---
+
+## 구성 파일 안내
+
+- `docker-compose.yml`: 프로덕션 모드 (최적화 멀티스테이지 빌드 + Nginx 리버스 프록시)
+- `docker-compose.dev.yml`: 개발 모드 (Vite HMR + Rust 개발 런타임 + 소스 볼륨 마운트)
+- `nginx/default.conf`: 프론트엔드 정적 서빙 및 `/api/*` 요청의 백엔드 리버스 프록시 설정
+- `mcp/`: 컨테이너 내부 에이전트용 MCP 설정 및 가이드 ([`docker/mcp/README.md`](mcp/README.md))
+
+---
+
+## 실행 방법 (저장소 루트에서)
+
+### 1. 개발 환경 실행 (Hot-reload & HMR)
 
 ```bash
 cp .env.example .env
-docker compose --env-file .env -f docker/docker-compose.yml up --build
+docker compose --env-file .env -f docker/docker-compose.dev.yml up --build
 ```
+* Frontend (Vite): `http://localhost:5173`
+* Backend (Rust): `http://localhost:8080`
+* PostgreSQL: `localhost:5432`
 
-## 참고
+### 2. 프로덕션 빌드 및 실행
 
-- `.dockerignore`는 빌드 컨텍스트인 저장소 루트에 있어야 적용되므로 루트에 두었습니다.
-- 로컬 실행용 `.env`의 `DATABASE_HOST=localhost`는 유지하고, 앱 컨테이너에서는 Compose의 `environment`로 `DATABASE_HOST=db`를 덮어씁니다.
-- 현재 앱 예제는 시작 문구를 출력한 뒤 종료합니다. 웹 서버와 DB 연결은 프로젝트에 맞게 구현하세요.
-- `migrations/`의 SQL은 컨테이너 시작 시 자동 적용되지 않습니다. 선택한 마이그레이션 도구로 실행하세요.
+```bash
+docker compose --env-file .env -f docker/docker-compose.yml up --build -d
+```
+* Web (Nginx): `http://localhost:80`
+* Backend: `http://localhost:8080`
+
+---
+
+## 관련 문서
+
+- [단독 실행 가이드](../docs/docker/standalone.md)
+- [도커 공유 템플릿 연계 가이드](../docs/docker/shared-template.md)
+- [빌드 및 이미지 최적화 가이드](../docs/docker/build-optimization.md)

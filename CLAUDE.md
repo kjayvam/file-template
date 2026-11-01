@@ -1,24 +1,28 @@
 # my-project
 
-언어와 프레임워크는 아직 정하지 않았습니다. 현재는 Node 기준 뼈대(`src/index.js`)만 있습니다. 언어가 정해지면 이 문서를 갱신하세요.
+Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드, PostgreSQL 기반의 풀스택 템플릿입니다. 초기 상태에서 어디서든 활용 가능한 뼈대로 구성되어 있습니다.
 
 ## 폴더 구조
 
-- `src/`: 소스 코드 (`components/`, `services/`, `utils/`, `config/`, `types/`, `assets/`)
+- `backend/`: Rust API 서버 (`Cargo.toml`, `src/main.rs`, `Dockerfile`)
+- `frontend/`: React + TypeScript 웹 클라이언트 (`package.json`, `src/`, `Dockerfile`)
+- `docker/`: Docker Compose (`docker-compose.yml`, `docker-compose.dev.yml`), Nginx 프록시, `mcp/` (컨테이너 내 에이전트용)
+- `docs/`: 프로젝트 문서 (아키텍처, API 가이드, 개발 가이드 등) 및 `docs/docker/` (Docker 가이드)
 - `tests/`: `unit/`, `integration/`, `e2e/`, `fixtures/`
-- `config/`: 환경별 설정 YAML (비밀 값 없음). 이를 읽는 코드는 `src/config/`
+- `config/`: 환경별 설정 YAML (비밀 값 없음)
 - `migrations/`: DB 마이그레이션 SQL (`NNNN_설명.up.sql` / `NNNN_설명.down.sql`)
-- `docker/`: Dockerfile, docker-compose, `mcp/` (컨테이너 내 에이전트용)
 - `external/`: GitHub 저장소와 기타 외부 자료 목록 (`external/README.md`)
-- `docs/`: 프로젝트 문서 (아키텍처, API 가이드, 개발 가이드 등)
 - `scripts/`, `examples/`, `.github/`
 
 ## 명령어
 
-- `./scripts/setup.sh`: 개발 환경 세팅 (현재는 틀만 있음)
-- `./scripts/build.sh`: 빌드와 테스트 (현재는 틀만 있음)
-- `node src/index.js`: 실행
-- `docker compose --env-file .env -f docker/docker-compose.yml up --build`: Docker 실행 (저장소 루트에서)
+- `./scripts/setup.sh`: 개발 환경 세팅 (.env 복사 및 의존성 설치)
+- `./scripts/build.sh`: 백엔드/프론트엔드 빌드 및 컴파일 검사
+- `docker compose --env-file .env -f docker/docker-compose.dev.yml up`: 개발 환경 실행 (HMR + Rust 핫리로딩)
+- `docker compose --env-file .env -f docker/docker-compose.yml up --build`: 프로덕션 Docker 실행 (저장소 루트에서)
+- 로컬 직접 실행:
+  - 백엔드: `cd backend && cargo run`
+  - 프론트엔드: `cd frontend && npm run dev`
 
 ## 규칙
 
