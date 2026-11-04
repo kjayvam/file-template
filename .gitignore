@@ -1,1 +1,24 @@
 .DS_Store
+
+# 비밀 값: 예시 파일만 버전 관리합니다.
+.env
+.env.*
+*.env
+!.env.example
+
+# 의존성, 빌드 산출물, 테스트 결과
+node_modules/
+target/
+dist/
+coverage/
+*.tsbuildinfo
+__pycache__/
+*.log
+playwright-report/
+test-results/
+
+# 개인별 에이전트 설정과 로컬 메모리
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/agent-memory-local/*
+!.claude/agent-memory-local/.gitkeep
