@@ -5,10 +5,23 @@ on:
     branches: [main]
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: 빌드 및 테스트
-        run: ./scripts/build.sh
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Rust 도구 설치
+        run: rustup show
+      - name: 프론트엔드 의존성 설치
+        working-directory: frontend
+        run: npm ci
+      - name: 포맷, 테스트 및 빌드
+        run: ./scripts/check.sh

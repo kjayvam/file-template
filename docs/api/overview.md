@@ -4,6 +4,16 @@
 
 RESTful API 엔드포인트 설계 표준, HTTP 상태 코드, 공통 요청/응답 규격 및 에러 핸들링 지침을 정의합니다.
 
+## 현재 구현된 API
+
+`GET /health`와 `GET /api/v1/health`는 HTTP 200과 다음 JSON을 반환합니다. `timestamp`는 요청 시 생성한 RFC 3339 UTC 시각입니다.
+
+```json
+{"status":"ok","service":"backend","timestamp":"2026-11-04T00:00:00Z"}
+```
+
+없는 경로는 404, health 경로의 POST는 405를 반환합니다. 아래 공통 응답·인증 규약은 향후 업무용 API의 설계 지침이며, health API에는 `success` 래퍼나 인증이 적용되지 않습니다.
+
 ## 엔드포인트 설계 원칙
 
 1. **명사 및 복수형 사용**: 리소스 경로는 명사의 복수형(`kebab-case`)을 사용합니다.

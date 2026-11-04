@@ -13,6 +13,8 @@
 
 ## 명명 규칙 (Naming Conventions)
 
+Rust의 함수·변수·모듈은 `snake_case`, 타입은 `PascalCase`, 상수는 `UPPER_SNAKE_CASE`를 사용합니다. 포맷은 `cd backend && cargo fmt`로 적용하고 `cargo fmt -- --check`로 검사합니다. 아래 표와 JSDoc 예시는 React·TypeScript 코드에 적용합니다.
+
 | 대상 | 표기법 | 예시 |
 | --- | --- | --- |
 | **변수 및 함수** | `camelCase` | `getUserById`, `isLoading` |

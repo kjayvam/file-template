@@ -12,7 +12,7 @@ Rust는 소스 코드 한 줄만 바뀌어도 모든 의존성을 다시 컴파�
 
 ```mermaid
 flowchart TD
-    Base["1. base 스테이지<br/>(rust:1.80-alpine / chef 설치)"]
+    Base["1. base 스테이지<br/>(rust:1.99.1-alpine / chef 설치)"]
     Planner["2. planner 스테이지<br/>(cargo chef prepare --recipe-path recipe.json)"]
     Builder["3. builder 스테이지<br/>(cargo chef cook --release --recipe-path recipe.json)<br/>★ 의존성만 미리 컴파일하여 캐싱!"]
     CodeBuild["4. 소스 복사 및 최종 빌드<br/>(cargo build --release)"]

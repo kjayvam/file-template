@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+project_root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
+cd "$project_root"
+
 echo "=== 개발 환경을 세팅합니다 ==="
 
 if [ ! -f .env ]; then
@@ -16,7 +19,7 @@ fi
 
 if command -v npm >/dev/null 2>&1; then
   echo "프론트엔드 의존성을 설치합니다..."
-  (cd frontend && npm install)
+  (cd frontend && npm ci)
 fi
 
-echo "세팅 완료: docker compose -f docker/docker-compose.dev.yml up 으로 개발 환경을 시작하세요."
+echo "세팅 완료: docker compose --env-file .env -f docker/docker-compose.dev.yml up 으로 개발 환경을 시작하세요."

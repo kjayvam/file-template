@@ -11,4 +11,4 @@ argument-hint: "[파일 또는 폴더]"
 다음 대상의 코드를 검토하세요: $ARGUMENTS
 
 버그, 빠진 예외 처리, 하드코딩된 비밀 값, CLAUDE.md의 규칙 위반, 빠진 테스트를 확인하고 심각도가 높은 순서로 `파일경로:줄번호`와 함께 정리하세요.
-대상이 비어 있으면 `src/` 폴더를 검토하세요.
+대상이 비어 있으면 `backend/src/`, `backend/tests/`, `frontend/src/`를 검토하세요. 테스트 위치와 명령은 `tests/README.md`를 참고하세요.

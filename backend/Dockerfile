@@ -1,5 +1,5 @@
 # 1. Base 스테이지: cargo-chef 준비
-FROM rust:1.80-alpine AS chef
+FROM rust:1.99.1-alpine AS chef
 RUN apk add --no-cache musl-dev
 RUN cargo install cargo-chef
 WORKDIR /app

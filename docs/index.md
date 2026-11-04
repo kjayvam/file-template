@@ -19,6 +19,7 @@
 
 ## 개발 가이드
 
+- [테스트 배치 및 검증](../tests/README.md)
 - [데이터베이스 가이드](guides/database.md)
 - [코드 스타일 가이드](guides/code-style.md)
 - [용어 사전 (Glossary)](guides/glossary.md)
