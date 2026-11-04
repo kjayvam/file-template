@@ -59,4 +59,4 @@ Docker 검증은 `.env` 없이 실행되며, 의존성과 빌드 결과는 로�
 ./scripts/check-template-modules.sh --docker
 ```
 
-Python 3.11+·Rust·rustfmt가 있으면 `--docker` 없이 검사할 수 있습니다.
+Python 3.11+·Rust·rustfmt가 있으면 `--docker` 없이 검사할 수 있습니다. [에이전트 지식 정리 권장안](docs/guides/agent-knowledge.md)은 로컬 Markdown·연결·검토·검색 흐름을 선택적으로 적용하는 방법을 설명합니다.

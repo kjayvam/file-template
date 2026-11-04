@@ -37,3 +37,4 @@
 | Axum State | https://docs.rs/axum/0.7.9/axum/extract/struct.State.html | 기본 app에 합치는 RAG 라우터의 상태 주입 |
 | Rust Future | https://doc.rust-lang.org/std/future/trait.Future.html | 공급자 독립 비동기 모델·임베딩 인터페이스 |
 | setup-python | https://github.com/actions/setup-python | 모듈 적용·제거 CI의 Python 버전 고정 |
+| NextWork AI 지식 정리 단계 | https://www.instagram.com/p/DfCf5JvlPCk/?img_index=2 | 로컬 Markdown 수집·연결·분류·검색에서 AI 위키로 확장하는 선택형 운영 방식 검토 |
