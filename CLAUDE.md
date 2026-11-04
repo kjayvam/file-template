@@ -12,6 +12,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 - `config/`: 환경별 설정 YAML (비밀 값 없음)
 - `migrations/`: DB 마이그레이션 SQL (`NNNN_설명.up.sql` / `NNNN_설명.down.sql`)
 - `external/`: GitHub 저장소와 기타 외부 자료 목록 (`external/README.md`)
+- `templates/`: ai-common·rag 선택형 원본, module.json의 의존·소유 파일·공유 연결 지점. 적용 방법은 templates/README.md
 - `scripts/`, `examples/`, `.github/`
 
 ## 명령어
@@ -22,6 +23,8 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 - `./scripts/check.sh --backend` / `--frontend`: 한쪽만 검증
 - `./scripts/check.sh --docker`: 로컬 Rust·Node 설치 없이 Docker로 같은 검사 실행 (.env 불필요)
 - `./scripts/build.sh`: Rust 컴파일과 프론트엔드 빌드만 검사 (테스트는 `check.sh`)
+- `./scripts/check-template-modules.sh --docker`: 임시 프로젝트에서 기본형→common→rag+common→common→기본형 검사. 네이티브는 Python 3.11+·Rust 설치 후 --docker 생략
+- `python3 scripts/template-module.py list`: 제공 모듈 목록. add/remove는 --project로 대상을 명시하고 --dry-run으로 변경 경로 검토
 - 개별 테스트: `cd backend && cargo test --locked`, `cd frontend && npm test`
 - `docker compose --env-file .env -f docker/docker-compose.dev.yml up`: 개발 환경 실행 (HMR + Rust 핫리로딩)
 - `docker compose --env-file .env -f docker/docker-compose.yml up --build`: 프로덕션 Docker 실행 (저장소 루트에서)
@@ -31,7 +34,10 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 
 ## 규칙
 
+- 이 저장소는 프로젝트별로 기능을 추가·제거하는 템플릿입니다. 제안한 AI 모듈·서버·콘솔을 모든 프로젝트의 필수 구조로 고정하지 않습니다. 선택한 모듈의 코드·의존성·설정·테스트·CI를 함께 관리합니다.
+
 - `.env`와 비밀 값(토큰, 키, 비밀번호)은 읽거나 출력하거나 커밋하지 않습니다. 새 환경 변수는 이름만 `.env.example`에 추가합니다.
+- 모듈 원본을 추가·수정하면 기본형 검사와 적용·제거 수명주기를 검증합니다. 기본형 backend에 직접 설치하지 말고 임시 프로젝트를 사용합니다. .env·개인 설정은 검증용 사본에 복사하지 않습니다.
 - 개인 설정(`CLAUDE.local.md`, `.claude/settings.local.json`)과 로컬 메모리는 커밋하지 않습니다. 두 의존성 잠금 파일은 커밋하며 CI에서는 갱신하지 않습니다.
 - 이미 적용된 마이그레이션 파일은 수정하지 않고, 새 번호의 up/down 파일 쌍을 추가합니다.
 - 커밋 메시지는 `type: 요약` 형식입니다. (`feat:`, `fix:` 등, CONTRIBUTING.md 참고)

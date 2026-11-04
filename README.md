@@ -9,12 +9,13 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 | `backend/` | Rust 백엔드 API 서버 (Axum, Tokio), `src/lib.rs`의 라우터와 `tests/`의 API 통합 테스트 |
 | `frontend/` | React + TypeScript 프론트엔드 (Vite), `src/**/*.test.tsx`의 컴포넌트 테스트와 `src/test/setup.ts`의 공통 설정 |
 | `docker/` | Docker 실행 설정 및 컨테이너 MCP (`docker/mcp/`) |
-| `docs/` | 프로젝트 문서 (아키텍처, API 가이드, 개발 가이드) |
+| `docs/` | 프로젝트 문서와 선택형 AI 구조·평가 설계 (`guides/ai-extensions.md`, `guides/ai-evaluation.md`) |
 | `docs/docker/` | Docker 단독 실행 및 도커 공유 템플릿 연계 가이드 |
 | `tests/` | 테스트 배치 안내, 공용 테스트 데이터와 향후 E2E 테스트 자리 |
 | `config/` | 환경별 설정 YAML |
 | `migrations/` | DB 마이그레이션 SQL |
-| `scripts/` | 환경 설정(`setup.sh`), 빌드(`build.sh`), 포맷·테스트·빌드 검증(`check.sh`), 배포 예시 |
+| `scripts/` | 환경·빌드·기본형 검증, 모듈 추가·제거(`template-module.py`)와 임시 프로젝트 검증(`check-template-modules.sh`) |
+| [`templates/`](templates/README.md) | ai-common·rag의 선택형 원본, 의존·소유 파일 목록과 적용·제거 안내 |
 | `rust-toolchain.toml` | 로컬·CI가 사용할 Rust 버전과 rustfmt 고정 |
 | `examples/` | 사용 예제 |
 | [`external/`](external/README.md) | GitHub 저장소와 기타 외부 자료 목록 |
@@ -42,3 +43,20 @@ Rust와 Node를 설치하지 않고 Docker로 동일한 검사를 실행할 수�
 Docker 검증은 `.env` 없이 실행되며, 의존성과 빌드 결과는 로컬 소스 폴더에, Cargo 다운로드 캐시는 `file-template-check-cargo` 볼륨에 남습니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요.
 
 개인 설정인 `CLAUDE.local.md`, `.claude/settings.local.json`과 `.env` 계열은 Git에서 제외합니다. `backend/Cargo.lock`, `frontend/package-lock.json`, `.env.example`은 버전 관리합니다.
+
+## 선택형 AI 확장 설계
+
+프로젝트에 필요한 RAG·Agent·화면·어댑터만 추가하고 제거하는 모듈형 템플릿을 제안합니다. 작은 프로젝트는 기존 Rust·React 안에 배치하고 별도 서버·workspace·콘솔은 필요할 때 선택합니다. ai-common·rag 0.1.0 원본과 추가·제거 도구를 제공합니다. 기본형에는 AI 모듈이 설치돼 있지 않으며 Agent·UI·live 공급자·품질 평가기는 후속 범위입니다.
+
+- [폴더·파일 구조, 활성화 방식, API·모듈 계약](docs/guides/ai-extensions.md)
+- [평가 데이터, 지표·통과 기준, offline/live CI](docs/guides/ai-evaluation.md)
+- [구조 선택 이유와 대안 비교](docs/adr/0001-optional-ai-extensions.md)
+
+
+모듈별 적용·제거 명령은 [템플릿 카탈로그](templates/README.md)에 있습니다. 실제 프로젝트를 수정하지 않고 전체 수명주기를 검사하려면 다음을 실행합니다.
+
+```bash
+./scripts/check-template-modules.sh --docker
+```
+
+Python 3.11+·Rust·rustfmt가 있으면 `--docker` 없이 검사할 수 있습니다.

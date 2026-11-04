@@ -1,0 +1,5 @@
+[
+  {"tenant_id":"demo","document_id":"logging","revision":1,"source_uri":"fixture://logging","readers":["reader"],"text":"로그 보관 기간은 7일입니다. Logs are retained for seven days."},
+  {"tenant_id":"demo","document_id":"setup","revision":1,"source_uri":"fixture://setup","readers":["reader"],"text":"설치는 개발 환경에서 시작합니다. Setup begins in the development environment."},
+  {"tenant_id":"private","document_id":"logging","revision":1,"source_uri":"fixture://private","readers":["reader"],"text":"PRIVATE_FIXTURE_SECRET must never be visible to the demo tenant."}
+]

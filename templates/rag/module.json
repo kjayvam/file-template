@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "id": "rag",
+  "version": "0.1.0",
+  "requires": [
+    "ai-common"
+  ],
+  "existing_rust_dependencies": {
+    "axum": "0.7",
+    "serde": "1",
+    "serde_json": "1",
+    "tokio": "1"
+  },
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "backend/src/features/ai/rag/chunk.rs",
+    "backend/src/features/ai/rag/demo/corpus.json",
+    "backend/src/features/ai/rag/document.rs",
+    "backend/src/features/ai/rag/http.rs",
+    "backend/src/features/ai/rag/mock.rs",
+    "backend/src/features/ai/rag/mod.rs",
+    "backend/src/features/ai/rag/prompts/answer.v1.md",
+    "backend/src/features/ai/rag/store.rs",
+    "backend/tests/ai_rag.rs"
+  ],
+  "integrations": [
+    {
+      "path": "backend/src/lib.rs",
+      "anchor": "pub fn app() -> Router {",
+      "position": "before",
+      "block": "// BEGIN template:rag:module\n#[path = \"features/ai/rag/mod.rs\"]\npub mod rag;\n// END template:rag:module\n\n"
+    },
+    {
+      "path": "backend/src/lib.rs",
+      "anchor": "    Router::new()\n",
+      "position": "after",
+      "block": "        // BEGIN template:rag:routes\n        .merge(rag::http::demo_router())\n        // END template:rag:routes\n"
+    }
+  ],
+  "checks": [
+    "cargo fmt -- --check",
+    "cargo test --locked --test ai_rag",
+    "cargo test --locked --test health"
+  ],
+  "data_paths_to_preserve": [
+    "var/ai/"
+  ]
+}

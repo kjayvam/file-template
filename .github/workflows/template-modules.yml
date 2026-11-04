@@ -1,0 +1,22 @@
+name: Template modules
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  add-and-remove:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Rust 도구 준비
+        run: rustup show
+      - name: 임시 프로젝트의 모듈 적용·제거 검증
+        run: ./scripts/check-template-modules.sh

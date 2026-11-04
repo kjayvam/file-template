@@ -69,3 +69,9 @@ flowchart TD
 * [단독 실행 가이드 (Standalone)](docker/standalone.md)
 * [도커 공유 템플릿 연계 가이드 (Shared Template)](docker/shared-template.md)
 * [빌드 최적화 가이드](docker/build-optimization.md)
+
+## 5. 선택형 AI 확장 제안
+
+후속 RAG·Agent는 필요한 모듈만 프로젝트에 추가하고 제거하는 템플릿으로 설계합니다. 기본 배치는 기존 Rust·React 내부이며 독립 workspace·서버·콘솔은 프로젝트 요구에 따른 대안입니다. `templates/`에는 ai-common·rag 0.1.0과 추가·제거 안내가 있으며 선택하지 않은 모듈은 기본형에 자동 추가하지 않습니다. Agent·실제 모델·별도 서비스는 후속 설계입니다.
+
+[세부 파일 구조·실행 경계](guides/ai-extensions.md), [평가 기준](guides/ai-evaluation.md), [ADR-0001](adr/0001-optional-ai-extensions.md)을 구현 전 기준으로 사용합니다.

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "ai-common",
+  "version": "0.1.0",
+  "requires": [],
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "backend/src/features/ai/common/budget.rs",
+    "backend/src/features/ai/common/context.rs",
+    "backend/src/features/ai/common/error.rs",
+    "backend/src/features/ai/common/mod.rs",
+    "backend/src/features/ai/common/model.rs",
+    "backend/tests/ai_common.rs"
+  ],
+  "integrations": [
+    {
+      "path": "backend/src/lib.rs",
+      "anchor": "pub fn app() -> Router {",
+      "position": "before",
+      "block": "// BEGIN template:ai-common:module\n#[path = \"features/ai/common/mod.rs\"]\npub mod ai_common;\n// END template:ai-common:module\n\n"
+    }
+  ],
+  "checks": [
+    "cargo fmt -- --check",
+    "cargo test --locked --test ai_common",
+    "cargo test --locked --test health"
+  ],
+  "data_paths_to_preserve": [
+    "var/ai/"
+  ]
+}

@@ -20,6 +20,9 @@
 ## 개발 가이드
 
 - [테스트 배치 및 검증](../tests/README.md)
+- [ai-common·rag 템플릿 적용·제거](../templates/README.md)
+- [선택형 RAG·Agent 확장 설계 (구현 제안)](guides/ai-extensions.md)
+- [AI 평가 지표·데이터·통과 기준 (구현 제안)](guides/ai-evaluation.md)
 - [데이터베이스 가이드](guides/database.md)
 - [코드 스타일 가이드](guides/code-style.md)
 - [용어 사전 (Glossary)](guides/glossary.md)
