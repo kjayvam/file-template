@@ -17,6 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     # GitHub Release를 만들거나 패키지를 올리는 단계를 추가할 때만 필요한 권한(contents: write 등)을 이 job에 엽니다.
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: 배포
         run: ./scripts/deploy.sh
