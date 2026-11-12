@@ -64,10 +64,10 @@ RAG 라벨은 정답 문장 하나와의 문자열 일치 대신, 허용 문서 
   "identity_fixture": "demo-reader-a",
   "question": "샘플 프로젝트의 로그 보관 기간은 며칠인가요?",
   "expected_status": "answered",
-  "relevant_sources": [{"document_id": "sample-logging", "revision": 2}],
+  "relevant_sources": [{"document_id": "logging", "revision": 1}],
   "required_claims": ["로그 보관 기간은 7일이다."],
   "forbidden_claims": ["로그를 무기한 보관한다."],
-  "evidence": [{"document_id": "sample-logging", "revision": 2, "quote": "로그는 7일 보관합니다.", "occurrence": 1}]
+  "evidence": [{"document_id": "logging", "revision": 1, "quote": "로그 보관 기간은 7일입니다.", "occurrence": 1}]
 }
 ```
 

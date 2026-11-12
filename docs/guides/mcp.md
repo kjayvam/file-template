@@ -45,5 +45,5 @@ Model Context Protocol(MCP)은 AI 에이전트(Antigravity, Claude 등)가 외�
 에이전트를 로컬 호스트가 아닌 격리된 도커 컨테이너(샌드박스) 내부에서 실행할 경우:
 
 - **설정 디렉토리**: [`docker/mcp/`](../../docker/mcp/README.md)에 컨테이너 내부 에이전트용 MCP 설정 및 스크립트를 관리합니다.
-- **네트워크 주소 주의**: 호스트 기준의 `localhost` 대신 도커 네트워크 상의 서비스 이름(예: `db`, `app`)이나 `host.docker.internal`을 사용해야 합니다.
+- **네트워크 주소 주의**: 호스트 기준의 `localhost` 대신 도커 네트워크 상의 서비스 이름(예: `db`, `backend`)이나 `host.docker.internal`을 사용해야 합니다.
 - **볼륨 마운트**: 개발 중인 커스텀 MCP 도구는 컨테이너 재빌드 없이 테스트할 수 있도록 볼륨 마운트하여 연동합니다.

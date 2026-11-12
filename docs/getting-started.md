@@ -39,10 +39,10 @@ npm run dev
 Rust와 Node가 없어도 실행할 수 있습니다. `.env`가 없다면 `.env.example`을 복사한 뒤 실행합니다.
 
 ```bash
-docker compose --env-file .env -f docker/docker-compose.dev.yml up backend frontend
+docker compose --env-file .env -f docker/docker-compose.dev.yml up
 ```
 
-현재 API는 DB를 사용하지 않으므로 `db` 서비스는 필요하지 않습니다. 프로덕션 실행은 [Docker 단독 실행 가이드](docker/standalone.md)를 참고하세요.
+현재 API는 DB를 사용하지 않으므로 `db` 서비스는 기본으로 실행되지 않습니다. PostgreSQL이 필요하면 `--profile postgres`를 붙입니다. Rust 코드를 바꾼 뒤에는 `restart backend`로 다시 컴파일합니다. 프로덕션 실행은 [Docker 단독 실행 가이드](docker/standalone.md)를 참고하세요.
 
 ## 검증
 
@@ -50,7 +50,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml up backend front
 ./scripts/check.sh
 ```
 
-Rust 포맷 검사, `cargo check --locked`, `cargo test --locked`, `npm test`, `npm run build`를 실행합니다. 도구가 없거나 검사가 실패하면 0이 아닌 종료 코드를 반환합니다. 빌드만 검사하려면 `./scripts/build.sh`를 사용합니다.
+Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm run build`를 실행합니다. 도구가 없거나 검사가 실패하면 0이 아닌 종료 코드를 반환합니다. 빌드만 검사하려면 `./scripts/build.sh`를 사용합니다.
 
 ```bash
 ./scripts/check.sh --backend
@@ -58,4 +58,4 @@ Rust 포맷 검사, `cargo check --locked`, `cargo test --locked`, `npm test`, `
 ./scripts/check.sh --docker
 ```
 
-`--docker`는 Rust 1.99.1과 Node 22 컨테이너에서 같은 검사를 실행하며 프론트엔드 설치도 `npm ci`로 수행합니다. `.env`나 실행 중인 DB·백엔드는 필요하지 않습니다. 첫 실행에는 이미지·의존성 다운로드가 필요합니다. 테스트 파일 위치와 개별 명령은 [테스트 안내](../tests/README.md)를 참고하세요.
+`--docker`는 Rust 1.99.1과 Node 22 컨테이너에서 같은 검사를 실행하며 프론트엔드 설치도 `npm ci`로 수행합니다. `.env`나 실행 중인 DB·백엔드는 필요하지 않습니다. Rust 빌드 산출물과 `node_modules`는 Docker 볼륨에 두므로 로컬 실행용 파일을 덮어쓰지 않습니다. 첫 실행에는 이미지·의존성 다운로드가 필요합니다. 테스트 파일 위치와 개별 명령은 [테스트 안내](../tests/README.md)를 참고하세요.

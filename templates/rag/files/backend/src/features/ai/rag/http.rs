@@ -93,7 +93,8 @@ async fn query(
         .query(
             &context,
             &query.question,
-            query.top_k.unwrap_or(5),
+            // An omitted top_k follows the configured maximum instead of a separate constant.
+            query.top_k.unwrap_or(rag.config().max_top_k),
             &mut budget,
         )
         .await

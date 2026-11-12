@@ -11,7 +11,7 @@ services:
       - "8080:8080"
     volumes:
       # SQLite 사용 시 파일 저장 및 앱 데이터 보존 볼륨
-      - db-data:/app/data
+      - app-data:/app/data
 
   frontend:
     build:
@@ -24,17 +24,17 @@ services:
     depends_on:
       - backend
 
-  # [선택] 서버형 데이터베이스가 필요한 경우 사용 (SQLite 사용 시 미사용)
+  # [선택] 서버형 데이터베이스가 필요할 때만 `--profile postgres`로 함께 실행합니다.
+  # 프로덕션에서는 호스트에 DB 포트를 열지 않고 Compose 네트워크(db:5432)로만 접속합니다.
   db:
     image: postgres:16-alpine
+    profiles: ["postgres"]
     environment:
       POSTGRES_DB: ${DATABASE_NAME:-my_project}
       POSTGRES_USER: ${DATABASE_USER:-my_project}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-change-me}
-    ports:
-      - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-my_project}"]
       interval: 5s
@@ -42,4 +42,5 @@ services:
       retries: 10
 
 volumes:
-  db-data:
+  app-data:
+  pg-data:

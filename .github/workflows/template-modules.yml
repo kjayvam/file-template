@@ -3,7 +3,23 @@ name: Template modules
 on:
   push:
     branches: [main]
+    paths:
+      - "backend/**"
+      - "templates/**"
+      - "scripts/template-module.py"
+      - "scripts/verify-template-modules.py"
+      - "scripts/check-template-modules.sh"
+      - "rust-toolchain.toml"
+      - ".github/workflows/template-modules.yml"
   pull_request:
+    paths:
+      - "backend/**"
+      - "templates/**"
+      - "scripts/template-module.py"
+      - "scripts/verify-template-modules.py"
+      - "scripts/check-template-modules.sh"
+      - "rust-toolchain.toml"
+      - ".github/workflows/template-modules.yml"
 
 permissions:
   contents: read

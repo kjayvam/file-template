@@ -16,14 +16,14 @@ flowchart TD
     Planner["2. planner 스테이지<br/>(cargo chef prepare --recipe-path recipe.json)"]
     Builder["3. builder 스테이지<br/>(cargo chef cook --release --recipe-path recipe.json)<br/>★ 의존성만 미리 컴파일하여 캐싱!"]
     CodeBuild["4. 소스 복사 및 최종 빌드<br/>(cargo build --release)"]
-    Runtime["5. runtime 스테이지<br/>(alpine / distroless)<br/>★ 바이너리만 복사 (용량 < 30MB)"]
+    Runtime["5. runtime 스테이지<br/>(alpine, root가 아닌 app 사용자)<br/>★ 바이너리만 복사 (용량 < 30MB)"]
 
     Base --> Planner --> Builder --> CodeBuild --> Runtime
 ```
 
 ### Dockerfile 핵심 설계
 * **의존성 캐시 유효**: `Cargo.toml`, `Cargo.lock`이 변경되지 않았다면 의존성 빌드(`cargo chef cook`) 단계는 완전히 캐시되어 수 초 만에 빌드가 완료됩니다.
-* **초경량 런타임**: 빌드 도구(Rustc, Cargo, GCC 등)가 포함되지 않고 오직 단일 바이너리와 필수 라이브러리(SSL, musl)만 포함되므로 최종 이미지 용량이 30MB 안팎으로 유지됩니다.
+* **초경량 런타임**: 빌드 도구(Rustc, Cargo, GCC 등)가 포함되지 않고 정적 링크된 단일 바이너리와 CA 인증서·tzdata만 포함되므로 최종 이미지 용량이 30MB 안팎으로 유지됩니다.
 
 ---
 
@@ -35,7 +35,7 @@ React 웹 애플리케이션은 브라우저에서 실행되는 정적 에셋(HT
 flowchart TD
     DevDeps["1. 의존성 설치 스테이지<br/>(node:22-alpine, package.json / lockfile)"]
     Bundler["2. 정적 번들 빌드 스테이지<br/>(Vite build -> /app/dist 생성)"]
-    Nginx["3. 런타임 스테이지<br/>(nginx:alpine, 정적 파일 복사 & 리버스 프록시)<br/>★ 용량 < 25MB"]
+    Nginx["3. 런타임 스테이지<br/>(nginx:alpine, 정적 파일 복사 & 리버스 프록시)<br/>★ 크기는 nginx:alpine 기반 이미지가 대부분 차지"]
 
     DevDeps --> Bundler --> Nginx
 ```
@@ -43,8 +43,8 @@ flowchart TD
 ### Nginx 리버스 프록시 역할
 * **단일 오리진 제공**: 클라이언트(브라우저)는 Nginx 포트(예: `:80`)로만 접속합니다.
 * **정적 서빙 & 프록시 분기**:
-  * `/` 및 정적 리소스 요청: Nginx가 캐싱 헤더와 gzip 압축을 적용하여 즉시 응답
-  * `/api/*` 요청: Nginx가 동일 도커 네트워크의 Rust 백엔드(`http://backend:8080`)로 프록시하여 CORS 문제를 원천 제거
+  * `/` 및 정적 리소스 요청: Nginx가 gzip 압축을 적용하고, 해시가 붙은 `/assets/`는 1년 캐시, `index.html`은 매번 재검증하도록 응답 (`docker/nginx/default.conf`)
+  * `/api/*` 요청: Nginx가 경로를 그대로 유지한 채 동일 도커 네트워크의 Rust 백엔드(`http://backend:8080`)로 프록시하여 CORS 문제를 원천 제거
 
 ---
 
@@ -52,6 +52,6 @@ flowchart TD
 
 | 컴포넌트 | 비최적화 이미지 (단일 스테이지) | 최적화 이미지 (멀티스테이지 적용) |
 |---|---|---|
-| **Backend (Rust)** | 약 1.8 GB ~ 2.2 GB (Rust 툴체인 포함) | **약 25 MB ~ 35 MB** (단일 바이너리) |
-| **Frontend (React)** | 약 800 MB ~ 1.2 GB (Node/npm 포함) | **약 20 MB ~ 30 MB** (Nginx + 정적 에셋) |
+| **Backend (Rust)** | 약 1.8 GB ~ 2.2 GB (Rust 툴체인 포함) | **약 20 MB ~ 35 MB** (단일 바이너리, 실측 약 21 MB) |
+| **Frontend (React)** | 약 800 MB ~ 1.2 GB (Node/npm 포함) | **약 50 MB ~ 100 MB** (nginx:alpine + 정적 에셋, 2026-11 기준 실측 약 93 MB) |
 | **보안 이점** | 쉘, 패키지 매니저, 개발 도구 노출 | 공격 표면(Attack Surface) 최소화 |

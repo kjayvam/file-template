@@ -26,7 +26,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 - `./scripts/check-template-modules.sh --docker`: 임시 프로젝트에서 기본형→common→rag+common→common→기본형 검사. 네이티브는 Python 3.11+·Rust 설치 후 --docker 생략
 - `python3 scripts/template-module.py list`: 제공 모듈 목록. add/remove는 --project로 대상을 명시하고 --dry-run으로 변경 경로 검토
 - 개별 테스트: `cd backend && cargo test --locked`, `cd frontend && npm test`
-- `docker compose --env-file .env -f docker/docker-compose.dev.yml up`: 개발 환경 실행 (HMR + Rust 핫리로딩)
+- `docker compose --env-file .env -f docker/docker-compose.dev.yml up`: 개발 환경 실행 (Vite HMR. Rust 변경은 `restart backend`로 재컴파일). PostgreSQL이 필요하면 `--profile postgres` 추가
 - `docker compose --env-file .env -f docker/docker-compose.yml up --build`: 프로덕션 Docker 실행 (저장소 루트에서)
 - 로컬 직접 실행:
   - 백엔드: `cd backend && cargo run`

@@ -1,6 +1,6 @@
 # 프로젝트별로 조합하는 RAG·Agent 템플릿 설계
 
-상태: ai-common·rag 0.1.0의 원본·추가·제거 도구·임시 프로젝트 검증은 구현했습니다. 실제 사용은 [템플릿 카탈로그](../../templates/README.md)를 따릅니다. 아래 Agent·UI·별도 서비스·live 평가·영속 저장소는 후속 설계입니다. 2026-11-04 기준입니다.
+상태: ai-common·rag 0.1.0의 원본·추가·제거 도구·임시 프로젝트 검증은 구현했습니다. 실제 사용은 [템플릿 카탈로그](../../templates/README.md)를 따릅니다. 아래 Agent·UI·별도 서비스·live 평가·영속 저장소는 후속 설계입니다.
 
 ## 1. 템플릿의 사용 원칙
 
@@ -39,24 +39,21 @@ templates/
       context.rs
       budget.rs
       error.rs
+    files/backend/tests/ai_common.rs
   rag/
     README.md
     module.json
     files/backend/src/features/ai/rag/
       mod.rs
       document.rs
-      ingest.rs
       chunk.rs
-      retrieve.rs
-      answer.rs
-      citation.rs
       store.rs
       mock.rs
       http.rs
       demo/corpus.json
       prompts/answer.v1.md
     files/backend/tests/ai_rag.rs
-    files/evals/ai/rag/               # 해당 기능의 사례·fixture·rubric·기준값
+    files/evals/ai/rag/               # (후속) 해당 기능의 사례·fixture·rubric·기준값
   agent/
     README.md
     module.json
@@ -99,7 +96,7 @@ ai-ui는 선택된 기능의 하위 파일만 적용합니다. Rag만 쓰는 프
 backend/
   Cargo.toml, Cargo.lock            # 선택한 모듈의 의존성만 추가
   src/lib.rs                        # 선택한 기능의 라우터 연결
-  src/features/ai/{mod.rs,common/,rag/}
+  src/features/ai/{common/,rag/}    # lib.rs에서 #[path]로 연결하므로 features/ai/mod.rs는 없음
   src/bin/ai_ingest.rs               # 수집 CLI가 필요한 경우만 추가
   tests/ai_rag.rs
 evals/ai/
@@ -116,7 +113,7 @@ UI도 선택하면 frontend/src/features/ai/rag/를 추가하고, Agent를 선�
 
 ## 4. 추가·제거·교체 규칙
 
-module.json은 검토 가능한 의존·파일·연결 목록입니다. 현재 template-module.py가 이 중 소유 파일·연결 블록·의존 관계를 사용하고 적용 당시 해시를 기록합니다. checks 필드는 검증 안내이며 임의 명령을 자동 실행하지 않습니다. 다음 정보를 기록합니다.
+module.json은 검토 가능한 의존·파일·연결 목록입니다. 현재 template-module.py가 이 중 소유 파일·연결 블록·의존 관계를 사용하고 적용 당시 해시를 기록합니다. checks·data_paths_to_preserve·new_rust_dependencies 필드는 현재 선언 전용이며 도구가 실행·검사하지 않습니다. 확장 시 목표 스키마는 다음 정보를 기록합니다.
 
 - 모듈 ID·버전·필수 의존·함께 사용하는 선택 모듈.
 - 모듈이 전적으로 소유하는 경로와 Cargo·라우터·설정·CI 같은 공유 파일의 연결 지점.
@@ -125,7 +122,7 @@ module.json은 검토 가능한 의존·파일·연결 목록입니다. 현재 t
 
 추가할 때는 필요한 모듈과 전이 의존만 적용하고 변경 목록을 확인한 뒤 검증합니다. 제거할 때는 의존하는 모듈을 먼저 확인하고, 라우트·UI 연결·설정·검사 등록을 해제한 다음 모듈 소유 파일과 더 이상 쓰지 않는 의존성을 정리합니다. 공유 파일 전체나 다른 모듈이 사용하는 ai-common을 삭제하지 않습니다.
 
-프로젝트에서 수정한 파일은 적용·제거 시 diff로 확인하고 자동 덮어쓰기·자동 삭제 대상에서 제외합니다. 추후 자동화하더라도 원본 버전·적용 당시 해시를 기록하고 변경된 파일은 수동 병합 대상으로 남깁니다. 실제 문서·대화·인덱스·DB 데이터 삭제는 코드 제거와 별개입니다. 적용된 마이그레이션은 지우거나 수정하지 않고 필요한 경우 새 마이그레이션으로 변경합니다.
+프로젝트에서 수정한 파일은 적용·제거 시 diff로 확인하고 자동 덮어쓰기·자동 삭제 대상에서 제외합니다. 현재 도구는 원본 버전·적용 당시 해시를 기록하고 변경된 파일은 자동 제거하지 않고 수동 병합 대상으로 남깁니다. 실제 문서·대화·인덱스·DB 데이터 삭제는 코드 제거와 별개입니다. 적용된 마이그레이션은 지우거나 수정하지 않고 필요한 경우 새 마이그레이션으로 변경합니다.
 
 런타임 비활성화와 템플릿 제거는 다릅니다. 전자는 코드·의존성을 남기고 등록만 끄는 것이고, 후자는 관련 파일·의존성·설정·테스트·CI 참조를 함께 정리하는 것입니다. Cargo feature는 필요할 때의 빌드 선택 수단이며 제거 기능을 대신하지 않습니다.
 
@@ -151,7 +148,7 @@ Mock·live는 모듈의 실행 구성입니다. Mock은 가상 모델·문서·�
 
 6~9절은 확장할 때의 목표 계약입니다. 현재 0.1.0은 메모리 검색·revision·접근 범위·인용·호출 횟수·deadline과 가상 HTTP 데모를 구현했습니다. 수집 CLI·영속 인덱스·운영 인증·live 공급자·토큰/금액 정산·Agent는 아직 없습니다. 현재 지원 범위는 [rag 안내](../../templates/rag/README.md)를 기준으로 확인하세요.
 
-초기 입력 형식은 UTF-8 Markdown·텍스트와 가상 corpus JSONL로 제한합니다. PDF·웹 크롤러·OCR은 후속 어댑터입니다. 처음부터 파일 업로드·작업 큐까지 만들지 않고 `ai_ingest` CLI로 검증된 입력을 색인합니다.
+초기 입력 형식은 UTF-8 Markdown·텍스트와 가상 corpus JSON 배열(`demo/corpus.json`)로 제한합니다. PDF·웹 크롤러·OCR은 후속 어댑터입니다. 처음부터 파일 업로드·작업 큐까지 만들지 않고 `ai_ingest` CLI로 검증된 입력을 색인합니다.
 
 메모리 저장소를 쓰는 첫 버전에서 CLI는 정규화된 corpus snapshot과 manifest를 `var/ai/corpus/`에 작성합니다. 서버가 이 snapshot을 읽어 **자기 프로세스 안에서** 임베딩·인덱스를 구성합니다. CLI 프로세스의 메모리 인덱스를 서버가 공유한다고 가정하지 않습니다. 문서 변경은 snapshot 갱신 후 서버 재시작으로 반영하고, 온라인 갱신 API는 후속 범위로 남깁니다. Lifecycle 테스트는 같은 프로세스에서 변경·삭제·권한 회수 계약을 검사합니다.
 
@@ -169,7 +166,7 @@ Mock·live는 모듈의 실행 구성입니다. Mock은 가상 모델·문서·�
 
 삭제와 접근 권한 회수는 조회용 필터에 먼저 반영하고, 진행 중인 응답도 반환 직전에 다시 권한·삭제 상태를 확인합니다. 검색 전에 tenant·접근 범위를 제한하며 top-k 이후 필터링으로 대신하지 않습니다. 답변·캐시 키에도 tenant·접근 범위 버전·인덱스 세대가 필요합니다. 초기 버전에는 답변 캐시를 넣지 않습니다.
 
-단순 코사인 유사도 `InMemoryIndex`를 기본 예제로 두되, 운영 규모의 저장 성능을 보장하는 구현으로 설명하지 않습니다. 검색 점수 기준은 모델마다 달라 설정·평가로 보정합니다. 사용할 수 있는 근거가 없으면 `insufficient_evidence`를 반환하며, 주장이 참임을 인용 ID 존재 여부만으로 판단하지 않습니다.
+단순 코사인 유사도 `MemoryIndex`를 기본 예제로 두되, 운영 규모의 저장 성능을 보장하는 구현으로 설명하지 않습니다. 검색 점수 기준은 모델마다 달라 설정·평가로 보정합니다. 사용할 수 있는 근거가 없으면 `insufficient_evidence`를 반환하며, 주장이 참임을 인용 ID 존재 여부만으로 판단하지 않습니다.
 
 ## 7. Agent 실행 계약
 

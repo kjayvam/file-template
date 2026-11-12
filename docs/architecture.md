@@ -12,7 +12,7 @@ flowchart TD
         Browser["사용자 브라우저 (Web)"]
     end
 
-    subgraph ContainerNetwork["도커 네트워크 (app-network)"]
+    subgraph ContainerNetwork["Compose 기본 네트워크"]
         subgraph WebLayer["웹 / 프론트엔드"]
             Frontend["React + TypeScript (Vite/Nginx)<br/>Port: 5173 / 80"]
         end

@@ -20,6 +20,8 @@ fi
 if command -v npm >/dev/null 2>&1; then
   echo "프론트엔드 의존성을 설치합니다..."
   (cd frontend && npm ci)
+else
+  echo "[참고] npm이 없어 프론트엔드 의존성 설치를 건너뜁니다. Docker 개발 환경은 컨테이너 안에서 설치합니다."
 fi
 
 echo "세팅 완료: docker compose --env-file .env -f docker/docker-compose.dev.yml up 으로 개발 환경을 시작하세요."

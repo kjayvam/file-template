@@ -11,9 +11,9 @@ Agent·UI·별도 서비스·실제 모델·영속 DB는 아직 제공하지 않
 
 ## 정의와 소유권
 
-각 `module.json`은 버전·의존 모듈·기존 Rust 의존성·소유 파일·공유 연결 블록·검증 명령을 기록합니다. JSON은 Python 표준 라이브러리로 검사하므로 YAML 파서나 pip 설치가 필요 없습니다. `files/` 아래 경로는 적용 대상 프로젝트 루트 기준입니다. `.DS_Store`는 원본 목록에서 제외합니다.
+각 `module.json`은 버전·의존 모듈·기존 Rust 의존성·소유 파일·공유 연결 블록·검증 명령을 기록합니다. 도구가 실제로 사용하는 필드는 `requires`·`existing_rust_dependencies`·`owned_files`·`integrations`이고, `checks`·`new_rust_dependencies`·`data_paths_to_preserve`는 사람이 읽는 선언입니다. JSON은 Python 표준 라이브러리로 검사하므로 YAML 파서나 pip 설치가 필요 없습니다. `files/` 아래 경로는 적용 대상 프로젝트 루트 기준입니다. `.DS_Store`는 원본 목록에서 제외합니다.
 
-이번 두 모듈은 Cargo.toml·Cargo.lock에 새 의존성을 추가하지 않습니다. rag는 기본형의 Axum 0.7, Serde 1, serde_json 1, Tokio 1의 기존 설정을 재사용합니다. 관리 도구는 의존성 계열을 확인하며 필요한 feature·호환성은 실제 빌드가 확인합니다.
+ai-common·rag는 Cargo.toml·Cargo.lock에 새 의존성을 추가하지 않습니다. rag는 기본형의 Axum 0.7, Serde 1, serde_json 1, Tokio 1의 기존 설정을 재사용합니다. 관리 도구는 의존성 계열을 확인하며 필요한 feature·호환성은 실제 빌드가 확인합니다.
 
 `backend/src/lib.rs`에 이름이 붙은 블록만 연결합니다. 물리 경로는 `src/features/ai/`이며 Rust 공개 경로는 `backend::ai_common`, `backend::rag`입니다. `#[path]`로 연결하므로 공유 `features/mod.rs`를 새로 덮어쓰지 않습니다.
 
@@ -71,7 +71,7 @@ python3 scripts/template-module.py remove ai-common --project /path/to/project
 
 rag가 남아 있으면 ai-common 제거는 거부됩니다. 소유 파일이나 등록 블록을 프로젝트에서 수정했으면 자동 제거는 실패하며 어떤 경로인지 알려줍니다. 강제 덮어쓰기·강제 제거 옵션은 없습니다. 이 경우 프로젝트 변경을 별도 기능으로 옮길지 검토하고 소유 파일·연결 지점을 수동으로 정리한 뒤 적용 기록도 실제 상태에 맞춰 갱신하세요.
 
-정상 제거는 해당 모듈 파일과 등록 블록만 지우고 공유 파일의 다른 변경·다른 파일·`var/ai/` 데이터는 보존합니다. 빈 디렉터리만 정리하며 마지막 모듈을 제거하면 적용 기록도 제거합니다. 이번 두 모듈은 Cargo 파일을 변경하지 않으므로 lock 갱신도 필요 없습니다.
+정상 제거는 해당 모듈 파일과 등록 블록만 지우고 공유 파일의 다른 변경·다른 파일·`var/ai/` 데이터는 보존합니다. 빈 디렉터리만 정리하며 마지막 모듈을 제거하면 적용 기록도 제거합니다. ai-common·rag는 Cargo 파일을 변경하지 않으므로 lock 갱신도 필요 없습니다.
 
 대상 프로젝트에서 `./scripts/check.sh --docker`를 다시 실행합니다. rag만 제거했다면 common 테스트는 남고 query API는 404여야 합니다. 둘 다 제거하면 health API와 기존 React만 남습니다. 실제로 공급자·DB를 추가한 프로젝트는 별도 의존성·설정·마이그레이션·데이터 정리도 검토해야 합니다.
 
@@ -81,6 +81,6 @@ rag가 남아 있으면 ai-common 제거는 거부됩니다. 소유 파일이나
 ./scripts/check-template-modules.sh --docker
 ```
 
-현재 체크아웃에 모듈을 적용하지 않고 임시 프로젝트에서 base → common → rag+common → common → base 순서로 Rust 포맷·컴파일·테스트와 라우트 상태를 확인합니다. 제거는 카탈로그가 없는 독립 도구 사본으로도 검사합니다. 의존 순서·덮어쓰기·심볼릭 링크·사용자 변경·dry-run 거부 검사와 데이터·기존 Cargo 파일 보존도 확인합니다.
+현재 체크아웃에 모듈을 적용하지 않고 임시 프로젝트에서 base → common → rag+common → common → base 순서로 Rust 포맷·컴파일·테스트와 라우트 상태를 확인합니다. 제거는 카탈로그가 없는 독립 도구 사본으로 검사합니다. 의존 순서·덮어쓰기·심볼릭 링크·사용자 변경·dry-run 거부 검사와 데이터·기존 Cargo 파일 보존도 확인합니다.
 
 Docker는 임시 프로젝트와 전용 `file-template-modules-target` 빌드 캐시, 기존 Cargo 다운로드 캐시를 사용합니다. 원본 backend·templates·scripts는 읽기 전용으로 마운트하고 `.env`·개인 설정은 복사하지 않습니다. 네이티브 검증은 Python 3.11+, Rust·rustfmt 설치 후 같은 명령에서 `--docker`를 빼면 됩니다.

@@ -36,7 +36,7 @@ flowchart TD
 flowchart LR
     Client(["브라우저 / 사용자"])
 
-    subgraph DockerNetwork["Compose Network (app-network)"]
+    subgraph DockerNetwork["Compose 기본 네트워크"]
         Frontend["Frontend (React + TS)<br/>• Dev: Vite (:5173)<br/>• Prod: Nginx (:80)"]
         Backend["Backend (Rust API)<br/>• Port: :8080<br/>• Axum / Tokio"]
         Database[("Database<br/>• SQLite: 로컬 파일/볼륨<br/>• 또는 PostgreSQL/MySQL")]
@@ -58,9 +58,11 @@ flowchart LR
 
 | 볼륨 용도 | 단독 실행 기본 이름 | 공유 템플릿 연계 시 권장 이름 | 특성 |
 |---|---|---|---|
-| **데이터베이스 데이터** (SQLite 파일 또는 DB 컨테이너) | `db-data` | `p_db_data_<프로젝트명>` | 프로젝트 영속 데이터 |
-| **Rust Crate/빌드 캐시** | `cargo-cache` | `sync_cargo_cache` | 호스트 단위 공유 시 빌드 속도 대폭 향상 |
-| **프론트엔드 캐시** | `node-cache` | `p_node_cache_<프로젝트명>` | 프로젝트별 의존성 격리 |
+| **앱 데이터** (SQLite 파일 등) | `app-data` | `p_app_data_<프로젝트명>` | 프로젝트 영속 데이터 |
+| **서버형 DB 데이터** (`--profile postgres`) | `pg-data` | `p_db_data_<프로젝트명>` | 프로젝트 영속 데이터 |
+| **Rust Crate 다운로드 캐시** (개발 Compose) | `cargo-cache` | `sync_cargo_cache` | 호스트 단위 공유 시 빌드 속도 대폭 향상 |
+| **Rust 빌드 산출물** (개발 Compose) | `backend-target` | `p_backend_target_<프로젝트명>` | 호스트 `backend/target`과 분리 |
+| **프론트엔드 의존성** (개발 Compose) | 익명 볼륨(`/app/node_modules`) | `p_node_modules_<프로젝트명>` | 프로젝트별 의존성 격리 |
 | **에이전트 인증** | (해당 없음) | `sync_agent_auth` | 호스트 공용 에이전트 로그인 재사용 |
 | **에이전트 작업 상태** | (해당 없음) | `p_agent_state_<프로젝트명>` | 프로젝트별 세션/메모리 분리 |
 

@@ -40,7 +40,7 @@ Rust와 Node를 설치하지 않고 Docker로 동일한 검사를 실행할 수�
 ./scripts/check.sh --docker
 ```
 
-Docker 검증은 `.env` 없이 실행되며, 의존성과 빌드 결과는 로컬 소스 폴더에, Cargo 다운로드 캐시는 `file-template-check-cargo` 볼륨에 남습니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요.
+Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌드 산출물·`node_modules`는 `file-template-check-*` 볼륨에 두어 호스트의 `backend/target`, `frontend/node_modules`를 덮어쓰지 않습니다. 프론트엔드 빌드 결과(`frontend/dist`)만 로컬 폴더에 생깁니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요.
 
 개인 설정인 `CLAUDE.local.md`, `.claude/settings.local.json`과 `.env` 계열은 Git에서 제외합니다. `backend/Cargo.lock`, `frontend/package-lock.json`, `.env.example`은 버전 관리합니다.
 

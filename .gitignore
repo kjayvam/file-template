@@ -17,6 +17,9 @@ __pycache__/
 playwright-report/
 test-results/
 
+# 모듈이 만드는 로컬 데이터(코퍼스 스냅샷, 평가 원시 응답 등)
+var/
+
 # 개인별 에이전트 설정과 로컬 메모리
 CLAUDE.local.md
 .claude/settings.local.json

@@ -15,7 +15,7 @@ check_backend() {
   (
     cd "$project_root/backend"
     cargo fmt -- --check
-    cargo check --locked
+    # cargo test가 라이브러리·바이너리·테스트를 모두 컴파일하므로 별도 cargo check는 생략합니다.
     cargo test --locked
   )
 }
@@ -45,15 +45,19 @@ case "${1:-}" in
   --frontend) check_frontend ;;
   --docker)
     require_tool docker
+    # 빌드 산출물(target)과 node_modules는 Docker 볼륨에 두어 호스트용 빌드·의존성을 덮어쓰지 않습니다.
     docker run --rm \
       --mount "type=bind,src=$project_root/backend,dst=/workspace/backend" \
       --mount "type=bind,src=$project_root/scripts,dst=/workspace/scripts,readonly" \
       --mount type=volume,src=file-template-check-cargo,dst=/usr/local/cargo/registry \
+      --mount type=volume,src=file-template-check-target,dst=/check-target \
+      --env CARGO_TARGET_DIR=/check-target \
       rust:1.99.1-alpine \
       sh -ec 'apk add --no-cache bash musl-dev; rustup component add rustfmt; /workspace/scripts/check.sh --backend'
     docker run --rm \
       --mount "type=bind,src=$project_root/frontend,dst=/workspace/frontend" \
       --mount "type=bind,src=$project_root/scripts,dst=/workspace/scripts,readonly" \
+      --mount type=volume,src=file-template-check-node-modules,dst=/workspace/frontend/node_modules \
       --workdir /workspace/frontend \
       node:22-alpine \
       sh -ec 'apk add --no-cache bash; npm ci; /workspace/scripts/check.sh --frontend'
