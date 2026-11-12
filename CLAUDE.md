@@ -19,7 +19,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 
 - 도구: Rust 1.99.1 (`rust-toolchain.toml`, `rustfmt` 포함), Node.js 22.12 이상(22 계열)과 npm. CI와 Docker 검증도 같은 계열을 사용합니다.
 - `./scripts/setup.sh`: 개발 환경 세팅 (.env가 없으면 예시 복사, `npm ci`)
-- `./scripts/check.sh`: Rust 포맷·컴파일·테스트와 프론트엔드 테스트·빌드. 도구 누락이나 검사 실패 시 오류 종료
+- `./scripts/check.sh`: Rust 포맷·컴파일·테스트와 프론트엔드 테스트·빌드, Docker 이미지와 `rust-toolchain.toml`의 Rust 버전 일치 확인. 도구 누락이나 검사 실패 시 오류 종료
 - `./scripts/check.sh --backend` / `--frontend`: 한쪽만 검증
 - `./scripts/check.sh --docker`: 로컬 Rust·Node 설치 없이 Docker로 같은 검사 실행 (.env 불필요)
 - `./scripts/build.sh`: Rust 컴파일과 프론트엔드 빌드만 검사 (테스트는 `check.sh`)

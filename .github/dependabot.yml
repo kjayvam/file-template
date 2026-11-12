@@ -13,7 +13,12 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "weekly"
+  # Rust 이미지 갱신 PR은 rust-toolchain.toml도 같은 버전으로 올려야 check.sh를 통과합니다.
   - package-ecosystem: "docker"
     directories: ["/backend", "/frontend"]
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker-compose"
+    directory: "/docker"
     schedule:
       interval: "weekly"

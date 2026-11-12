@@ -32,7 +32,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 ./scripts/check.sh
 ```
 
-`check.sh`는 Rust 포맷·컴파일·API 통합 테스트와 React 컴포넌트 테스트·프로덕션 빌드를 실행합니다. 필요한 도구가 없거나 검사가 실패하면 오류로 종료합니다. 빌드만 확인하려면 `./scripts/build.sh`를 사용합니다.
+`check.sh`는 Rust 포맷·컴파일·API 통합 테스트와 React 컴포넌트 테스트·프로덕션 빌드를 실행하고, Docker 이미지의 Rust 버전이 `rust-toolchain.toml`과 같은지 확인합니다. 필요한 도구가 없거나 검사가 실패하면 오류로 종료합니다. 빌드만 확인하려면 `./scripts/build.sh`를 사용합니다.
 
 Rust와 Node를 설치하지 않고 Docker로 동일한 검사를 실행할 수도 있습니다.
 
@@ -40,7 +40,7 @@ Rust와 Node를 설치하지 않고 Docker로 동일한 검사를 실행할 수�
 ./scripts/check.sh --docker
 ```
 
-Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌드 산출물·`node_modules`는 `file-template-check-*` 볼륨에 두어 호스트의 `backend/target`, `frontend/node_modules`를 덮어쓰지 않습니다. 프론트엔드 빌드 결과(`frontend/dist`)만 로컬 폴더에 생깁니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요.
+Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌드 산출물·`node_modules`는 `file-template-check-*` 볼륨에 두어 호스트의 `backend/target`, `frontend/node_modules`를 덮어쓰지 않습니다. 프론트엔드 빌드 결과(`frontend/dist`)만 로컬 폴더에 생깁니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요. 이 템플릿으로 새 프로젝트를 만들 때 바꿀 자리표시자는 [시작하기의 새 프로젝트 항목](docs/getting-started.md#템플릿으로-새-프로젝트-시작하기)에 모아 두었습니다.
 
 개인 설정인 `CLAUDE.local.md`, `.claude/settings.local.json`과 `.env` 계열은 Git에서 제외합니다. `backend/Cargo.lock`, `frontend/package-lock.json`, `.env.example`은 버전 관리합니다.
 

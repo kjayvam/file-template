@@ -20,8 +20,8 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-      - name: Rust 도구 설치
-        run: rustup show
+      - name: Rust 도구 설치 (rust-toolchain.toml)
+        run: rustup toolchain install
       - name: 프론트엔드 의존성 설치
         working-directory: frontend
         run: npm ci
