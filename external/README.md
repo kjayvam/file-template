@@ -18,10 +18,10 @@
 | 이름 | URL | 용도 |
 | --- | --- | --- |
 | Claude 폴더 구성 릴스 | https://www.instagram.com/reel/DcnTAsgSCXT/ | 개발 에이전트 설정 구조의 검토 참고 |
-| RAG 프로젝트 구성 릴스 1 | https://www.instagram.com/reel/Deo7_wiy8bB/ | 후속 RAG 확장 검토 자료; 이번 변경에는 미도입 |
+| RAG 프로젝트 구성 릴스 1 | https://www.instagram.com/reel/Deo7_wiy8bB/ | 후속 RAG 확장 검토 자료; 현재 미도입 |
 | Claude 프로젝트 구성 릴스 | https://www.instagram.com/reel/DdTjfkqyG3N/ | rules·skills·hooks 역할 비교 |
-| RAG 프로젝트 구성 릴스 2 | https://www.instagram.com/reel/DdUEInPyVVE/ | 후속 RAG 파이프라인 검토 자료; 이번 변경에는 미도입 |
-| AI Agent 구성 릴스 | https://www.instagram.com/reel/DeEOaYZxh4F/ | 후속 Agent 모듈·평가 구조 검토 자료; 이번 변경에는 미도입 |
+| RAG 프로젝트 구성 릴스 2 | https://www.instagram.com/reel/DdUEInPyVVE/ | 후속 RAG 파이프라인 검토 자료; 현재 미도입 |
+| AI Agent 구성 릴스 | https://www.instagram.com/reel/DeEOaYZxh4F/ | 후속 Agent 모듈·평가 구조 검토 자료; 현재 미도입 |
 | Claude Code Hooks | https://code.claude.com/docs/en/hooks | hooks 등록 방식 확인 |
 | Claude Code Skills | https://code.claude.com/docs/en/skills | 명령·스킬 호출 및 기본 검토 경로 정리 참고 |
 | Vitest | https://vitest.dev/guide/ | React 테스트 러너 설정과 Vite·Node 호환성 확인 |

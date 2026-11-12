@@ -86,6 +86,10 @@ impl<E: Embedder, M: ChatModel> Rag<E, M> {
         self.index.clone()
     }
 
+    pub fn config(&self) -> &RagConfig {
+        &self.config
+    }
+
     fn check_embedding_version(&self) -> Result<(), AiError> {
         if self.embedder.version() != self.embedding_version
             || self.embedder.dimensions() != self.dimensions

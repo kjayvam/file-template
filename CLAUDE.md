@@ -13,20 +13,20 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 - `migrations/`: DB 마이그레이션 SQL (`NNNN_설명.up.sql` / `NNNN_설명.down.sql`)
 - `external/`: GitHub 저장소와 기타 외부 자료 목록 (`external/README.md`)
 - `templates/`: ai-common·rag 선택형 원본, module.json의 의존·소유 파일·공유 연결 지점. 적용 방법은 templates/README.md
-- `scripts/`, `examples/`, `.github/`
+- `scripts/`, `.github/`
 
 ## 명령어
 
 - 도구: Rust 1.99.1 (`rust-toolchain.toml`, `rustfmt` 포함), Node.js 22.12 이상(22 계열)과 npm. CI와 Docker 검증도 같은 계열을 사용합니다.
 - `./scripts/setup.sh`: 개발 환경 세팅 (.env가 없으면 예시 복사, `npm ci`)
-- `./scripts/check.sh`: Rust 포맷·컴파일·테스트와 프론트엔드 테스트·빌드. 도구 누락이나 검사 실패 시 오류 종료
+- `./scripts/check.sh`: Rust 포맷·컴파일·테스트와 프론트엔드 테스트·빌드, Docker 이미지와 `rust-toolchain.toml`의 Rust 버전 일치 확인. 도구 누락이나 검사 실패 시 오류 종료
 - `./scripts/check.sh --backend` / `--frontend`: 한쪽만 검증
 - `./scripts/check.sh --docker`: 로컬 Rust·Node 설치 없이 Docker로 같은 검사 실행 (.env 불필요)
 - `./scripts/build.sh`: Rust 컴파일과 프론트엔드 빌드만 검사 (테스트는 `check.sh`)
 - `./scripts/check-template-modules.sh --docker`: 임시 프로젝트에서 기본형→common→rag+common→common→기본형 검사. 네이티브는 Python 3.11+·Rust 설치 후 --docker 생략
 - `python3 scripts/template-module.py list`: 제공 모듈 목록. add/remove는 --project로 대상을 명시하고 --dry-run으로 변경 경로 검토
 - 개별 테스트: `cd backend && cargo test --locked`, `cd frontend && npm test`
-- `docker compose --env-file .env -f docker/docker-compose.dev.yml up`: 개발 환경 실행 (HMR + Rust 핫리로딩)
+- `docker compose --env-file .env -f docker/docker-compose.dev.yml up`: 개발 환경 실행 (Vite HMR. Rust 변경은 `restart backend`로 재컴파일). PostgreSQL이 필요하면 `--profile postgres` 추가
 - `docker compose --env-file .env -f docker/docker-compose.yml up --build`: 프로덕션 Docker 실행 (저장소 루트에서)
 - 로컬 직접 실행:
   - 백엔드: `cd backend && cargo run`

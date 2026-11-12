@@ -20,8 +20,8 @@ Rust의 함수·변수·모듈은 `snake_case`, 타입은 `PascalCase`, 상수�
 | **변수 및 함수** | `camelCase` | `getUserById`, `isLoading` |
 | **클래스 및 인터페이스/타입** | `PascalCase` | `UserService`, `UserProfile` |
 | **상수 (Environment/Config)** | `UPPER_SNAKE_CASE` | `MAX_RETRY_COUNT`, `DEFAULT_PAGE_SIZE` |
-| **파일명 (모듈/유틸)** | `kebab-case` 또는 `camelCase` (일관성 유지) | `user-service.js`, `formatDate.js` |
-| **컴포넌트 파일명** | `PascalCase` | `UserProfileCard.jsx` |
+| **파일명 (모듈/유틸)** | `kebab-case` 또는 `camelCase` (일관성 유지) | `user-service.ts`, `formatDate.ts` |
+| **컴포넌트 파일명** | `PascalCase` | `UserProfileCard.tsx` |
 
 - **불리언 변수/함수**: 상태를 명확히 표현할 수 있도록 접두사를 붙입니다 (`is`, `has`, `can`, `should` 등).
   - 예: `isActive`, `hasPermission`, `canSubmit`
@@ -29,17 +29,17 @@ Rust의 함수·변수·모듈은 `snake_case`, 타입은 `PascalCase`, 상수�
 ## 주석 및 문서화
 
 - **왜(Why)**에 집중: 코드가 '무엇을(What)' 하는지는 코드 자체로 설명하고, 주석은 **왜 그렇게 작성했는지(Why)** 배경과 의도를 설명합니다.
-- 복잡한 비즈니스 로직이나 공용 함수에는 JSDoc/TSDoc 형태의 함수 명세를 작성합니다:
-  ```javascript
+- 복잡한 비즈니스 로직이나 공용 함수에는 TSDoc 형태의 함수 명세를 작성합니다. 타입은 TypeScript 시그니처에 두고 주석에는 의미만 적습니다:
+  ```typescript
   /**
    * 사용자 ID로 프로필 정보를 조회합니다.
    *
-   * @param {string} userId - 조회할 사용자의 고유 ID
-   * @returns {Promise<UserProfile>} 사용자 프로필 정보
-   * @throws {NotFoundError} 사용자가 존재하지 않을 경우 발생
+   * @param userId - 조회할 사용자의 고유 ID
+   * @throws NotFoundError 사용자가 존재하지 않을 경우 발생
    */
-  async function getUserProfile(userId) { ... }
+  async function getUserProfile(userId: string): Promise<UserProfile> { ... }
   ```
+- Rust 공개 항목에는 `///` 문서 주석을 사용합니다.
 
 ## 에러 처리
 

@@ -3,7 +3,23 @@ name: Template modules
 on:
   push:
     branches: [main]
+    paths:
+      - "backend/**"
+      - "templates/**"
+      - "scripts/template-module.py"
+      - "scripts/verify-template-modules.py"
+      - "scripts/check-template-modules.sh"
+      - "rust-toolchain.toml"
+      - ".github/workflows/template-modules.yml"
   pull_request:
+    paths:
+      - "backend/**"
+      - "templates/**"
+      - "scripts/template-module.py"
+      - "scripts/verify-template-modules.py"
+      - "scripts/check-template-modules.sh"
+      - "rust-toolchain.toml"
+      - ".github/workflows/template-modules.yml"
 
 permissions:
   contents: read
@@ -16,7 +32,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      - name: Rust 도구 준비
-        run: rustup show
+      - name: Rust 도구 설치 (rust-toolchain.toml)
+        run: rustup toolchain install
       - name: 임시 프로젝트의 모듈 적용·제거 검증
         run: ./scripts/check-template-modules.sh

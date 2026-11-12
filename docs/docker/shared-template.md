@@ -96,7 +96,7 @@ volumes:
     name: sync_cargo_cache
 ```
 
-* 호스트에 `sync_cargo_cache` 볼륨이 이미 존재하면 이를 재사용하고, 없을 때는 로컬 `cargo-cache` 볼륨을 사용하는 방식으로 유연하게 전환합니다.
+* `external: true` 볼륨은 자동으로 대체되지 않습니다. 호스트에 `sync_cargo_cache`가 없으면 Compose가 실패하므로, 공유 서버에서만 이 override 파일을 추가하고 단독 실행에서는 기본 `cargo-cache` 볼륨을 그대로 사용합니다.
 
 ---
 

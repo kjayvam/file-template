@@ -7,7 +7,7 @@
 ## 주요 역할
 
 - **컨테이너 내부 에이전트 지원**: 에이전트가 격리된 컨테이너 환경에서 코드 빌드, 테스트 실행, DB 쿼리 등을 수행할 때 필요한 MCP 서버를 제공합니다.
-- **도커 네트워크 연동**: 호스트(`localhost`)가 아닌 동일 도커 네트워크 상의 서비스(예: `db:5432`, `app:3000`)와 직접 통신할 수 있는 MCP 환경을 구성합니다.
+- **도커 네트워크 연동**: 호스트(`localhost`)가 아닌 동일 도커 네트워크 상의 서비스(예: `db:5432`, `backend:8080`)와 직접 통신할 수 있는 MCP 환경을 구성합니다.
 
 ## 컨테이너 환경 MCP 설정 예시
 
@@ -16,20 +16,18 @@
 ```json
 {
   "mcpServers": {
-    "postgres-internal": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://my_project:change-me@db:5432/my_project"
-      ]
+    "database-internal": {
+      "command": "<사용할 DB MCP 서버 실행 명령>",
+      "args": ["<서버 인자>", "${DATABASE_URL}"]
     }
   }
 }
 ```
 
+DB MCP 서버는 [MCP 가이드](../../docs/guides/mcp.md)의 선택 기준을 따릅니다. 컨테이너 안의 `DATABASE_URL`은 `localhost` 대신 서비스 이름을 씁니다. (예: `postgresql://<사용자>:<비밀번호>@db:5432/<DB 이름>`)
+
 > **네트워크 참고**:
-> - 같은 Compose 네트워크 내 서비스와 통신할 때는 컨테이너 서비스 이름(`db`, `app` 등)을 호스트명으로 사용합니다.
+> - 같은 Compose 네트워크 내 서비스와 통신할 때는 컨테이너 서비스 이름(`db`, `backend` 등)을 호스트명으로 사용합니다.
 > - 호스트 머신의 서비스에 접근해야 하는 경우 `host.docker.internal`을 사용합니다.
 
 ## 디렉토리 관리 규칙

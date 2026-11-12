@@ -17,13 +17,15 @@ Model Context Protocol(MCP)은 AI 에이전트(Antigravity, Claude 등)가 외�
       "command": "uvx",
       "args": ["mcp-server-fetch"]
     },
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"]
+    "database": {
+      "command": "<사용할 DB MCP 서버 실행 명령>",
+      "args": ["<서버 인자>", "${DATABASE_URL}"]
     }
   }
 }
 ```
+
+DB MCP 서버는 프로젝트가 선택한 DB와 유지보수 상태를 확인하고 고릅니다. 예전에 많이 쓰던 `@modelcontextprotocol/server-postgres`는 공식 저장소에서 보관(archived)되고 npm에서 지원 중단된 패키지이므로 새로 도입하지 않습니다. 연결 문자열은 위처럼 환경 변수로 넘깁니다.
 
 ## 보안 및 비밀 값 관리 수칙
 
@@ -32,7 +34,7 @@ Model Context Protocol(MCP)은 AI 에이전트(Antigravity, Claude 등)가 외�
 
 1. **환경 변수 참조**: 민감한 키 값은 `.env` 또는 시스템 환경 변수로 주입합니다.
 2. **최소 권한 원칙**: DB 연동 시 가급적 읽기 전용 계정을 연결하거나, 개발/테스트용 로컬 데이터베이스를 사용합니다.
-3. **로컬 전용 설정 분리**: 개인 개발용 MCP 서버가 필요하다면 `.gitignore`에 등록된 로컬 전용 설정 파일을 활용합니다.
+3. **로컬 전용 설정 분리**: 개인 개발용 MCP 서버는 공유 `.mcp.json`에 넣지 않고 각 도구의 개인 범위 설정에 등록합니다. (예: Claude Code `claude mcp add --scope local`은 저장소 밖의 사용자 설정에 저장)
 
 ## 권장 MCP 도구 유형
 
@@ -45,5 +47,5 @@ Model Context Protocol(MCP)은 AI 에이전트(Antigravity, Claude 등)가 외�
 에이전트를 로컬 호스트가 아닌 격리된 도커 컨테이너(샌드박스) 내부에서 실행할 경우:
 
 - **설정 디렉토리**: [`docker/mcp/`](../../docker/mcp/README.md)에 컨테이너 내부 에이전트용 MCP 설정 및 스크립트를 관리합니다.
-- **네트워크 주소 주의**: 호스트 기준의 `localhost` 대신 도커 네트워크 상의 서비스 이름(예: `db`, `app`)이나 `host.docker.internal`을 사용해야 합니다.
+- **네트워크 주소 주의**: 호스트 기준의 `localhost` 대신 도커 네트워크 상의 서비스 이름(예: `db`, `backend`)이나 `host.docker.internal`을 사용해야 합니다.
 - **볼륨 마운트**: 개발 중인 커스텀 MCP 도구는 컨테이너 재빌드 없이 테스트할 수 있도록 볼륨 마운트하여 연동합니다.

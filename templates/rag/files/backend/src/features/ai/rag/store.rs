@@ -35,7 +35,7 @@ fn cosine(a: &[f32], b: &[f32]) -> f64 {
 }
 
 impl MemoryIndex {
-    /// Host-only ingestion. A fixed index signature prevents mixed embedding/chunk versions.
+    /// Host-only ingestion. Embedding version mixing is rejected earlier by `Rag::check_embedding_version`.
     pub(super) fn put(&self, document: Document, chunks: Vec<Chunk>) -> Result<bool, AiError> {
         let mut entries = self
             .entries
@@ -64,6 +64,10 @@ impl MemoryIndex {
     }
 
     pub fn set_readers(&self, tenant: &str, id: &str, readers: Vec<String>) -> Result<(), AiError> {
+        // Same reader validation as ingestion (chunk::split).
+        if readers.iter().any(|reader| reader.trim().is_empty()) {
+            return Err(AiError::InvalidInput);
+        }
         let mut entries = self
             .entries
             .write()

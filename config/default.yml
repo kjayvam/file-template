@@ -1,6 +1,6 @@
 app:
   name: my-project
-  port: 3000
+  port: 8080
 
 log:
   level: info

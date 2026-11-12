@@ -77,12 +77,11 @@ async fn selected_modules_register_only_their_routes() {{
 ''')
             backend = project / "backend"
             execute(["cargo", "fmt", "--", "--check"], cwd=backend, env=env)
-            execute(["cargo", "check", "--locked", "--quiet"], cwd=backend, env=env)
             result = execute(["cargo", "test", "--locked", "--quiet"], cwd=backend, env=env)
             totals = [int(n) for n in re.findall(r"test result: ok\. (\d+) passed", result.stdout)]
             assert sum(totals) > 0, "No tests executed"
             assert not (project / "templates").exists(), "Runtime must not depend on catalog"
-            print(f"PASS {label}: fmt/check, {sum(totals)} Rust tests (includes lifecycle probe)", flush=True)
+            print(f"PASS {label}: fmt, {sum(totals)} Rust tests (includes lifecycle probe)", flush=True)
 
         verify("base", [])
         module("add", "rag", succeeds=False)

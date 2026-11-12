@@ -1,0 +1,8 @@
+# docker-compose.yml의 빌드 컨텍스트는 backend/이므로 루트가 아닌 이 파일이 적용됩니다.
+target
+Dockerfile
+.dockerignore
+*.log
+.env
+.env.*
+*.env

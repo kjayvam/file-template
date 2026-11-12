@@ -4,9 +4,21 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-  # 언어와 패키지 매니저를 정한 뒤 해당 설정을 추가하세요 (npm, pip, gomod 등).
-  # npm 예시: 루트에 package.json을 추가한 뒤 아래 주석을 해제하세요.
-  # - package-ecosystem: "npm"
-  #   directory: "/"
-  #   schedule:
-  #     interval: "weekly"
+  # 잠금 파일(Cargo.lock, package-lock.json)은 Dependabot PR에서 갱신되고 CI는 --locked·npm ci로 검증합니다.
+  - package-ecosystem: "cargo"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+  # Rust 이미지 갱신 PR은 rust-toolchain.toml도 같은 버전으로 올려야 check.sh를 통과합니다.
+  - package-ecosystem: "docker"
+    directories: ["/backend", "/frontend"]
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: "docker-compose"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"

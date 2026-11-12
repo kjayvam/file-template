@@ -33,7 +33,7 @@ export const App: React.FC = () => {
       <h1>Rust + React Template</h1>
       <p>초기 템플릿 환경이 성공적으로 설정되었습니다.</p>
       <section style={{ marginTop: "1rem", padding: "1rem", background: "#f4f4f5", borderRadius: "8px" }}>
-        <h3>Backend Health Check</h3>
+        <h2>Backend Health Check</h2>
         {error ? (
           <p role="alert">백엔드에 연결할 수 없습니다. 서버 상태를 확인해 주세요.</p>
         ) : health ? (

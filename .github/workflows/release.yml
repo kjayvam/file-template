@@ -6,24 +6,17 @@ on:
       - "v*"
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
+  check:
+    uses: ./.github/workflows/ci.yml
+
   release:
+    needs: check
     runs-on: ubuntu-latest
+    # GitHub Release를 만들거나 패키지를 올리는 단계를 추가할 때만 필요한 권한(contents: write 등)을 이 job에 엽니다.
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-      - name: Rust 도구 설치
-        run: rustup show
-      - name: 프론트엔드 의존성 설치
-        working-directory: frontend
-        run: npm ci
-      - name: 포맷, 테스트 및 빌드
-        run: ./scripts/check.sh
       - name: 배포
         run: ./scripts/deploy.sh

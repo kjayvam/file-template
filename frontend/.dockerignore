@@ -1,0 +1,12 @@
+# docker-compose.yml의 빌드 컨텍스트는 frontend/이므로 루트가 아닌 이 파일이 적용됩니다.
+# 호스트 node_modules가 이미지 안의 npm ci 결과를 덮어쓰지 않도록 제외합니다.
+node_modules
+dist
+coverage
+*.tsbuildinfo
+Dockerfile
+.dockerignore
+*.log
+.env
+.env.*
+*.env
