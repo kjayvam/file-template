@@ -22,7 +22,7 @@ jobs:
         # 프로젝트에서 사용하는 언어만 남깁니다. (actions는 워크플로 파일 자체를 검사)
         language: [javascript-typescript, rust, actions]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
