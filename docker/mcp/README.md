@@ -16,17 +16,15 @@
 ```json
 {
   "mcpServers": {
-    "postgres-internal": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-postgres",
-        "postgresql://my_project:change-me@db:5432/my_project"
-      ]
+    "database-internal": {
+      "command": "<사용할 DB MCP 서버 실행 명령>",
+      "args": ["<서버 인자>", "${DATABASE_URL}"]
     }
   }
 }
 ```
+
+DB MCP 서버는 [MCP 가이드](../../docs/guides/mcp.md)의 선택 기준을 따릅니다. 컨테이너 안의 `DATABASE_URL`은 `localhost` 대신 서비스 이름을 씁니다. (예: `postgresql://<사용자>:<비밀번호>@db:5432/<DB 이름>`)
 
 > **네트워크 참고**:
 > - 같은 Compose 네트워크 내 서비스와 통신할 때는 컨테이너 서비스 이름(`db`, `backend` 등)을 호스트명으로 사용합니다.

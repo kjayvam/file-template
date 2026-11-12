@@ -16,6 +16,8 @@
 - 백엔드 이미지를 root가 아닌 사용자로 실행하고 SIGTERM에 정상 종료
 - 사용하지 않는 Rust 의존성(dotenvy, tower-http, chrono serde feature) 제거
 - Release 워크플로가 CI를 재사용하고 쓰기 권한을 쓰지 않도록 변경
+- MCP 예시를 보관된 `@modelcontextprotocol/server-postgres` 대신 특정 패키지에 묶이지 않는 형태로 변경, `ROADMAP.md` 최소 양식 작성, 빈 `examples/` 제거
+- rag 데모 라우트가 백엔드가 열린 모든 곳에서 접근된다는 실제 동작으로 문서 수정
 - 검사 스크립트의 Rust 이미지 버전을 `rust-toolchain.toml`에서 읽고 Docker 볼륨 접두사를 한 변수로 모음
 
 ### Fixed

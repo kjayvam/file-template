@@ -13,7 +13,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 - `migrations/`: DB 마이그레이션 SQL (`NNNN_설명.up.sql` / `NNNN_설명.down.sql`)
 - `external/`: GitHub 저장소와 기타 외부 자료 목록 (`external/README.md`)
 - `templates/`: ai-common·rag 선택형 원본, module.json의 의존·소유 파일·공유 연결 지점. 적용 방법은 templates/README.md
-- `scripts/`, `examples/`, `.github/`
+- `scripts/`, `.github/`
 
 ## 명령어
 

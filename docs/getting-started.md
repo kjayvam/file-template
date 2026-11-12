@@ -70,7 +70,7 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 | `.github/CODEOWNERS`, `.github/ISSUE_TEMPLATE/config.yml` | `@OWNER`, `OWNER/REPO`를 실제 사용자·저장소로 변경 |
 | `SECURITY.md`, `CODE_OF_CONDUCT.md` | `<보안 담당 이메일>`, `<연락처 이메일>` 채우기 |
 | `.github/FUNDING.yml` | 후원 링크가 없으면 파일 삭제 |
-| `config/*.yml`, `.env.example`, `docker/docker-compose*.yml`, `docker/mcp/README.md` | 기본 이름 `my-project`, `my_project`와 DB 이름 변경 |
+| `config/*.yml`, `.env.example`, `docker/docker-compose*.yml` | 기본 이름 `my-project`, `my_project`와 DB 이름 변경 |
 | `scripts/check.sh`, `scripts/check-template-modules.sh` | `volume_prefix`를 프로젝트 이름으로 변경. 다른 프로젝트와 Docker 검증용 빌드 산출물·`node_modules` 볼륨을 공유하지 않게 합니다 |
 | `CHANGELOG.md` | 템플릿 이력을 지우고 `[Unreleased]`부터 다시 시작 |
 | `migrations/0001_create_users.*` | PostgreSQL 예시입니다. 어느 DB에도 적용하기 전에 실제 스키마로 바꾸거나 삭제 |

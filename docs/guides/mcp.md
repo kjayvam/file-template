@@ -17,13 +17,15 @@ Model Context Protocol(MCP)은 AI 에이전트(Antigravity, Claude 등)가 외�
       "command": "uvx",
       "args": ["mcp-server-fetch"]
     },
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://localhost/mydb"]
+    "database": {
+      "command": "<사용할 DB MCP 서버 실행 명령>",
+      "args": ["<서버 인자>", "${DATABASE_URL}"]
     }
   }
 }
 ```
+
+DB MCP 서버는 프로젝트가 선택한 DB와 유지보수 상태를 확인하고 고릅니다. 예전에 많이 쓰던 `@modelcontextprotocol/server-postgres`는 공식 저장소에서 보관(archived)되고 npm에서 지원 중단된 패키지이므로 새로 도입하지 않습니다. 연결 문자열은 위처럼 환경 변수로 넘깁니다.
 
 ## 보안 및 비밀 값 관리 수칙
 

@@ -17,7 +17,6 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 | `scripts/` | 환경·빌드·기본형 검증, 모듈 추가·제거(`template-module.py`)와 임시 프로젝트 검증(`check-template-modules.sh`) |
 | [`templates/`](templates/README.md) | ai-common·rag의 선택형 원본, 의존·소유 파일 목록과 적용·제거 안내 |
 | `rust-toolchain.toml` | 로컬·CI가 사용할 Rust 버전과 rustfmt 고정 |
-| `examples/` | 사용 예제 |
 | [`external/`](external/README.md) | GitHub 저장소와 기타 외부 자료 목록 |
 | `.github/` | GitHub 워크플로 및 협업 설정 |
 
