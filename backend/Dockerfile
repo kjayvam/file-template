@@ -1,7 +1,9 @@
 # 1. Base 스테이지: cargo-chef 준비
 # rust:*-alpine 이미지에 musl-dev·gcc가 포함되어 있어 별도 apk 설치가 필요 없습니다.
 FROM rust:1.99.1-alpine AS chef
-RUN cargo install cargo-chef --locked
+# 빌드마다 다른 cargo-chef가 설치되지 않도록 고정합니다. Dependabot이 갱신하지 않으므로 Rust를 올릴 때 함께 확인합니다.
+ARG CARGO_CHEF_VERSION=0.1.78
+RUN cargo install cargo-chef --locked --version "$CARGO_CHEF_VERSION"
 WORKDIR /app
 
 # 2. Planner 스테이지: 의존성 레시피 생성

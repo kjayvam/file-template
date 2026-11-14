@@ -34,5 +34,11 @@ jobs:
           python-version: "3.12"
       - name: Rust 도구 설치 (rust-toolchain.toml)
         run: rustup toolchain install
+      # 검증은 매번 새 임시 프로젝트·target에서 컴파일하므로 Cargo 레지스트리 다운로드만 재사용합니다.
+      - name: Cargo 레지스트리 캐시
+        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          workspaces: backend
+          cache-targets: false
       - name: 임시 프로젝트의 모듈 적용·제거 검증
         run: ./scripts/check-template-modules.sh
