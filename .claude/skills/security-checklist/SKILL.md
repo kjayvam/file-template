@@ -17,9 +17,10 @@ description: 이 프로젝트의 보안 검토 체크리스트. 코드, 설정, 
 
 ## Docker
 - 컨테이너가 root가 아닌 사용자로 실행되는가
+- Nginx 응답에 기본 보안 헤더가 빠진 location이 없는가 (location의 `add_header`는 server 값을 상속하지 않음)
 - 이미지에 `.env`나 개발용 파일이 들어가지 않는가
 - DB 포트나 비밀번호가 필요 이상으로 노출되지 않는가
 
 ## GitHub Actions
 - 워크플로 `permissions`가 필요한 만큼만 열려 있는가
-- 외부 액션의 버전이 고정되어 있는가
+- 외부 액션이 커밋 SHA와 버전 주석(`@<sha> # vX.Y.Z`)으로 고정되어 있는가

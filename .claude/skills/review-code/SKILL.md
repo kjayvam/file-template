@@ -4,7 +4,6 @@ description: 지정한 파일이나 폴더를 code-reviewer 서브에이전트�
 context: fork
 agent: code-reviewer
 disable-model-invocation: true
-background: false
 argument-hint: "[파일 또는 폴더]"
 ---
 

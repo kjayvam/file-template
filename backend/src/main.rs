@@ -6,10 +6,8 @@ use tracing::info;
 async fn main() {
     tracing_subscriber::fmt::init();
 
-    let port = std::env::var("PORT")
-        .unwrap_or_else(|_| "8080".to_string())
-        .parse::<u16>()
-        .unwrap_or(8080);
+    let port =
+        port_from(std::env::var("PORT").ok().as_deref()).unwrap_or_else(|error| panic!("{error}"));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], port));
     let listener = tokio::net::TcpListener::bind(addr)
@@ -21,6 +19,17 @@ async fn main() {
         .with_graceful_shutdown(shutdown_signal())
         .await
         .expect("서버 실행 중 오류가 발생했습니다");
+}
+
+/// PORT가 없으면 8080을 쓰고, 잘못된 값은 다른 포트로 조용히 바꾸지 않고 시작을 멈춥니다.
+fn port_from(value: Option<&str>) -> Result<u16, String> {
+    match value {
+        None => Ok(8080),
+        Some(text) => text
+            .trim()
+            .parse::<u16>()
+            .map_err(|_| format!("PORT 값이 올바르지 않습니다: {text:?} (0~65535 정수)")),
+    }
 }
 
 /// Ctrl+C 또는 SIGTERM(docker stop)을 받으면 진행 중인 요청을 마치고 종료합니다.
@@ -48,4 +57,18 @@ async fn shutdown_signal() {
         _ = terminate => {},
     }
     info!("종료 신호를 받아 서버를 정리합니다");
+}
+
+#[cfg(test)]
+mod tests {
+    use super::port_from;
+
+    #[test]
+    fn port_defaults_to_8080_and_rejects_invalid_values() {
+        assert_eq!(port_from(None), Ok(8080));
+        assert_eq!(port_from(Some("3000")), Ok(3000));
+        assert!(port_from(Some("abc")).is_err());
+        assert!(port_from(Some("70000")).is_err());
+        assert!(port_from(Some("")).is_err());
+    }
 }

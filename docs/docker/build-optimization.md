@@ -44,6 +44,7 @@ flowchart TD
 * **단일 오리진 제공**: 클라이언트(브라우저)는 Nginx 포트(예: `:80`)로만 접속합니다.
 * **정적 서빙 & 프록시 분기**:
   * `/` 및 정적 리소스 요청: Nginx가 gzip 압축을 적용하고, 해시가 붙은 `/assets/`는 1년 캐시, `index.html`은 매번 재검증하도록 응답 (`docker/nginx/default.conf`)
+  * 보안 헤더: 모든 응답에 `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`을 붙입니다. CSP·HSTS는 프로젝트의 스크립트 출처와 HTTPS 종단에 맞춰 추가합니다.
   * `/api/*` 요청: Nginx가 경로를 그대로 유지한 채 동일 도커 네트워크의 Rust 백엔드(`http://backend:8080`)로 프록시하여 CORS 문제를 원천 제거
 
 ---

@@ -29,6 +29,10 @@
 - @testing-library/jest-dom 7.0.1로 갱신, Dependabot이 `@types/node`의 22 계열 밖 major 갱신은 제안하지 않음
 - 새 프로젝트 자리표시자 목록에 `LICENSE`·`ROADMAP.md` 추가, README 폴더 표에 `.claude/`, 외부 자료에 checkout·codeql-action·cargo-chef 추가
 - Dependabot이 PostgreSQL 이미지의 major 갱신은 제안하지 않음(기존 `pg-data` 볼륨과 호환되지 않음)
+- GitHub Actions를 커밋 SHA와 버전 주석으로 고정하고 CI에 Rust 빌드 캐시(`Swatinem/rust-cache`) 추가
+- Nginx가 모든 응답에 `X-Content-Type-Options`·`X-Frame-Options`·`Referrer-Policy` 보안 헤더를 보냄
+- ADR-0001 상태를 채택으로 변경(ai-common·rag 구현, 나머지 모듈은 제안), DB 가이드에 인라인 `UNIQUE`의 제약 이름 안내 추가
+- 쓰지 않는 `docs/images/`와 review-code 스킬의 미지원 `background` 필드 제거, 모듈 Python 스크립트에 실행 권한 부여
 - 새 프로젝트 자리표시자 목록에 프론트엔드 제목·시작 문구, AI 모듈 삭제 시 정리할 문서에 `docs/architecture.md`·`docs/guides/agent-knowledge.md`, README의 `.claude/` 설명에 `agent-memory/`·`workflows/` 추가
 
 ### Fixed
@@ -39,6 +43,7 @@
 - `check-template-modules.sh --docker`가 docker 없이 실행될 때 안내 없이 실패하던 문제
 - rag가 변경 없는 문서를 다시 수집할 때도 모든 청크를 임베딩하던 문제
 - rag 데모 API가 내부 저장소 오류(`store_unavailable`)를 공급자 장애처럼 502로 반환하던 문제(500으로 변경)
+- 잘못된 `PORT` 값을 조용히 8080으로 바꾸던 문제(이제 시작 시 오류로 종료)
 - `check-template-modules.sh`의 네이티브 실행이 Python 3.11 미만이나 rustfmt 없는 환경에서 원인 안내 없이 실패하던 문제
 - 빌드 최적화 문서의 Dockerfile 명령이 실제와 달리 `--locked`·`--bin backend`를 빠뜨리던 부분, 외부 자료의 Tower 문서 링크를 잠금 파일 버전(0.5.3)으로 수정
 - AI 확장 문서가 없는 `IdentityResolver`, Cargo 변경, 부분 제거를 현재 동작처럼 설명하던 부분과 데모 응답 형식 차이, DB·MCP 가이드의 실행·환경 변수 설명, README의 Docker 검증 산출물 설명
