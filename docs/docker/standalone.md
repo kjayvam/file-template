@@ -12,7 +12,8 @@
 - Docker Compose v2 (Compose CLI)
 - 로컬 환경 설정 파일:
   ```bash
-  cp .env.example .env
+  # .env가 없을 때만 예시를 복사합니다. (기존 .env를 덮어쓰지 않음)
+  [ -f .env ] || cp .env.example .env
   ```
 
 ---

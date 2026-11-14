@@ -11,7 +11,9 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 TOOL = ROOT / "scripts/template-module.py"
-BASE_FILES = ["backend/Cargo.toml", "backend/Cargo.lock", "backend/src/lib.rs", "backend/src/main.rs", "backend/tests/health.rs"]
+# Copy the whole backend so files a project adds after cloning (modules, routes) still compile.
+# Build output and secret files never enter the disposable project.
+BACKEND_IGNORE = shutil.ignore_patterns("target", ".env", ".env.*", "*.env", ".DS_Store")
 # The disposable project lives outside the checkout, so copy the pin or rustup falls back to its default toolchain.
 OPTIONAL_FILES = ["rust-toolchain.toml"]
 
@@ -33,12 +35,11 @@ def main():
         scratch = Path(scratch)
         project = scratch / "project"
         project.mkdir()
-        names = BASE_FILES + [name for name in OPTIONAL_FILES if (ROOT / name).is_file()]
-        for name in names:
-            target = project / name
-            target.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(ROOT / name, target)
-        original = {name: (project / name).read_bytes() for name in names}
+        shutil.copytree(ROOT / "backend", project / "backend", ignore=BACKEND_IGNORE)
+        for name in OPTIONAL_FILES:
+            if (ROOT / name).is_file():
+                shutil.copyfile(ROOT / name, project / name)
+        original = {p.relative_to(project).as_posix(): p.read_bytes() for p in project.rglob("*") if p.is_file()}
         env = os.environ.copy()
         env.setdefault("CARGO_TARGET_DIR", str(scratch / "target"))
         checks = 0

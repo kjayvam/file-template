@@ -70,8 +70,9 @@ case "${1:-}" in
     require_tool docker
     check_rust_pins
     # 빌드 산출물(target)과 node_modules는 Docker 볼륨에 두어 호스트용 빌드·의존성을 덮어쓰지 않습니다.
+    # 백엔드 검사는 소스를 쓰지 않으므로 읽기 전용으로 마운트합니다. (프론트엔드 빌드는 dist를 만듭니다)
     docker run --rm \
-      --mount "type=bind,src=$project_root/backend,dst=/workspace/backend" \
+      --mount "type=bind,src=$project_root/backend,dst=/workspace/backend,readonly" \
       --mount "type=bind,src=$project_root/scripts,dst=/workspace/scripts,readonly" \
       --mount "type=volume,src=$volume_prefix-check-cargo,dst=/usr/local/cargo/registry" \
       --mount "type=volume,src=$volume_prefix-check-target,dst=/check-target" \
