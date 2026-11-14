@@ -83,4 +83,4 @@ rag가 남아 있으면 ai-common 제거는 거부됩니다. 소유 파일이나
 
 현재 체크아웃에 모듈을 적용하지 않고 임시 프로젝트에서 base → common → rag+common → common → base 순서로 Rust 포맷·컴파일·테스트와 라우트 상태를 확인합니다. 제거는 카탈로그가 없는 독립 도구 사본으로 검사합니다. 의존 순서·덮어쓰기·심볼릭 링크·사용자 변경·dry-run 거부 검사와 데이터·기존 Cargo 파일 보존도 확인합니다.
 
-Docker는 임시 프로젝트와 전용 `file-template-modules-target` 빌드 캐시, 기존 Cargo 다운로드 캐시를 사용합니다. 원본 backend·templates·scripts는 읽기 전용으로 마운트하고 `.env`·개인 설정은 복사하지 않습니다. 네이티브 검증은 Python 3.11+, Rust·rustfmt 설치 후 같은 명령에서 `--docker`를 빼면 됩니다.
+Docker는 임시 프로젝트와 전용 `file-template-modules-target` 빌드 캐시, 기존 Cargo 다운로드 캐시를 사용합니다. 원본 backend·templates·scripts·`rust-toolchain.toml`은 읽기 전용으로 마운트하고 `.env`·개인 설정은 복사하지 않습니다. 네이티브 검증은 Python 3.11+, Rust·rustfmt 설치 후 같은 명령에서 `--docker`를 빼면 됩니다.

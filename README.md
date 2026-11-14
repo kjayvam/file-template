@@ -51,7 +51,6 @@ Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌
 - [평가 데이터, 지표·통과 기준, offline/live CI](docs/guides/ai-evaluation.md)
 - [구조 선택 이유와 대안 비교](docs/adr/0001-optional-ai-extensions.md)
 
-
 모듈별 적용·제거 명령은 [템플릿 카탈로그](templates/README.md)에 있습니다. 실제 프로젝트를 수정하지 않고 전체 수명주기를 검사하려면 다음을 실행합니다.
 
 ```bash

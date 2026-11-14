@@ -19,8 +19,13 @@
 - MCP 예시를 보관된 `@modelcontextprotocol/server-postgres` 대신 특정 패키지에 묶이지 않는 형태로 변경, `ROADMAP.md` 최소 양식 작성, 빈 `examples/` 제거
 - rag 데모 라우트가 백엔드가 열린 모든 곳에서 접근된다는 실제 동작으로 문서 수정
 - 검사 스크립트의 Rust 이미지 버전을 `rust-toolchain.toml`에서 읽고 Docker 볼륨 접두사를 한 변수로 모음
+- 백엔드 런타임 이미지 alpine 3.24, GitHub Actions checkout v7, 프론트엔드 TypeScript 7.0.2로 갱신
+- Dependabot이 react·react-dom·타입 패키지와 vite·@vitejs/plugin-react를 한 PR로 묶고, Node 이미지의 22 계열 밖 major 갱신은 제안하지 않음
+- 개발 Compose의 `cargo run`도 `--locked`로 잠금 파일을 사용
 
 ### Fixed
 - Nginx가 `/api/` 접두사를 잘라 프로덕션에서 `/api/v1/health`가 404가 되던 문제
 - CI와 시작 안내가 툴체인을 설치하지 않는 `rustup show` 대신 `rustup toolchain install`을 사용
 - rag 데모 API가 `top_k` 생략 시 설정과 무관한 고정값 5를 쓰던 문제, `set_readers`의 빈 reader 허용
+- 모듈 수명주기 검증의 임시 프로젝트가 `rust-toolchain.toml`을 받지 않아 네이티브·CI 실행이 고정되지 않은 기본 Rust로 컴파일하던 문제
+- `check-template-modules.sh --docker`가 docker 없이 실행될 때 안내 없이 실패하던 문제

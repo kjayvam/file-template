@@ -12,6 +12,8 @@ import tempfile
 ROOT = Path(__file__).resolve().parent.parent
 TOOL = ROOT / "scripts/template-module.py"
 BASE_FILES = ["backend/Cargo.toml", "backend/Cargo.lock", "backend/src/lib.rs", "backend/src/main.rs", "backend/tests/health.rs"]
+# The disposable project lives outside the checkout, so copy the pin or rustup falls back to its default toolchain.
+OPTIONAL_FILES = ["rust-toolchain.toml"]
 
 
 def execute(command, *, cwd, env=None, succeeds=True):
@@ -31,11 +33,12 @@ def main():
         scratch = Path(scratch)
         project = scratch / "project"
         project.mkdir()
-        for name in BASE_FILES:
+        names = BASE_FILES + [name for name in OPTIONAL_FILES if (ROOT / name).is_file()]
+        for name in names:
             target = project / name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, target)
-        original = {name: (project / name).read_bytes() for name in BASE_FILES}
+        original = {name: (project / name).read_bytes() for name in names}
         env = os.environ.copy()
         env.setdefault("CARGO_TARGET_DIR", str(scratch / "target"))
         checks = 0

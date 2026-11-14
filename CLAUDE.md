@@ -29,7 +29,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 - `docker compose --env-file .env -f docker/docker-compose.dev.yml up`: 개발 환경 실행 (Vite HMR. Rust 변경은 `restart backend`로 재컴파일). PostgreSQL이 필요하면 `--profile postgres` 추가
 - `docker compose --env-file .env -f docker/docker-compose.yml up --build`: 프로덕션 Docker 실행 (저장소 루트에서)
 - 로컬 직접 실행:
-  - 백엔드: `cd backend && cargo run`
+  - 백엔드: `cd backend && cargo run --locked`
   - 프론트엔드: `cd frontend && npm run dev`
 
 ## 규칙

@@ -13,12 +13,25 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "weekly"
+    # 서로의 peer 범위가 맞아야 npm ci가 통과하는 패키지는 한 PR로 묶습니다.
+    groups:
+      react:
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      vite:
+        patterns: ["vite", "@vitejs/plugin-react"]
   # Rust 이미지 갱신 PR은 rust-toolchain.toml도 같은 버전으로 올려야 check.sh를 통과합니다.
   - package-ecosystem: "docker"
     directories: ["/backend", "/frontend"]
     schedule:
       interval: "weekly"
+    # Node는 package.json engines(>=22.12 <23)와 같은 22 계열을 유지합니다.
+    ignore:
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: "docker-compose"
     directory: "/docker"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]
