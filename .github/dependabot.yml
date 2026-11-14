@@ -39,3 +39,6 @@ updates:
     ignore:
       - dependency-name: "node"
         update-types: ["version-update:semver-major"]
+      # PostgreSQL major 갱신은 기존 pg-data 볼륨을 그대로 읽지 못하므로(pg_upgrade·덤프 복원 필요) 수동으로 올립니다.
+      - dependency-name: "postgres"
+        update-types: ["version-update:semver-major"]

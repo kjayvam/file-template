@@ -67,6 +67,7 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 | 위치 | 정리할 내용 |
 | --- | --- |
 | `README.md`, `CLAUDE.md` 제목 | 템플릿 이름(`file-template`, `my-project`)을 프로젝트 이름으로 변경 |
+| `frontend/index.html`, `frontend/src/App.tsx` | 페이지 제목 `App`과 시작 화면 문구(`Rust + React Template`)를 프로젝트에 맞게 변경 |
 | `.github/CODEOWNERS`, `.github/ISSUE_TEMPLATE/config.yml` | `@OWNER`, `OWNER/REPO`를 실제 사용자·저장소로 변경 |
 | `SECURITY.md`, `CODE_OF_CONDUCT.md` | `<보안 담당 이메일>`, `<연락처 이메일>` 채우기 |
 | `LICENSE` | `<소유자 이름>`을 저작권자로 바꾸거나 프로젝트에 맞는 라이선스로 교체 |
@@ -79,7 +80,7 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 | `scripts/deploy.sh`, `scripts/seed-db.sh` | 실패로 끝나는 자리표시자. 실제 명령으로 작성 |
 | `external/README.md` | 템플릿 작성용 참고 자료 중 프로젝트와 무관한 항목 정리 |
 
-선택형 AI 모듈을 쓰지 않으면 `templates/`, `scripts/template-module.py`, `scripts/verify-template-modules.py`, `scripts/check-template-modules.sh`, `.github/workflows/template-modules.yml`, AI 설계 문서(`docs/guides/ai-*.md`, `docs/adr/0001-optional-ai-extensions.md`)를 함께 지울 수 있습니다. 지운 뒤에는 `README.md`, `CLAUDE.md`, `docs/index.md`, `tests/README.md`, `.claude/rules/tests.md`의 관련 설명도 정리합니다.
+선택형 AI 모듈을 쓰지 않으면 `templates/`, `scripts/template-module.py`, `scripts/verify-template-modules.py`, `scripts/check-template-modules.sh`, `.github/workflows/template-modules.yml`, AI 설계 문서(`docs/guides/ai-*.md`, `docs/adr/0001-optional-ai-extensions.md`)를 함께 지울 수 있습니다. 지운 뒤에는 `README.md`, `CLAUDE.md`, `docs/index.md`, `docs/architecture.md`(선택형 AI 확장 절), `docs/guides/agent-knowledge.md`(제품 RAG 확장 절), `tests/README.md`, `.claude/rules/tests.md`의 관련 설명도 정리합니다.
 
 Rust 버전을 올릴 때는 `rust-toolchain.toml`, `backend/Dockerfile`, `docker/docker-compose.dev.yml`을 함께 바꿉니다. 세 곳이 다르면 `check.sh`가 실패합니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, `templates/README.md`, `docs/docker/build-optimization.md`)도 같이 갱신합니다.
 

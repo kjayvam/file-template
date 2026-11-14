@@ -14,8 +14,8 @@ Rust는 소스 코드 한 줄만 바뀌어도 모든 의존성을 다시 컴파�
 flowchart TD
     Base["1. base 스테이지<br/>(rust:1.99.1-alpine / chef 설치)"]
     Planner["2. planner 스테이지<br/>(cargo chef prepare --recipe-path recipe.json)"]
-    Builder["3. builder 스테이지<br/>(cargo chef cook --release --recipe-path recipe.json)<br/>★ 의존성만 미리 컴파일하여 캐싱!"]
-    CodeBuild["4. 소스 복사 및 최종 빌드<br/>(cargo build --release)"]
+    Builder["3. builder 스테이지<br/>(cargo chef cook --release --locked --recipe-path recipe.json)<br/>★ 의존성만 미리 컴파일하여 캐싱!"]
+    CodeBuild["4. 소스 복사 및 최종 빌드<br/>(cargo build --release --locked --bin backend)"]
     Runtime["5. runtime 스테이지<br/>(alpine, root가 아닌 app 사용자)<br/>★ 바이너리만 복사 (용량 < 30MB)"]
 
     Base --> Planner --> Builder --> CodeBuild --> Runtime
