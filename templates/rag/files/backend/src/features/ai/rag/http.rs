@@ -46,6 +46,8 @@ fn failure(error: AiError, request_id: &str) -> Response {
         AiError::BudgetExceeded => StatusCode::TOO_MANY_REQUESTS,
         AiError::DeadlineExceeded => StatusCode::GATEWAY_TIMEOUT,
         AiError::EvidenceChanged | AiError::RevisionConflict => StatusCode::CONFLICT,
+        // The in-memory store failing is an internal error, not a provider outage.
+        AiError::StoreUnavailable => StatusCode::INTERNAL_SERVER_ERROR,
         _ => StatusCode::BAD_GATEWAY,
     };
     (
@@ -105,5 +107,24 @@ async fn query(
         )
         .into_response(),
         Err(error) => failure(error, &id),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn failure_separates_internal_store_errors_from_provider_errors() {
+        let status = |error| failure(error, "t").status();
+        assert_eq!(
+            status(AiError::StoreUnavailable),
+            StatusCode::INTERNAL_SERVER_ERROR
+        );
+        assert_eq!(
+            status(AiError::ProviderUnavailable),
+            StatusCode::BAD_GATEWAY
+        );
+        assert_eq!(status(AiError::InvalidModelOutput), StatusCode::BAD_GATEWAY);
     }
 }

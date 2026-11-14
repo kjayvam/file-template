@@ -13,6 +13,10 @@ updates:
     directory: "/frontend"
     schedule:
       interval: "weekly"
+    # @types/node는 실행 Node와 같은 22 계열을 유지합니다. (engines, Docker 이미지와 함께 올립니다)
+    ignore:
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
     # 서로의 peer 범위가 맞아야 npm ci가 통과하는 패키지는 한 PR로 묶습니다.
     groups:
       react:

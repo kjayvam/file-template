@@ -25,6 +25,8 @@
 - axum 0.8.9, vite 8·@vitejs/plugin-react 6, react·react-dom 19로 갱신하고 rag 모듈의 기존 의존성 계열을 axum 0.8로 변경
 - 프로덕션 Compose가 백엔드 8080 포트를 호스트에 열지 않고 Nginx `/api/` 프록시로만 접근, frontend 런타임 이미지를 `nginx:1.31-alpine`으로 고정
 - `vite.config.ts`·`vitest.config.ts`를 `tsconfig.node.json`과 `@types/node` 22로 타입 검사
+- @testing-library/jest-dom 7.0.1로 갱신, Dependabot이 `@types/node`의 22 계열 밖 major 갱신은 제안하지 않음
+- 새 프로젝트 자리표시자 목록에 `LICENSE`·`ROADMAP.md` 추가, README 폴더 표에 `.claude/`, 외부 자료에 checkout·codeql-action·cargo-chef 추가
 
 ### Fixed
 - Nginx가 `/api/` 접두사를 잘라 프로덕션에서 `/api/v1/health`가 404가 되던 문제
@@ -33,3 +35,5 @@
 - 모듈 수명주기 검증의 임시 프로젝트가 `rust-toolchain.toml`을 받지 않아 네이티브·CI 실행이 고정되지 않은 기본 Rust로 컴파일하던 문제
 - `check-template-modules.sh --docker`가 docker 없이 실행될 때 안내 없이 실패하던 문제
 - rag가 변경 없는 문서를 다시 수집할 때도 모든 청크를 임베딩하던 문제
+- rag 데모 API가 내부 저장소 오류(`store_unavailable`)를 공급자 장애처럼 502로 반환하던 문제(500으로 변경)
+- AI 확장 문서가 없는 `IdentityResolver`, Cargo 변경, 부분 제거를 현재 동작처럼 설명하던 부분과 데모 응답 형식 차이, DB·MCP 가이드의 실행·환경 변수 설명, README의 Docker 검증 산출물 설명
