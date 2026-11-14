@@ -19,7 +19,7 @@ COPY . .
 RUN cargo build --release --locked --bin backend
 
 # 4. Runtime 스테이지: 초경량 실행 이미지
-FROM alpine:3.22 AS runtime
+FROM alpine:3.24 AS runtime
 RUN apk add --no-cache ca-certificates tzdata \
     && addgroup -S app \
     && adduser -S -G app -H app \
