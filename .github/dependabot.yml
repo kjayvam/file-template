@@ -24,15 +24,17 @@ updates:
         patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
       vite:
         patterns: ["vite", "@vitejs/plugin-react"]
-  # Rust 이미지 갱신 PR은 rust-toolchain.toml도 같은 버전으로 올려야 check.sh를 통과합니다.
   - package-ecosystem: "docker"
     directories: ["/backend", "/frontend"]
     schedule:
       interval: "weekly"
-    # Node는 package.json engines(>=22.22.2 <23)와 같은 22 계열을 유지합니다.
     ignore:
+      # Node는 package.json engines(>=22.22.2 <23)와 같은 22 계열을 유지합니다.
       - dependency-name: "node"
         update-types: ["version-update:semver-major"]
+      # Rust 이미지는 rust-toolchain.toml·Dockerfile·개발 Compose를 한 커밋에서 함께 올려야 check.sh를 통과합니다.
+      # Dependabot은 rust-toolchain.toml을 바꾸지 않고 두 파일도 다른 PR로 나누므로 수동으로 갱신합니다.
+      - dependency-name: "rust"
   - package-ecosystem: "docker-compose"
     directory: "/docker"
     schedule:
@@ -40,6 +42,8 @@ updates:
     ignore:
       - dependency-name: "node"
         update-types: ["version-update:semver-major"]
+      # Rust 이미지는 위 docker 항목과 같은 이유로 수동 갱신합니다.
+      - dependency-name: "rust"
       # PostgreSQL major 갱신은 기존 pg-data 볼륨을 그대로 읽지 못하므로(pg_upgrade·덤프 복원 필요) 수동으로 올립니다.
       - dependency-name: "postgres"
         update-types: ["version-update:semver-major"]

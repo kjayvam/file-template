@@ -22,6 +22,7 @@ services:
   frontend:
     image: node:22-alpine
     working_dir: /app
+    # 컨테이너 밖에서 접속하도록 이 실행에서만 모든 인터페이스를 엽니다. (vite.config.ts 기본은 localhost)
     command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
     volumes:
       - ../frontend:/app
@@ -41,8 +42,9 @@ services:
       POSTGRES_DB: ${DATABASE_NAME:-my_project}
       POSTGRES_USER: ${DATABASE_USER:-my_project}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD:-change-me}
+    # 기본 비밀번호를 쓰는 개발 DB이므로 같은 PC(localhost)에서만 접속하도록 묶습니다.
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - pg-data:/var/lib/postgresql/data
     healthcheck:

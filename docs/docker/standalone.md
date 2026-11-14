@@ -33,7 +33,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml restart backend
 * **Backend**: `http://localhost:8080` (Rust API 서버)
 * **Database**:
   * **SQLite 선택 시**: 별도 컨테이너 불필요 (로컬 볼륨/파일로 직접 I/O)
-  * **서버형 DB(PostgreSQL/MySQL) 선택 시**: `--profile postgres`를 붙여 `db` 서비스 실행 (`localhost:5432`)
+  * **서버형 DB(PostgreSQL/MySQL) 선택 시**: `--profile postgres`를 붙여 `db` 서비스 실행 (`localhost:5432`, 같은 PC에서만 접속)
 
 ### 개발 모드 볼륨 마운트 구조
 * `./frontend` → 컨테이너 내부 `/app` (코드 수정 시 브라우저 즉시 갱신)
@@ -54,7 +54,7 @@ docker compose --env-file .env -f docker/docker-compose.yml up --build -d
 
 * **Frontend**: Nginx가 React 빌드 산출물(정적 에셋)을 서빙하며, `/api/*` 경로 요청을 백엔드로 리버스 프록시합니다 (`http://localhost:80`).
 * **Backend**: 컴파일된 단일 바이너리만 포함된 초경량(수십 MB) 런타임 이미지로 동작합니다. 호스트 포트(8080)를 열지 않으므로 API는 Nginx의 `/api/` 경로로 접근합니다. (예: `http://localhost/api/v1/health`)
-* **Database**: SQLite 파일은 `app-data`, PostgreSQL(`--profile postgres`)은 `pg-data` 볼륨에 보존됩니다. 프로덕션 Compose는 DB 포트를 호스트에 열지 않습니다.
+* **Database**: SQLite 파일은 `app-data`, PostgreSQL(`--profile postgres`)은 `pg-data` 볼륨에 보존됩니다. 프로덕션 Compose는 DB 포트를 호스트에 열지 않으며, 기본 비밀번호가 없으므로 `.env`의 `DATABASE_PASSWORD`가 비어 있으면 PostgreSQL이 시작되지 않습니다.
 
 ---
 

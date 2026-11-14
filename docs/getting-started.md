@@ -29,7 +29,7 @@ cd frontend
 npm run dev
 ```
 
-- 프론트엔드: `http://localhost:5173`
+- 프론트엔드: `http://localhost:5173` (로컬 실행은 같은 PC에서만 접속. 다른 기기에서 확인하려면 `npm run dev -- --host`)
 - 백엔드: `http://localhost:8080/health`, `http://localhost:8080/api/v1/health`
 - Vite는 `/api` 요청을 기본적으로 `http://localhost:8080`으로 전달합니다.
 - 백엔드 주소를 바꾸려면 `VITE_API_BACKEND_URL=http://localhost:다른포트 npm run dev`를 사용합니다. 개발 Compose에서는 `http://backend:8080`이 지정됩니다.
@@ -82,6 +82,6 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 
 선택형 AI 모듈을 쓰지 않으면 `templates/`, `scripts/template-module.py`, `scripts/verify-template-modules.py`, `scripts/check-template-modules.sh`, `.github/workflows/template-modules.yml`, `.github/workflows/codeql.yml`의 `python` 항목(남은 Python 코드가 없으면 CodeQL이 실패), AI 설계 문서(`docs/guides/ai-*.md`, `docs/adr/0001-optional-ai-extensions.md`)를 함께 지울 수 있습니다. 지운 뒤에는 `README.md`, `CLAUDE.md`, `docs/index.md`, `docs/architecture.md`(선택형 AI 확장 절), `docs/guides/agent-knowledge.md`(제품 RAG 확장 절), `tests/README.md`, `.claude/rules/tests.md`의 관련 설명과 `external/README.md`의 모듈 관련 항목도 정리합니다.
 
-Rust 버전을 올릴 때는 `rust-toolchain.toml`, `backend/Dockerfile`, `docker/docker-compose.dev.yml`을 함께 바꿉니다. 세 곳이 다르면 `check.sh`가 실패합니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, `templates/README.md`, `docs/docker/build-optimization.md`)도 같이 갱신합니다.
+Rust 버전을 올릴 때는 `rust-toolchain.toml`, `backend/Dockerfile`, `docker/docker-compose.dev.yml`을 함께 바꿉니다. 세 곳이 다르면 `check.sh`가 실패하므로 Dependabot은 Rust 이미지를 제안하지 않으며 [Rust 릴리스](https://blog.rust-lang.org/releases/)를 보고 직접 올립니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, `templates/README.md`, `docs/docker/build-optimization.md`)도 같이 갱신하고, `backend/Dockerfile`의 `CARGO_CHEF_VERSION`이 새 Rust에서 설치되는지 확인합니다.
 
 Node 하한이나 계열을 바꿀 때는 `frontend/package.json`의 `engines`와 `frontend/package-lock.json`(루트 패키지의 `engines`), Node 이미지(`frontend/Dockerfile`, `docker/docker-compose.dev.yml`, `scripts/check.sh`), CI의 `node-version`, `.github/dependabot.yml`의 Node 관련 주석과 `@types/node`·`node` 무시 규칙을 함께 바꿉니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, 계열을 바꾸면 `docs/docker/build-optimization.md`)도 같이 갱신합니다. 현재 하한 22.22.2는 jsdom 31의 요구 사항입니다.

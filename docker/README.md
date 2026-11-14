@@ -29,7 +29,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml --profile postgr
 ```
 * Frontend (Vite): `http://localhost:5173` (코드 수정 시 HMR)
 * Backend (Rust): `http://localhost:8080` (Rust 코드 수정 후 `docker compose --env-file .env -f docker/docker-compose.dev.yml restart backend`)
-* PostgreSQL(`--profile postgres`일 때만): `localhost:5432`
+* PostgreSQL(`--profile postgres`일 때만): `localhost:5432` (같은 PC에서만 접속, 다른 기기에서 쓰려면 `ports`의 `127.0.0.1:`을 직접 조정)
 
 ### 2. 프로덕션 빌드 및 실행
 
@@ -38,7 +38,7 @@ docker compose --env-file .env -f docker/docker-compose.yml up --build -d
 ```
 * Web (Nginx): `http://localhost:80`
 * Backend: 호스트 포트를 열지 않습니다. API는 Nginx를 거쳐 접근합니다. (예: `http://localhost/api/v1/health`)
-* PostgreSQL은 `--profile postgres`로 실행하며 프로덕션 Compose에서는 호스트 포트를 열지 않습니다(`db:5432`로만 접근).
+* PostgreSQL은 `--profile postgres`로 실행하며 프로덕션 Compose에서는 호스트 포트를 열지 않습니다(`db:5432`로만 접근). 기본 비밀번호가 없으므로 `.env`에 `DATABASE_PASSWORD`를 지정해야 시작됩니다.
 
 ---
 
