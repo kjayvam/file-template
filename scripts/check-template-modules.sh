@@ -18,10 +18,15 @@ case "${1:-}" in
     python3 "$project_root/scripts/verify-template-modules.py"
     ;;
   --docker)
+    if ! command -v docker >/dev/null 2>&1; then
+      echo "[오류] docker 명령이 필요합니다." >&2
+      exit 1
+    fi
     docker run --rm \
       --mount "type=bind,src=$project_root/backend,dst=/workspace/backend,readonly" \
       --mount "type=bind,src=$project_root/templates,dst=/workspace/templates,readonly" \
       --mount "type=bind,src=$project_root/scripts,dst=/workspace/scripts,readonly" \
+      --mount "type=bind,src=$project_root/rust-toolchain.toml,dst=/workspace/rust-toolchain.toml,readonly" \
       --mount "type=volume,src=$volume_prefix-check-cargo,dst=/usr/local/cargo/registry" \
       --mount "type=volume,src=$volume_prefix-modules-target,dst=/module-target" \
       --env CARGO_TARGET_DIR=/module-target \

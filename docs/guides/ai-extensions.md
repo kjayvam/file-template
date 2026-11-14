@@ -113,7 +113,7 @@ UI도 선택하면 frontend/src/features/ai/rag/를 추가하고, Agent를 선�
 
 ## 4. 추가·제거·교체 규칙
 
-module.json은 검토 가능한 의존·파일·연결 목록입니다. 현재 template-module.py가 이 중 소유 파일·연결 블록·의존 관계를 사용하고 적용 당시 해시를 기록합니다. checks·data_paths_to_preserve·new_rust_dependencies 필드는 현재 선언 전용이며 도구가 실행·검사하지 않습니다. 확장 시 목표 스키마는 다음 정보를 기록합니다.
+module.json은 검토 가능한 의존·파일·연결 목록입니다. 현재 template-module.py가 이 중 소유 파일·연결 블록·의존 모듈·기존 Rust 의존성 계열을 사용하고 적용 당시 해시를 기록합니다. checks·data_paths_to_preserve·new_rust_dependencies 필드는 현재 선언 전용이며 도구가 실행·검사하지 않습니다. 확장 시 목표 스키마는 다음 정보를 기록합니다.
 
 - 모듈 ID·버전·필수 의존·함께 사용하는 선택 모듈.
 - 모듈이 전적으로 소유하는 경로와 Cargo·라우터·설정·CI 같은 공유 파일의 연결 지점.

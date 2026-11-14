@@ -3,7 +3,7 @@ services:
     image: rust:1.99.1-alpine
     working_dir: /app
     # Rust 코드를 바꾸면 `docker compose ... restart backend`로 다시 컴파일·실행합니다.
-    command: sh -c "apk add --no-cache musl-dev && cargo run"
+    command: sh -c "apk add --no-cache musl-dev && cargo run --locked"
     volumes:
       - ../backend:/app
       - cargo-cache:/usr/local/cargo/registry
