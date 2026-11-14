@@ -11,7 +11,7 @@
 | checkout | https://github.com/actions/checkout | 모든 워크플로의 저장소 체크아웃 |
 | setup-node | https://github.com/actions/setup-node | CI의 Node 설치와 npm 잠금 파일 캐시 |
 | setup-python | https://github.com/actions/setup-python | 모듈 적용·제거 CI의 Python 버전 고정 |
-| codeql-action | https://github.com/github/codeql-action | CodeQL 워크플로의 JavaScript·TypeScript, Rust, Actions 분석 |
+| codeql-action | https://github.com/github/codeql-action | CodeQL 워크플로의 JavaScript·TypeScript, Rust, Python, Actions 분석 |
 | rust-cache | https://github.com/Swatinem/rust-cache | CI의 Rust 빌드 산출물·Cargo 레지스트리 캐시 |
 | cargo-chef | https://github.com/LukeMathWalker/cargo-chef | 백엔드 Dockerfile의 의존성 레이어 캐시 |
 

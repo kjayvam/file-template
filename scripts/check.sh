@@ -77,7 +77,7 @@ case "${1:-}" in
       --mount "type=volume,src=$volume_prefix-check-target,dst=/check-target" \
       --env CARGO_TARGET_DIR=/check-target \
       "rust:$(rust_version)-alpine" \
-      sh -ec 'apk add --no-cache bash musl-dev; rustup component add rustfmt; /workspace/scripts/check.sh --backend'
+      sh -ec 'apk add --no-cache bash; rustup component add rustfmt; /workspace/scripts/check.sh --backend'
     docker run --rm \
       --mount "type=bind,src=$project_root/frontend,dst=/workspace/frontend" \
       --mount "type=bind,src=$project_root/scripts,dst=/workspace/scripts,readonly" \
