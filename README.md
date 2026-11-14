@@ -19,7 +19,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 | `rust-toolchain.toml` | 로컬·CI가 사용할 Rust 버전과 rustfmt 고정 |
 | [`external/`](external/README.md) | GitHub 저장소와 기타 외부 자료 목록 |
 | `.github/` | GitHub 워크플로 및 협업 설정 |
-| `.claude/` | 에이전트 공용 설정: 서브에이전트(`agents/`), 스킬(`skills/`), 경로별 규칙(`rules/`), 출력 스타일, 권한(`settings.json`), 공유 에이전트 메모리(`agent-memory/`), 저장 워크플로(`workflows/`). 개인 메모리 `agent-memory-local/`은 Git 제외 |
+| `.claude/` | 에이전트 공용 설정: 서브에이전트(`agents/`), 스킬(`skills/`), 경로별 규칙(`rules/`), 출력 스타일, 권한(`settings.json`), 공유 에이전트 메모리(`agent-memory/`), 저장 워크플로(`workflows/`). 개인 메모리 `agent-memory-local/`과 에이전트 앱의 worktree(`worktrees/`)는 Git 제외 |
 
 외부 자료의 이름, URL, 용도는 `external/`에서 관리합니다. 프로젝트 지침은 [CLAUDE.md](CLAUDE.md)를 참고하세요.
 

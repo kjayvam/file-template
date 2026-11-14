@@ -34,6 +34,7 @@
 - ADR-0001 상태를 채택으로 변경(ai-common·rag 구현, 나머지 모듈은 제안), DB 가이드에 인라인 `UNIQUE`의 제약 이름 안내 추가
 - 쓰지 않는 `docs/images/`와 review-code 스킬의 미지원 `background` 필드 제거, 모듈 Python 스크립트에 실행 권한 부여
 - 새 프로젝트 자리표시자 목록에 프론트엔드 제목·시작 문구, AI 모듈 삭제 시 정리할 문서에 `docs/architecture.md`·`docs/guides/agent-knowledge.md`, README의 `.claude/` 설명에 `agent-memory/`·`workflows/` 추가
+- Rust Alpine 이미지에 이미 있는 `musl-dev`의 중복 설치 제거(개발 Compose 재시작 시 네트워크 불필요), `.gitignore`에 에이전트 앱의 `.claude/worktrees/` 추가, CodeQL에 모듈 스크립트용 Python 분석 추가
 
 ### Fixed
 - Nginx가 `/api/` 접두사를 잘라 프로덕션에서 `/api/v1/health`가 404가 되던 문제
@@ -47,3 +48,4 @@
 - `check-template-modules.sh`의 네이티브 실행이 Python 3.11 미만이나 rustfmt 없는 환경에서 원인 안내 없이 실패하던 문제
 - 빌드 최적화 문서의 Dockerfile 명령이 실제와 달리 `--locked`·`--bin backend`를 빠뜨리던 부분, 외부 자료의 Tower 문서 링크를 잠금 파일 버전(0.5.3)으로 수정
 - AI 확장 문서가 없는 `IdentityResolver`, Cargo 변경, 부분 제거를 현재 동작처럼 설명하던 부분과 데모 응답 형식 차이, DB·MCP 가이드의 실행·환경 변수 설명, README의 Docker 검증 산출물 설명
+- Docker 가이드의 에이전트 상태 볼륨 이름이 공유 템플릿 가이드(`p_agent_state_<프로젝트>_<인스턴스>`)와 다르던 부분, 새 프로젝트 정리 목록에서 빠진 볼륨 이름 문서·CodeQL Python 항목·외부 자료 정리

@@ -35,7 +35,7 @@ case "${1:-}" in
       --mount "type=volume,src=$volume_prefix-modules-target,dst=/module-target" \
       --env CARGO_TARGET_DIR=/module-target \
       "rust:$rust_version-alpine" \
-      sh -ec 'apk add --no-cache python3 musl-dev; rustup component add rustfmt; python3 /workspace/scripts/verify-template-modules.py'
+      sh -ec 'apk add --no-cache python3; rustup component add rustfmt; python3 /workspace/scripts/verify-template-modules.py'
     ;;
   *) echo "사용법: $0 [--docker]" >&2; exit 2 ;;
 esac

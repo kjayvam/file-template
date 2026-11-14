@@ -1,6 +1,6 @@
 # 1. Base 스테이지: cargo-chef 준비
+# rust:*-alpine 이미지에 musl-dev·gcc가 포함되어 있어 별도 apk 설치가 필요 없습니다.
 FROM rust:1.99.1-alpine AS chef
-RUN apk add --no-cache musl-dev
 RUN cargo install cargo-chef --locked
 WORKDIR /app
 
