@@ -28,6 +28,8 @@
 | **인덱스 (Index)** | `idx_{테이블}_{컬럼}` | `idx_users_email` | 복합 인덱스는 순서대로 나열 |
 | **유니크 인덱스 (Unique)** | `uq_{테이블}_{컬럼}` | `uq_users_email` | 유니크 제약 조건 |
 
+컬럼 정의에 `UNIQUE`만 붙이면 엔진이 이름을 정합니다(PostgreSQL은 `users_email_key`). 위 이름 규칙을 지키려면 `CONSTRAINT uq_users_email UNIQUE (email)`처럼 이름을 명시합니다. `migrations/0001_create_users.up.sql` 예시는 인라인 `UNIQUE`를 쓰므로, 실제 스키마로 바꿀 때 함께 정리합니다.
+
 ---
 
 ## 4. 필수 공통 컬럼

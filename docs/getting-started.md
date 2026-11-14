@@ -13,7 +13,7 @@ rustup toolchain install
 ./scripts/setup.sh
 ```
 
-인자 없는 `rustup toolchain install`은 루트의 `rust-toolchain.toml`에 지정된 Rust 버전과 `rustfmt`를 설치합니다(rustup 1.28 이상). `rustup show`는 상태만 보여 주며 설치하지 않습니다. `setup.sh`는 `.env`가 없을 때만 `.env.example`을 복사하고 프론트엔드 의존성을 `npm ci`로 설치합니다. 기존 `.env`를 덮어쓰지 않습니다. 로컬 백엔드는 `.env`를 자동 로드하지 않으며 기본 포트 8080을 사용합니다. 다른 포트를 쓰려면 `PORT`를 프로세스 환경 변수로 지정하세요.
+인자 없는 `rustup toolchain install`은 루트의 `rust-toolchain.toml`에 지정된 Rust 버전과 `rustfmt`를 설치합니다(rustup 1.28 이상). `rustup show`는 상태만 보여 주며 설치하지 않습니다. `setup.sh`는 `.env`가 없을 때만 `.env.example`을 복사하고 프론트엔드 의존성을 `npm ci`로 설치합니다. 기존 `.env`를 덮어쓰지 않습니다. 로컬 백엔드는 `.env`를 자동 로드하지 않으며 기본 포트 8080을 사용합니다. 다른 포트를 쓰려면 `PORT`를 프로세스 환경 변수로 지정하세요. 정수로 해석할 수 없는 값이면 8080으로 바꾸지 않고 시작 시 오류로 종료합니다.
 
 ## 로컬 실행
 
