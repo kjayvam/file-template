@@ -37,7 +37,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml --profile postgr
 docker compose --env-file .env -f docker/docker-compose.yml up --build -d
 ```
 * Web (Nginx): `http://localhost:80`
-* Backend: `http://localhost:8080`
+* Backend: 호스트 포트를 열지 않습니다. API는 Nginx를 거쳐 접근합니다. (예: `http://localhost/api/v1/health`)
 * PostgreSQL은 `--profile postgres`로 실행하며 프로덕션 Compose에서는 호스트 포트를 열지 않습니다(`db:5432`로만 접근).
 
 ---

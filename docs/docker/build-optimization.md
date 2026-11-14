@@ -35,7 +35,7 @@ React 웹 애플리케이션은 브라우저에서 실행되는 정적 에셋(HT
 flowchart TD
     DevDeps["1. 의존성 설치 스테이지<br/>(node:22-alpine, package.json / lockfile)"]
     Bundler["2. 정적 번들 빌드 스테이지<br/>(Vite build -> /app/dist 생성)"]
-    Nginx["3. 런타임 스테이지<br/>(nginx:alpine, 정적 파일 복사 & 리버스 프록시)<br/>★ 크기는 nginx:alpine 기반 이미지가 대부분 차지"]
+    Nginx["3. 런타임 스테이지<br/>(nginx:1.31-alpine, 정적 파일 복사 & 리버스 프록시)<br/>★ 크기는 nginx alpine 기반 이미지가 대부분 차지"]
 
     DevDeps --> Bundler --> Nginx
 ```
@@ -53,5 +53,5 @@ flowchart TD
 | 컴포넌트 | 비최적화 이미지 (단일 스테이지) | 최적화 이미지 (멀티스테이지 적용) |
 |---|---|---|
 | **Backend (Rust)** | 약 1.8 GB ~ 2.2 GB (Rust 툴체인 포함) | **약 20 MB ~ 35 MB** (단일 바이너리, 실측 약 21 MB) |
-| **Frontend (React)** | 약 800 MB ~ 1.2 GB (Node/npm 포함) | **약 50 MB ~ 100 MB** (nginx:alpine + 정적 에셋, 2026-11 기준 실측 약 93 MB) |
+| **Frontend (React)** | 약 800 MB ~ 1.2 GB (Node/npm 포함) | **약 50 MB ~ 100 MB** (nginx alpine + 정적 에셋, 2026-11 기준 실측 약 93 MB) |
 | **보안 이점** | 쉘, 패키지 매니저, 개발 도구 노출 | 공격 표면(Attack Surface) 최소화 |
