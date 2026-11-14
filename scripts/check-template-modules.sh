@@ -11,8 +11,12 @@ if [ "$#" -gt 1 ]; then
 fi
 case "${1:-}" in
   "")
-    if ! command -v python3 >/dev/null 2>&1 || ! command -v cargo >/dev/null 2>&1; then
-      echo "[오류] Python 3.11+, Rust가 필요합니다. --docker 로 검증할 수 있습니다." >&2
+    # template-module.py는 Python 3.11의 tomllib을, 검증은 cargo fmt(rustfmt)를 사용합니다.
+    if ! command -v python3 >/dev/null 2>&1 \
+      || ! python3 -c 'import sys; sys.exit(sys.version_info < (3, 11))' \
+      || ! command -v cargo >/dev/null 2>&1 \
+      || ! (cd "$project_root/backend" && cargo fmt --version) >/dev/null 2>&1; then
+      echo "[오류] Python 3.11+, Rust(rustfmt 포함)가 필요합니다. --docker 로 검증할 수 있습니다." >&2
       exit 1
     fi
     python3 "$project_root/scripts/verify-template-modules.py"

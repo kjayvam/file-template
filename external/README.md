@@ -31,7 +31,7 @@
 | React Testing Library | https://testing-library.com/docs/react-testing-library/setup/ | 컴포넌트 렌더링·비동기 상태·테스트 정리 방식 |
 | jsdom | https://github.com/jsdom/jsdom | Vitest의 브라우저 DOM 환경. 31부터 Node ^22.22.2를 요구해 프론트엔드 Node 하한의 기준 |
 | Axum 0.8 | https://docs.rs/axum/0.8.9/axum/ | 실제 API 라우터의 통합 테스트 구성 |
-| Tower ServiceExt | https://docs.rs/tower/0.5.2/tower/util/trait.ServiceExt.html | 네트워크 없이 Router에 HTTP 요청을 보내는 oneshot 테스트 |
+| Tower ServiceExt | https://docs.rs/tower/0.5.3/tower/util/trait.ServiceExt.html | 네트워크 없이 Router에 HTTP 요청을 보내는 oneshot 테스트 |
 | Rust 릴리스 | https://blog.rust-lang.org/releases/ | 현재 의존성과 호환되는 검증용 Rust 버전 선택 |
 | Cargo Workspaces | https://doc.rust-lang.org/cargo/reference/workspaces.html | 프로젝트가 독립 서비스 배치를 선택할 때의 workspace·잠금 파일 범위 참고 |
 | LlamaIndex Retrieval Evaluation | https://developers.llamaindex.ai/python/examples/evaluation/retrieval/retriever_eval/ | RAG 검색 Recall·MRR 지표 정의 참고; 라이브러리 도입은 미결정 |
