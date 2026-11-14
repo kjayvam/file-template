@@ -69,6 +69,8 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 | `README.md`, `CLAUDE.md` 제목 | 템플릿 이름(`file-template`, `my-project`)을 프로젝트 이름으로 변경 |
 | `.github/CODEOWNERS`, `.github/ISSUE_TEMPLATE/config.yml` | `@OWNER`, `OWNER/REPO`를 실제 사용자·저장소로 변경 |
 | `SECURITY.md`, `CODE_OF_CONDUCT.md` | `<보안 담당 이메일>`, `<연락처 이메일>` 채우기 |
+| `LICENSE` | `<소유자 이름>`을 저작권자로 바꾸거나 프로젝트에 맞는 라이선스로 교체 |
+| `ROADMAP.md` | `<...>` 항목을 프로젝트 목표와 일정으로 작성 |
 | `.github/FUNDING.yml` | 후원 링크가 없으면 파일 삭제 |
 | `config/*.yml`, `.env.example`, `docker/docker-compose*.yml` | 기본 이름 `my-project`, `my_project`와 DB 이름 변경 |
 | `scripts/check.sh`, `scripts/check-template-modules.sh` | `volume_prefix`를 프로젝트 이름으로 변경. 다른 프로젝트와 Docker 검증용 빌드 산출물·`node_modules` 볼륨을 공유하지 않게 합니다 |
