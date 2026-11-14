@@ -28,7 +28,7 @@ updates:
     directories: ["/backend", "/frontend"]
     schedule:
       interval: "weekly"
-    # Node는 package.json engines(>=22.12 <23)와 같은 22 계열을 유지합니다.
+    # Node는 package.json engines(>=22.22.2 <23)와 같은 22 계열을 유지합니다.
     ignore:
       - dependency-name: "node"
         update-types: ["version-update:semver-major"]

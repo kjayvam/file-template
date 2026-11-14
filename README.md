@@ -25,7 +25,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 
 ## 시작과 검증
 
-로컬 개발에는 Rust 1.99.1(`rustfmt` 포함), Node.js 22.12 이상(22 계열)과 npm이 필요합니다. Rust는 `rust-toolchain.toml`로 고정됩니다. 루트에서 실행합니다.
+로컬 개발에는 Rust 1.99.1(`rustfmt` 포함), Node.js 22.22.2 이상(22 계열)과 npm이 필요합니다. Rust는 `rust-toolchain.toml`로 고정됩니다. 루트에서 실행합니다.
 
 ```bash
 ./scripts/setup.sh

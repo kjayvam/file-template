@@ -2,7 +2,7 @@
 
 ## 요구 사항
 
-- 로컬 실행: Rust 1.99.1 (`cargo`, `rustfmt`), Node.js 22.12 이상(22 계열)과 npm
+- 로컬 실행: Rust 1.99.1 (`cargo`, `rustfmt`), Node.js 22.22.2 이상(22 계열)과 npm
 - 컨테이너 실행·검증: Docker Engine/Desktop과 Docker Compose v2
 - 아래 명령은 별도 설명이 없으면 저장소 루트에서 실행합니다.
 
