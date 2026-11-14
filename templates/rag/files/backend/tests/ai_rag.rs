@@ -17,7 +17,7 @@ use backend::{
 use serde_json::{json, Value};
 use std::{
     sync::{
-        atomic::{AtomicBool, Ordering},
+        atomic::{AtomicBool, AtomicUsize, Ordering},
         Arc, Mutex,
     },
     time::Duration,
@@ -157,6 +157,46 @@ async fn revisions_replace_old_chunks_and_deletion_removes_evidence() {
         .await
         .unwrap();
     assert_eq!(answer.status, AnswerStatus::InsufficientEvidence);
+}
+
+struct CountingEmbedder {
+    calls: Arc<AtomicUsize>,
+}
+impl Embedder for CountingEmbedder {
+    fn version(&self) -> &str {
+        "counting-v1"
+    }
+    fn dimensions(&self) -> usize {
+        256
+    }
+    fn embed<'a>(&'a self, text: &'a str) -> AiFuture<'a, Vec<f32>> {
+        self.calls.fetch_add(1, Ordering::SeqCst);
+        Box::pin(async move { HashedEmbedder::vector(text) })
+    }
+}
+
+#[tokio::test]
+async fn unchanged_reingest_does_not_call_the_embedder_again() {
+    let calls = Arc::new(AtomicUsize::new(0));
+    let rag = Rag::new(
+        RagConfig::default(),
+        CountingEmbedder {
+            calls: calls.clone(),
+        },
+        ExtractiveModel,
+    )
+    .unwrap();
+    let original = doc("t", "logs", 1, "alpha log retention is seven days");
+    assert!(rag.ingest(original.clone()).await.unwrap());
+    let after_first = calls.load(Ordering::SeqCst);
+    assert!(after_first > 0);
+    assert!(!rag.ingest(original).await.unwrap());
+    assert_eq!(calls.load(Ordering::SeqCst), after_first);
+    assert!(rag
+        .ingest(doc("t", "logs", 2, "alpha log retention is fourteen days"))
+        .await
+        .unwrap());
+    assert!(calls.load(Ordering::SeqCst) > after_first);
 }
 
 struct RevokingModel {

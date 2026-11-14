@@ -54,6 +54,14 @@ impl MemoryIndex {
         Ok(true)
     }
 
+    /// True when the same document (revision, readers and text) is already indexed.
+    pub(super) fn contains(&self, document: &Document) -> Result<bool, AiError> {
+        let entries = self.entries.read().map_err(|_| AiError::StoreUnavailable)?;
+        Ok(entries
+            .get(&(document.tenant_id.clone(), document.document_id.clone()))
+            .is_some_and(|entry| entry.document == *document))
+    }
+
     pub fn delete(&self, tenant: &str, id: &str) -> Result<bool, AiError> {
         Ok(self
             .entries

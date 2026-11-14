@@ -102,6 +102,10 @@ impl<E: Embedder, M: ChatModel> Rag<E, M> {
     /// Trusted host ingestion. Input text must already be normalized by the host.
     pub async fn ingest(&self, document: Document) -> Result<bool, AiError> {
         self.check_embedding_version()?;
+        // Skip embedding an unchanged re-ingest; `put` still rechecks under the write lock.
+        if self.index.contains(&document)? {
+            return Ok(false);
+        }
         let mut chunks = chunk::split(
             &document,
             self.config.chunk_chars,
