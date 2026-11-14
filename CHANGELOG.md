@@ -25,7 +25,7 @@
 - axum 0.8.9, vite 8·@vitejs/plugin-react 6, react·react-dom 19로 갱신하고 rag 모듈의 기존 의존성 계열을 axum 0.8로 변경
 - 프로덕션 Compose가 백엔드 8080 포트를 호스트에 열지 않고 Nginx `/api/` 프록시로만 접근, frontend 런타임 이미지를 `nginx:1.31-alpine`으로 고정
 - `vite.config.ts`·`vitest.config.ts`를 `tsconfig.node.json`과 `@types/node` 22로 타입 검사
-- jsdom 31.0.1로 갱신하고 jsdom이 요구하는 Node 하한에 맞춰 `engines`와 문서의 Node 요구 사항을 22.22.2 이상(22 계열)으로 변경
+- jsdom 31.0.1로 갱신하고 jsdom이 요구하는 Node 하한에 맞춰 `engines`와 문서의 Node 요구 사항을 22.22.2 이상(22 계열)으로 변경. 시작하기에 Node 버전 변경 시 함께 바꿀 파일 목록, 외부 자료에 jsdom 추가
 - @testing-library/jest-dom 7.0.1로 갱신, Dependabot이 `@types/node`의 22 계열 밖 major 갱신은 제안하지 않음
 - 새 프로젝트 자리표시자 목록에 `LICENSE`·`ROADMAP.md` 추가, README 폴더 표에 `.claude/`, 외부 자료에 checkout·codeql-action·cargo-chef 추가
 

@@ -82,3 +82,5 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 선택형 AI 모듈을 쓰지 않으면 `templates/`, `scripts/template-module.py`, `scripts/verify-template-modules.py`, `scripts/check-template-modules.sh`, `.github/workflows/template-modules.yml`, AI 설계 문서(`docs/guides/ai-*.md`, `docs/adr/0001-optional-ai-extensions.md`)를 함께 지울 수 있습니다. 지운 뒤에는 `README.md`, `CLAUDE.md`, `docs/index.md`, `tests/README.md`, `.claude/rules/tests.md`의 관련 설명도 정리합니다.
 
 Rust 버전을 올릴 때는 `rust-toolchain.toml`, `backend/Dockerfile`, `docker/docker-compose.dev.yml`을 함께 바꿉니다. 세 곳이 다르면 `check.sh`가 실패합니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, `templates/README.md`, `docs/docker/build-optimization.md`)도 같이 갱신합니다.
+
+Node 하한이나 계열을 바꿀 때는 `frontend/package.json`의 `engines`와 `frontend/package-lock.json`(루트 패키지의 `engines`), Node 이미지(`frontend/Dockerfile`, `docker/docker-compose.dev.yml`, `scripts/check.sh`), CI의 `node-version`, `.github/dependabot.yml`의 Node 관련 주석과 `@types/node`·`node` 무시 규칙을 함께 바꿉니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, 계열을 바꾸면 `docs/docker/build-optimization.md`)도 같이 갱신합니다. 현재 하한 22.22.2는 jsdom 31의 요구 사항입니다.
