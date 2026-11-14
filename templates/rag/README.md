@@ -1,6 +1,6 @@
 # rag 0.1.0
 
-ai-common에 의존하는 작은 오프라인 RAG 모듈입니다. [module.json](module.json)은 기존 Axum 0.7·Tokio 1·Serde 1·serde_json 1 사용과 전체 소유 파일·라우트 연결을 기록합니다. 추가 Cargo 패키지·모델 키·DB·독립 AI 서버는 없습니다.
+ai-common에 의존하는 작은 오프라인 RAG 모듈입니다. [module.json](module.json)은 기존 Axum 0.8·Tokio 1·Serde 1·serde_json 1 사용과 전체 소유 파일·라우트 연결을 기록합니다. 추가 Cargo 패키지·모델 키·DB·독립 AI 서버는 없습니다.
 
 ## 구성
 

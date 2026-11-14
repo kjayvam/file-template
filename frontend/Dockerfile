@@ -9,7 +9,8 @@ COPY . .
 RUN npm run build
 
 # 2. 런타임 스테이지 (Nginx)
-FROM nginx:alpine AS runtime
+# Dependabot이 갱신할 수 있도록 major.minor까지 고정합니다.
+FROM nginx:1.31-alpine AS runtime
 COPY --from=builder /app/dist /usr/share/nginx/html
 
 EXPOSE 80

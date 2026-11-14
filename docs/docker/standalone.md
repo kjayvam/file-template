@@ -53,7 +53,7 @@ docker compose --env-file .env -f docker/docker-compose.yml up --build -d
 ```
 
 * **Frontend**: Nginx가 React 빌드 산출물(정적 에셋)을 서빙하며, `/api/*` 경로 요청을 백엔드로 리버스 프록시합니다 (`http://localhost:80`).
-* **Backend**: 컴파일된 단일 바이너리만 포함된 초경량(수십 MB) 런타임 이미지로 동작합니다.
+* **Backend**: 컴파일된 단일 바이너리만 포함된 초경량(수십 MB) 런타임 이미지로 동작합니다. 호스트 포트(8080)를 열지 않으므로 API는 Nginx의 `/api/` 경로로 접근합니다. (예: `http://localhost/api/v1/health`)
 * **Database**: SQLite 파일은 `app-data`, PostgreSQL(`--profile postgres`)은 `pg-data` 볼륨에 보존됩니다. 프로덕션 Compose는 DB 포트를 호스트에 열지 않습니다.
 
 ---

@@ -22,6 +22,9 @@
 - 백엔드 런타임 이미지 alpine 3.24, GitHub Actions checkout v7, 프론트엔드 TypeScript 7.0.2로 갱신
 - Dependabot이 react·react-dom·타입 패키지와 vite·@vitejs/plugin-react를 한 PR로 묶고, Node 이미지의 22 계열 밖 major 갱신은 제안하지 않음
 - 개발 Compose의 `cargo run`도 `--locked`로 잠금 파일을 사용
+- axum 0.8.9, vite 8·@vitejs/plugin-react 6, react·react-dom 19로 갱신하고 rag 모듈의 기존 의존성 계열을 axum 0.8로 변경
+- 프로덕션 Compose가 백엔드 8080 포트를 호스트에 열지 않고 Nginx `/api/` 프록시로만 접근, frontend 런타임 이미지를 `nginx:1.31-alpine`으로 고정
+- `vite.config.ts`·`vitest.config.ts`를 `tsconfig.node.json`과 `@types/node` 22로 타입 검사
 
 ### Fixed
 - Nginx가 `/api/` 접두사를 잘라 프로덕션에서 `/api/v1/health`가 404가 되던 문제
@@ -29,3 +32,4 @@
 - rag 데모 API가 `top_k` 생략 시 설정과 무관한 고정값 5를 쓰던 문제, `set_readers`의 빈 reader 허용
 - 모듈 수명주기 검증의 임시 프로젝트가 `rust-toolchain.toml`을 받지 않아 네이티브·CI 실행이 고정되지 않은 기본 Rust로 컴파일하던 문제
 - `check-template-modules.sh --docker`가 docker 없이 실행될 때 안내 없이 실패하던 문제
+- rag가 변경 없는 문서를 다시 수집할 때도 모든 청크를 임베딩하던 문제

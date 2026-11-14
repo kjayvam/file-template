@@ -13,7 +13,7 @@ Agent·UI·별도 서비스·실제 모델·영속 DB는 아직 제공하지 않
 
 각 `module.json`은 버전·의존 모듈·기존 Rust 의존성·소유 파일·공유 연결 블록·검증 명령을 기록합니다. 도구가 실제로 사용하는 필드는 `requires`·`existing_rust_dependencies`·`owned_files`·`integrations`이고, `checks`·`new_rust_dependencies`·`data_paths_to_preserve`는 사람이 읽는 선언입니다. JSON은 Python 표준 라이브러리로 검사하므로 YAML 파서나 pip 설치가 필요 없습니다. `files/` 아래 경로는 적용 대상 프로젝트 루트 기준입니다. `.DS_Store`는 원본 목록에서 제외합니다.
 
-ai-common·rag는 Cargo.toml·Cargo.lock에 새 의존성을 추가하지 않습니다. rag는 기본형의 Axum 0.7, Serde 1, serde_json 1, Tokio 1의 기존 설정을 재사용합니다. 관리 도구는 의존성 계열을 확인하며 필요한 feature·호환성은 실제 빌드가 확인합니다.
+ai-common·rag는 Cargo.toml·Cargo.lock에 새 의존성을 추가하지 않습니다. rag는 기본형의 Axum 0.8, Serde 1, serde_json 1, Tokio 1의 기존 설정을 재사용합니다. 관리 도구는 의존성 계열을 확인하며 필요한 feature·호환성은 실제 빌드가 확인합니다.
 
 `backend/src/lib.rs`에 이름이 붙은 블록만 연결합니다. 물리 경로는 `src/features/ai/`이며 Rust 공개 경로는 `backend::ai_common`, `backend::rag`입니다. `#[path]`로 연결하므로 공유 `features/mod.rs`를 새로 덮어쓰지 않습니다.
 
