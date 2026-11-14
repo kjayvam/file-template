@@ -37,6 +37,7 @@
 - Rust Alpine 이미지에 이미 있는 `musl-dev`의 중복 설치 제거(개발 Compose 재시작 시 네트워크 불필요), `.gitignore`에 에이전트 앱의 `.claude/worktrees/` 추가, CodeQL에 모듈 스크립트용 Python 분석 추가
 - Dependabot이 Rust 이미지를 제안하지 않음(`rust-toolchain.toml`과 함께 수동 갱신), 개발 Compose의 PostgreSQL 포트를 `127.0.0.1`에만 열고 로컬 `npm run dev`는 Vite 기본값(localhost)만 사용
 - 프로덕션 Compose의 PostgreSQL 기본 비밀번호(`change-me`) 제거, cargo-chef 0.1.78 고정, 모듈 검증 CI에 Cargo 레지스트리 캐시 추가
+- `check.sh --docker`가 backend 소스를 읽기 전용으로 마운트
 
 ### Fixed
 - Nginx가 `/api/` 접두사를 잘라 프로덕션에서 `/api/v1/health`가 404가 되던 문제
@@ -50,4 +51,6 @@
 - `check-template-modules.sh`의 네이티브 실행이 Python 3.11 미만이나 rustfmt 없는 환경에서 원인 안내 없이 실패하던 문제
 - 빌드 최적화 문서의 Dockerfile 명령이 실제와 달리 `--locked`·`--bin backend`를 빠뜨리던 부분, 외부 자료의 Tower 문서 링크를 잠금 파일 버전(0.5.3)으로 수정
 - AI 확장 문서가 없는 `IdentityResolver`, Cargo 변경, 부분 제거를 현재 동작처럼 설명하던 부분과 데모 응답 형식 차이, DB·MCP 가이드의 실행·환경 변수 설명, README의 Docker 검증 산출물 설명
+- 모듈 수명주기 검증이 고정된 backend 파일 5개만 복사해, 프로젝트가 backend 파일을 추가하면 임시 프로젝트 컴파일이 실패하던 문제(이제 `target`·`.env` 계열을 뺀 backend 전체 복사)
+- Docker 실행 안내의 `cp .env.example .env`가 기존 `.env`를 덮어쓰던 부분, Nginx 설정 주석이 upstream keepalive 없이 백엔드 연결이 재사용되는 것처럼 설명하던 부분
 - Docker 가이드의 에이전트 상태 볼륨 이름이 공유 템플릿 가이드(`p_agent_state_<프로젝트>_<인스턴스>`)와 다르던 부분, 새 프로젝트 정리 목록에서 빠진 볼륨 이름 문서·CodeQL Python 항목·외부 자료 정리

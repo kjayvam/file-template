@@ -22,7 +22,8 @@
 ### 1. 개발 환경 실행 (Vite HMR)
 
 ```bash
-cp .env.example .env
+# .env가 없을 때만 예시를 복사합니다. (기존 .env를 덮어쓰지 않음)
+[ -f .env ] || cp .env.example .env
 docker compose --env-file .env -f docker/docker-compose.dev.yml up
 # PostgreSQL까지 함께 실행할 때
 docker compose --env-file .env -f docker/docker-compose.dev.yml --profile postgres up
