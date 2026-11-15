@@ -22,7 +22,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 - `./scripts/check.sh`: Rust 포맷·컴파일·테스트와 프론트엔드 테스트·빌드, Docker 이미지와 `rust-toolchain.toml`의 Rust 버전 일치 확인. 도구 누락이나 검사 실패 시 오류 종료
 - `./scripts/check.sh --backend` / `--frontend`: 한쪽만 검증
 - `./scripts/check.sh --docker`: 로컬 Rust·Node 설치 없이 Docker로 같은 검사 실행 (.env 불필요)
-- `./scripts/build.sh`: Rust 컴파일과 프론트엔드 빌드만 검사 (테스트는 `check.sh`)
+- `./scripts/build.sh`: Rust 컴파일과 프론트엔드 빌드만 검사 (테스트는 `check.sh`). 로컬 Rust·Node 없이는 `--docker`
 - `./scripts/check-template-modules.sh --docker`: 임시 프로젝트에서 기본형→common→rag+common→common→기본형 검사. 네이티브는 Python 3.11+·Rust 설치 후 --docker 생략
 - `python3 scripts/template-module.py list`: 제공 모듈 목록. add/remove는 --project로 대상을 명시하고 --dry-run으로 변경 경로 검토
 - 개별 테스트: `cd backend && cargo test --locked`, `cd frontend && npm test`

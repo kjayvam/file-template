@@ -3,29 +3,13 @@ set -euo pipefail
 
 project_root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
 toolchain_file="$project_root/rust-toolchain.toml"
-# Docker 검증 볼륨 이름 접두사입니다. 새 프로젝트에서는 프로젝트 이름으로 바꿔 다른 프로젝트와 공유하지 않게 합니다.
-volume_prefix="file-template"
+# 볼륨 접두사·검사 이미지·rust_version은 build.sh 등과 함께 쓰는 설정입니다.
+. "$project_root/scripts/docker-common.sh"
 
 require_tool() {
   if ! command -v "$1" >/dev/null 2>&1; then
     echo "[오류] $1 명령이 필요합니다. 설치 후 재시도하거나 ./scripts/check.sh --docker 를 사용하세요." >&2
     exit 1
-  fi
-}
-
-rust_version() {
-  sed -n 's/^channel *= *"\(.*\)"/\1/p' "$toolchain_file"
-}
-
-# 검사 도구를 설치한 로컬 이미지를 한 번만 만들고 재사용해 재실행 때 패키지를 내려받지 않습니다.
-# 태그에 기본 이미지와 설치 명령의 체크섬을 넣으므로 버전이나 설치 내용이 바뀌면 새 이미지를 만듭니다.
-# 사용: check_image 이름 기본이미지 "설치 명령" (결과 태그는 image 변수)
-check_image() {
-  local recipe
-  recipe="$(printf 'FROM %s\nRUN %s' "$2" "$3")"
-  image="$volume_prefix-check-$1:$(printf '%s' "$recipe" | cksum | cut -d ' ' -f 1)"
-  if ! docker image inspect "$image" >/dev/null 2>&1; then
-    printf '%s\n' "$recipe" | docker build --quiet --tag "$image" - >/dev/null
   fi
 }
 
@@ -81,9 +65,9 @@ case "${1:-}" in
   --docker)
     require_tool docker
     check_rust_pins
-    check_image rust "rust:$(rust_version)-alpine" "apk add --no-cache bash && rustup component add rustfmt"
+    use_rust_check_image
     rust_image="$image"
-    check_image node "node:22-alpine" "apk add --no-cache bash"
+    use_node_check_image
     node_image="$image"
     # 빌드 산출물(target)과 node_modules는 Docker 볼륨에 두어 호스트용 빌드·의존성을 덮어쓰지 않습니다.
     # 백엔드 검사는 소스를 쓰지 않으므로 읽기 전용으로 마운트합니다. (프론트엔드 빌드는 dist를 만듭니다)

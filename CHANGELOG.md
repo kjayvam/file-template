@@ -6,6 +6,7 @@
 
 ### Added
 - 프로젝트 초기 폴더 구조
+- `build.sh --docker`로 로컬 Rust·Node 없이 컴파일·빌드 검사. Docker 볼륨 접두사·검사 이미지 설정을 `scripts/docker-common.sh` 한곳으로 모음
 - ai-common·rag 선택형 모듈 원본과 추가·제거 도구(`scripts/template-module.py`), 임시 프로젝트 수명주기 검증
 - 빌드 컨텍스트별 `.dockerignore`(backend, frontend), Dependabot의 cargo·npm·docker·docker-compose 갱신, CodeQL의 Rust·Actions 분석
 - `check.sh`의 Docker 이미지·`rust-toolchain.toml` Rust 버전 일치 검사, 새 프로젝트 시작 시 정리할 자리표시자 목록(`docs/getting-started.md`)
