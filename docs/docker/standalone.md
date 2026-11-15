@@ -32,6 +32,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml restart backend
 
 * **Frontend**: `http://localhost:5173` (Vite 개발 서버 + HMR)
 * **Backend**: `http://localhost:8080` (Rust API 서버)
+* 개발 Compose는 모든 포트를 `127.0.0.1`에만 열어 같은 PC에서만 접속합니다. 다른 기기에서 확인할 때만 `ports`의 `127.0.0.1:`을 조정합니다.
 * **Database**:
   * **SQLite 선택 시**: 별도 컨테이너 불필요 (로컬 볼륨/파일로 직접 I/O)
   * **서버형 DB(PostgreSQL/MySQL) 선택 시**: `--profile postgres`를 붙여 `db` 서비스 실행 (`localhost:5432`, 같은 PC에서만 접속)

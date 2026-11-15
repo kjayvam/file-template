@@ -36,7 +36,7 @@
 - 쓰지 않는 `docs/images/`와 review-code 스킬의 미지원 `background` 필드 제거, 모듈 Python 스크립트에 실행 권한 부여
 - 새 프로젝트 자리표시자 목록에 프론트엔드 제목·시작 문구, AI 모듈 삭제 시 정리할 문서에 `docs/architecture.md`·`docs/guides/agent-knowledge.md`, README의 `.claude/` 설명에 `agent-memory/`·`workflows/` 추가
 - Rust Alpine 이미지에 이미 있는 `musl-dev`의 중복 설치 제거(개발 Compose 재시작 시 네트워크 불필요), `.gitignore`에 에이전트 앱의 `.claude/worktrees/` 추가, CodeQL에 모듈 스크립트용 Python 분석 추가
-- Dependabot이 Rust 이미지를 제안하지 않음(`rust-toolchain.toml`과 함께 수동 갱신), 개발 Compose의 PostgreSQL 포트를 `127.0.0.1`에만 열고 로컬 `npm run dev`는 Vite 기본값(localhost)만 사용
+- Dependabot이 Rust 이미지를 제안하지 않음(`rust-toolchain.toml`과 함께 수동 갱신), 개발 Compose의 PostgreSQL·backend·frontend 포트를 `127.0.0.1`에만 열고 로컬 `npm run dev`는 Vite 기본값(localhost)만 사용
 - 프로덕션 Compose의 PostgreSQL 기본 비밀번호(`change-me`) 제거, cargo-chef 0.1.78 고정, 모듈 검증 CI에 Cargo 레지스트리 캐시 추가
 - `check.sh --docker`가 backend 소스를 읽기 전용으로 마운트
 - Docker 검사가 bash·python3·rustfmt를 설치한 `file-template-check-*` 로컬 이미지를 한 번 만들어 재사용(재실행 시 도구 다운로드 없음)
