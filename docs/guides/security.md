@@ -8,6 +8,7 @@
 
 - **커밋 금지**: API 키, DB 비밀번호, JWT 시크릿 등 모든 비밀 값은 절대 Git에 커밋하지 않습니다.
 - **`.env.example` 동기화**: 새 환경 변수를 추가할 때는 실제 값 없이 키 이름과 설명만 [`.env.example`](../../.env.example)에 기록합니다.
+- **에이전트 읽기 차단**: [`.claude/settings.json`](../../.claude/settings.json)은 `.env`, `.env.local`, `.env.*.local`, `.env.development`·`.env.production`·`.env.staging`·`.env.test`, `*.env`의 Read를 막고 `.env.example`은 열어 둡니다. 거부 규칙의 `!` 예외는 쓰지 않으므로, 목록에 없는 `.env.<이름>` 파일을 만들면 거부 목록에도 추가합니다.
 - **코드 하드코딩 금지**: 소스 코드 내부(`backend/src/`, `frontend/src/`)에 테스트용 토큰이나 임시 비밀번호를 상수로 남겨두지 않습니다.
 
 ## 2. 인증 및 권한 관리 (AuthN & AuthZ)

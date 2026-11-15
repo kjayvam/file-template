@@ -8,6 +8,7 @@ description: 이 프로젝트의 보안 검토 체크리스트. 코드, 설정, 
 ## 비밀 값
 - 토큰, 키, 비밀번호가 코드, 설정 파일, 워크플로, 예시 파일에 직접 적혀 있지 않은가
 - `.env`와 비밀 값이 `.gitignore`와 `.dockerignore`에 들어 있는가
+- 새로 쓰는 `.env.<이름>` 파일이 `.claude/settings.json`의 Read 거부 목록에 있는가
 - `.env.example`에는 가짜 값만 있는가
 
 ## 입력과 데이터베이스
