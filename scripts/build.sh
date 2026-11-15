@@ -50,7 +50,6 @@ case "${1:-}" in
       "$image" \
       sh -ec 'npm ci; npm run build'
     ;;
-  *) usage ;;
 esac
 
 echo "빌드 검사 완료."

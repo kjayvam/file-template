@@ -62,4 +62,5 @@
 - Nginx `/assets/` 응답에 `expires`와 `add_header`가 각각 `Cache-Control`을 붙여 두 줄로 나가던 부분(한 줄로 합침)
 - Docker 실행 안내의 `cp .env.example .env`가 기존 `.env`를 덮어쓰던 부분, Nginx 설정 주석이 upstream keepalive 없이 백엔드 연결이 재사용되는 것처럼 설명하던 부분
 - Docker 가이드의 에이전트 상태 볼륨 이름이 공유 템플릿 가이드(`p_agent_state_<프로젝트>_<인스턴스>`)와 다르던 부분, 새 프로젝트 정리 목록에서 빠진 볼륨 이름 문서·CodeQL Python 항목·외부 자료 정리
+- `RUST_LOG` 없이 실행한 백엔드(로컬 `cargo run` 등)가 tracing 기본값(error)으로 시작 로그를 출력하지 않던 문제(이제 기본 info), `PORT=0`일 때 시작 로그가 실제로 열린 포트 대신 0을 표시하던 부분, 외부 자료에서 빠진 Keep a Changelog 항목
 - `check.sh`의 Rust 이미지 버전 불일치 오류가 이미지 이름을 두 번 출력하던 부분, 모듈 검증 CI가 `scripts/docker-common.sh` 변경에는 실행되지 않던 부분, ai-common 안내의 `mod.rs` 누락, 공유 템플릿 Keeper 예시가 기본 SQLite 데이터 볼륨(`app-data`)을 보호하지 않던 부분
