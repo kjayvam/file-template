@@ -4,6 +4,8 @@ services:
       context: ../backend
       dockerfile: Dockerfile
     env_file: ../.env
+    # 서버 재부팅이나 비정상 종료 뒤 자동으로 다시 시작합니다. `docker compose stop`으로 멈춘 서비스는 그대로 둡니다.
+    restart: unless-stopped
     environment:
       PORT: 8080
       DATABASE_URL: ${DATABASE_URL:-sqlite:///app/data/app.db}
@@ -17,6 +19,7 @@ services:
       context: ../frontend
       dockerfile: Dockerfile
     # 컨테이너는 root가 아닌 Nginx로 8080에서 받으며 호스트에는 80으로 엽니다.
+    restart: unless-stopped
     ports:
       - "80:8080"
     volumes:
@@ -29,6 +32,7 @@ services:
   db:
     image: postgres:16-alpine
     profiles: ["postgres"]
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DATABASE_NAME:-my_project}
       POSTGRES_USER: ${DATABASE_USER:-my_project}

@@ -44,6 +44,8 @@
 - 백엔드 Rust edition 2024로 변경, ai-common·rag 원본을 rustfmt 2024 스타일로 맞추고 0.2.0으로 갱신
 - rag 데모가 내장 corpus 기반 인덱스 초기화 실패를 400 대신 500(`store_unavailable`)으로 반환
 - 개발 Compose의 frontend가 `package-lock.json`이 마지막 설치와 같으면 `npm ci`를 건너뛰고, `node_modules`를 이름 있는 볼륨(`frontend-node-modules`)에 보존
+- 프로덕션 Compose의 backend·frontend·db에 `restart: unless-stopped`를 지정해 서버 재부팅 뒤 자동 시작
+- `.claude/settings.json`의 `.env` 읽기 거부를 동작이 불확실한 `!.env.example` 예외 대신 명시적 파일 목록으로 바꿔 `.env.example`을 읽을 수 있게 함
 - 프론트엔드 `tsconfig.json`의 target·lib를 설정 파일용 `tsconfig.node.json`과 같은 ES2022 계열로 맞춤
 
 ### Fixed
