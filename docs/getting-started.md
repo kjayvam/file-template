@@ -50,7 +50,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml up
 ./scripts/check.sh
 ```
 
-Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm run build`를 실행합니다. `backend/Dockerfile`·`docker/docker-compose.dev.yml`의 Rust 이미지 버전이 `rust-toolchain.toml`과 다르면 실패합니다. 도구가 없거나 검사가 실패하면 0이 아닌 종료 코드를 반환합니다. 빌드만 검사하려면 `./scripts/build.sh`를 사용합니다.
+Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm run build`를 실행합니다. `backend/Dockerfile`·`docker/docker-compose.dev.yml`의 Rust 이미지 버전이 `rust-toolchain.toml`과 다르면 실패합니다. 도구가 없거나 검사가 실패하면 0이 아닌 종료 코드를 반환합니다. 빌드만 검사하려면 `./scripts/build.sh`를, 로컬 Rust·Node 없이 빌드만 검사하려면 `./scripts/build.sh --docker`를 사용합니다.
 
 ```bash
 ./scripts/check.sh --backend
@@ -74,7 +74,7 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 | `ROADMAP.md` | `<...>` 항목을 프로젝트 목표와 일정으로 작성 |
 | `.github/FUNDING.yml` | 후원 링크가 없으면 파일 삭제 |
 | `config/*.yml`, `.env.example`, `docker/docker-compose*.yml` | 기본 이름 `my-project`, `my_project`와 DB 이름 변경 |
-| `scripts/check.sh`, `scripts/check-template-modules.sh` | `volume_prefix`를 프로젝트 이름으로 변경. 다른 프로젝트와 Docker 검증용 빌드 산출물·`node_modules` 볼륨과 검사 이미지를 공유하지 않게 합니다. 볼륨 이름(`file-template-*`)을 적은 `README.md`, `templates/README.md`도 함께 고칩니다 |
+| `scripts/docker-common.sh` | `volume_prefix`를 프로젝트 이름으로 변경. `check.sh`, `build.sh`, `check-template-modules.sh`가 함께 씁니다. 다른 프로젝트와 Docker 검증용 빌드 산출물·`node_modules` 볼륨과 검사 이미지를 공유하지 않게 합니다. 볼륨 이름(`file-template-*`)을 적은 `README.md`, `templates/README.md`도 함께 고칩니다 |
 | `CHANGELOG.md` | 템플릿 이력을 지우고 `[Unreleased]`부터 다시 시작 |
 | `migrations/0001_create_users.*` | PostgreSQL 예시입니다. 어느 DB에도 적용하기 전에 실제 스키마로 바꾸거나 삭제 |
 | `scripts/deploy.sh`, `scripts/seed-db.sh` | 실패로 끝나는 자리표시자. 실제 명령으로 작성 |
@@ -84,4 +84,4 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 
 Rust 버전을 올릴 때는 `rust-toolchain.toml`, `backend/Dockerfile`, `docker/docker-compose.dev.yml`을 함께 바꿉니다. 세 곳이 다르면 `check.sh`가 실패하므로 Dependabot은 Rust 이미지를 제안하지 않으며 [Rust 릴리스](https://blog.rust-lang.org/releases/)를 보고 직접 올립니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, `templates/README.md`, `docs/docker/build-optimization.md`)도 같이 갱신하고, `backend/Dockerfile`의 `CARGO_CHEF_VERSION`이 새 Rust에서 설치되는지 확인합니다.
 
-Node 하한이나 계열을 바꿀 때는 `frontend/package.json`의 `engines`와 `frontend/package-lock.json`(루트 패키지의 `engines`), Node 이미지(`frontend/Dockerfile`, `docker/docker-compose.dev.yml`, `scripts/check.sh`), CI의 `node-version`, `.github/dependabot.yml`의 Node 관련 주석과 `@types/node`·`node` 무시 규칙을 함께 바꿉니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, 계열을 바꾸면 `docs/docker/build-optimization.md`)도 같이 갱신합니다. 현재 하한 22.22.2는 jsdom 31의 요구 사항입니다.
+Node 하한이나 계열을 바꿀 때는 `frontend/package.json`의 `engines`와 `frontend/package-lock.json`(루트 패키지의 `engines`), Node 이미지(`frontend/Dockerfile`, `docker/docker-compose.dev.yml`, `scripts/docker-common.sh`), CI의 `node-version`, `.github/dependabot.yml`의 Node 관련 주석과 `@types/node`·`node` 무시 규칙을 함께 바꿉니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, 계열을 바꾸면 `docs/docker/build-optimization.md`)도 같이 갱신합니다. 현재 하한 22.22.2는 jsdom 31의 요구 사항입니다.

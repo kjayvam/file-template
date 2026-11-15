@@ -14,7 +14,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 | `tests/` | 테스트 배치 안내, 공용 테스트 데이터와 향후 E2E 테스트 자리 |
 | `config/` | 환경별 설정 YAML |
 | `migrations/` | DB 마이그레이션 SQL |
-| `scripts/` | 환경·빌드·기본형 검증, 모듈 추가·제거(`template-module.py`)와 임시 프로젝트 검증(`check-template-modules.sh`) |
+| `scripts/` | 환경·빌드·기본형 검증, Docker 실행 공용 설정(`docker-common.sh`), 모듈 추가·제거(`template-module.py`)와 임시 프로젝트 검증(`check-template-modules.sh`) |
 | [`templates/`](templates/README.md) | ai-common·rag의 선택형 원본, 의존·소유 파일 목록과 적용·제거 안내 |
 | `rust-toolchain.toml` | 로컬·CI가 사용할 Rust 버전과 rustfmt 고정 |
 | [`external/`](external/README.md) | GitHub 저장소와 기타 외부 자료 목록 |
@@ -32,7 +32,7 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 ./scripts/check.sh
 ```
 
-`check.sh`는 Rust 포맷·컴파일·API 통합 테스트와 React 컴포넌트 테스트·프로덕션 빌드를 실행하고, Docker 이미지의 Rust 버전이 `rust-toolchain.toml`과 같은지 확인합니다. 필요한 도구가 없거나 검사가 실패하면 오류로 종료합니다. 빌드만 확인하려면 `./scripts/build.sh`를 사용합니다.
+`check.sh`는 Rust 포맷·컴파일·API 통합 테스트와 React 컴포넌트 테스트·프로덕션 빌드를 실행하고, Docker 이미지의 Rust 버전이 `rust-toolchain.toml`과 같은지 확인합니다. 필요한 도구가 없거나 검사가 실패하면 오류로 종료합니다. 빌드만 확인하려면 `./scripts/build.sh`(로컬 도구 없이는 `./scripts/build.sh --docker`)를 사용합니다.
 
 Rust와 Node를 설치하지 않고 Docker로 동일한 검사를 실행할 수도 있습니다.
 

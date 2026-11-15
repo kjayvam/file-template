@@ -2,21 +2,8 @@
 set -euo pipefail
 
 project_root="$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)"
-# check.sh와 같은 Docker 볼륨 접두사를 사용해 Cargo 다운로드 캐시를 공유합니다.
-volume_prefix="file-template"
-rust_version="$(sed -n 's/^channel *= *"\(.*\)"/\1/p' "$project_root/rust-toolchain.toml")"
-# 검사 도구를 설치한 로컬 이미지를 한 번만 만들고 재사용해 재실행 때 패키지를 내려받지 않습니다.
-# 태그에 기본 이미지와 설치 명령의 체크섬을 넣으므로 버전이나 설치 내용이 바뀌면 새 이미지를 만듭니다.
-# 사용: check_image 이름 기본이미지 "설치 명령" (결과 태그는 image 변수)
-check_image() {
-  local recipe
-  recipe="$(printf 'FROM %s\nRUN %s' "$2" "$3")"
-  image="$volume_prefix-check-$1:$(printf '%s' "$recipe" | cksum | cut -d ' ' -f 1)"
-  if ! docker image inspect "$image" >/dev/null 2>&1; then
-    printf '%s\n' "$recipe" | docker build --quiet --tag "$image" - >/dev/null
-  fi
-}
-
+# check.sh와 같은 Docker 볼륨 접두사·이미지 규칙을 사용해 Cargo 다운로드 캐시를 공유합니다.
+. "$project_root/scripts/docker-common.sh"
 if [ "$#" -gt 1 ]; then
   echo "사용법: $0 [--docker]" >&2
   exit 2
@@ -38,7 +25,7 @@ case "${1:-}" in
       echo "[오류] docker 명령이 필요합니다." >&2
       exit 1
     fi
-    check_image modules "rust:$rust_version-alpine" "apk add --no-cache python3 && rustup component add rustfmt"
+    check_image modules "rust:$(rust_version)-alpine" "apk add --no-cache python3 && rustup component add rustfmt"
     docker run --rm \
       --mount "type=bind,src=$project_root/backend,dst=/workspace/backend,readonly" \
       --mount "type=bind,src=$project_root/templates,dst=/workspace/templates,readonly" \
