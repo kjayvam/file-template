@@ -35,13 +35,13 @@ React 웹 애플리케이션은 브라우저에서 실행되는 정적 에셋(HT
 flowchart TD
     DevDeps["1. 의존성 설치 스테이지<br/>(node:22-alpine, package.json / lockfile)"]
     Bundler["2. 정적 번들 빌드 스테이지<br/>(Vite build -> /app/dist 생성)"]
-    Nginx["3. 런타임 스테이지<br/>(nginx:1.31-alpine, 정적 파일 복사 & 리버스 프록시)<br/>★ 크기는 nginx alpine 기반 이미지가 대부분 차지"]
+    Nginx["3. 런타임 스테이지<br/>(nginxinc/nginx-unprivileged:1.31-alpine, root가 아닌 nginx 사용자·컨테이너 포트 8080, 정적 파일 복사 & 리버스 프록시)<br/>★ 크기는 nginx alpine 기반 이미지가 대부분 차지"]
 
     DevDeps --> Bundler --> Nginx
 ```
 
 ### Nginx 리버스 프록시 역할
-* **단일 오리진 제공**: 클라이언트(브라우저)는 Nginx 포트(예: `:80`)로만 접속합니다.
+* **단일 오리진 제공**: 클라이언트(브라우저)는 Nginx 포트(호스트 `:80`, 컨테이너 안에서는 `:8080`)로만 접속합니다.
 * **정적 서빙 & 프록시 분기**:
   * `/` 및 정적 리소스 요청: Nginx가 gzip 압축을 적용하고, 해시가 붙은 `/assets/`는 1년 캐시, `index.html`은 매번 재검증하도록 응답 (`docker/nginx/default.conf`)
   * 보안 헤더: 모든 응답에 `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`을 붙입니다. CSP·HSTS는 프로젝트의 스크립트 출처와 HTTPS 종단에 맞춰 추가합니다.

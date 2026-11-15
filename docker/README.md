@@ -37,7 +37,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml --profile postgr
 ```bash
 docker compose --env-file .env -f docker/docker-compose.yml up --build -d
 ```
-* Web (Nginx): `http://localhost:80`
+* Web (Nginx): `http://localhost:80` (컨테이너는 root가 아닌 Nginx로 8080에서 받고 호스트 80에 연결)
 * Backend: 호스트 포트를 열지 않습니다. API는 Nginx를 거쳐 접근합니다. (예: `http://localhost/api/v1/health`)
 * PostgreSQL은 `--profile postgres`로 실행하며 프로덕션 Compose에서는 호스트 포트를 열지 않습니다(`db:5432`로만 접근). 기본 비밀번호가 없으므로 `.env`에 `DATABASE_PASSWORD`를 지정해야 시작됩니다.
 

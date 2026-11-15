@@ -74,7 +74,7 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 | `ROADMAP.md` | `<...>` 항목을 프로젝트 목표와 일정으로 작성 |
 | `.github/FUNDING.yml` | 후원 링크가 없으면 파일 삭제 |
 | `config/*.yml`, `.env.example`, `docker/docker-compose*.yml` | 기본 이름 `my-project`, `my_project`와 DB 이름 변경 |
-| `scripts/check.sh`, `scripts/check-template-modules.sh` | `volume_prefix`를 프로젝트 이름으로 변경. 다른 프로젝트와 Docker 검증용 빌드 산출물·`node_modules` 볼륨을 공유하지 않게 합니다. 볼륨 이름(`file-template-*`)을 적은 `README.md`, `templates/README.md`도 함께 고칩니다 |
+| `scripts/check.sh`, `scripts/check-template-modules.sh` | `volume_prefix`를 프로젝트 이름으로 변경. 다른 프로젝트와 Docker 검증용 빌드 산출물·`node_modules` 볼륨과 검사 이미지를 공유하지 않게 합니다. 볼륨 이름(`file-template-*`)을 적은 `README.md`, `templates/README.md`도 함께 고칩니다 |
 | `CHANGELOG.md` | 템플릿 이력을 지우고 `[Unreleased]`부터 다시 시작 |
 | `migrations/0001_create_users.*` | PostgreSQL 예시입니다. 어느 DB에도 적용하기 전에 실제 스키마로 바꾸거나 삭제 |
 | `scripts/deploy.sh`, `scripts/seed-db.sh` | 실패로 끝나는 자리표시자. 실제 명령으로 작성 |

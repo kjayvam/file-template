@@ -8,7 +8,7 @@ pub mod store;
 use crate::ai_common::{AiError, Budget, ChatModel, Embedder, ModelRequest, RequestContext};
 use document::{Answer, AnswerStatus, Citation, Document};
 use std::{future::Future, sync::Arc, time::Duration};
-use store::{validate_vector, MemoryIndex};
+use store::{MemoryIndex, validate_vector};
 
 #[derive(Clone)]
 pub struct RagConfig {

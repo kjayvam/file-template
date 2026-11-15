@@ -1,6 +1,6 @@
 # 프로젝트별로 조합하는 RAG·Agent 템플릿 설계
 
-상태: ai-common·rag 0.1.0의 원본·추가·제거 도구·임시 프로젝트 검증은 구현했습니다. 실제 사용은 [템플릿 카탈로그](../../templates/README.md)를 따릅니다. 아래 Agent·UI·별도 서비스·live 평가·영속 저장소는 후속 설계입니다.
+상태: ai-common·rag 0.2.0의 원본·추가·제거 도구·임시 프로젝트 검증은 구현했습니다. 실제 사용은 [템플릿 카탈로그](../../templates/README.md)를 따릅니다. 아래 Agent·UI·별도 서비스·live 평가·영속 저장소는 후속 설계입니다.
 
 ## 1. 템플릿의 사용 원칙
 
@@ -90,11 +90,11 @@ templates/
 
 ai-ui는 선택된 기능의 하위 파일만 적용합니다. Rag만 쓰는 프로젝트에 Agent 화면·타입·테스트를 복사하지 않습니다. 별도 모델 어댑터를 만들 때는 common 아래 providers/에 구현하고 실제 공유가 생겼을 때만 별도 crate로 추출합니다.
 
-예를 들어 RAG만 선택한 소규모 프로젝트의 확장 목표 구조는 다음과 같습니다. 템플릿 원본 폴더는 결과물에 없어도 됩니다. 현재 ai-common·rag 0.1.0을 적용하면 이 중 `src/lib.rs` 연결 블록, `src/features/ai/{common/,rag/}`, `tests/ai_common.rs`·`tests/ai_rag.rs`와 루트의 적용 기록 `.template-modules.json`만 생기고 Cargo 파일은 바뀌지 않습니다. 수집 CLI·`evals/ai/`·`config/ai/`·`scripts/{check-ai.sh,eval-ai.sh}`는 아직 없습니다.
+예를 들어 RAG만 선택한 소규모 프로젝트의 확장 목표 구조는 다음과 같습니다. 템플릿 원본 폴더는 결과물에 없어도 됩니다. 현재 ai-common·rag 0.2.0을 적용하면 이 중 `src/lib.rs` 연결 블록, `src/features/ai/{common/,rag/}`, `tests/ai_common.rs`·`tests/ai_rag.rs`와 루트의 적용 기록 `.template-modules.json`만 생기고 Cargo 파일은 바뀌지 않습니다. 수집 CLI·`evals/ai/`·`config/ai/`·`scripts/{check-ai.sh,eval-ai.sh}`는 아직 없습니다.
 
 ```text
 backend/
-  Cargo.toml, Cargo.lock            # 모듈이 새 의존성을 쓸 때만 변경 (0.1.0은 변경 없음)
+  Cargo.toml, Cargo.lock            # 모듈이 새 의존성을 쓸 때만 변경 (0.2.0은 변경 없음)
   src/lib.rs                        # 선택한 기능의 라우터 연결
   src/features/ai/{common/,rag/}    # lib.rs에서 #[path]로 연결하므로 features/ai/mod.rs는 없음
   src/bin/ai_ingest.rs               # 수집 CLI가 필요한 경우만 추가
@@ -146,7 +146,7 @@ Mock·live는 모듈의 실행 구성입니다. Mock은 가상 모델·문서·�
 
 ## 6. RAG 동작과 데이터 계약
 
-6~9절은 확장할 때의 목표 계약입니다. 현재 0.1.0은 메모리 검색·revision·접근 범위·인용·호출 횟수·deadline과 가상 HTTP 데모를 구현했습니다. 수집 CLI·영속 인덱스·운영 인증·live 공급자·토큰/금액 정산·Agent는 아직 없습니다. 현재 지원 범위는 [rag 안내](../../templates/rag/README.md)를 기준으로 확인하세요.
+6~9절은 확장할 때의 목표 계약입니다. 현재 0.2.0은 메모리 검색·revision·접근 범위·인용·호출 횟수·deadline과 가상 HTTP 데모를 구현했습니다. 수집 CLI·영속 인덱스·운영 인증·live 공급자·토큰/금액 정산·Agent는 아직 없습니다. 현재 지원 범위는 [rag 안내](../../templates/rag/README.md)를 기준으로 확인하세요.
 
 초기 입력 형식은 UTF-8 Markdown·텍스트와 가상 corpus JSON 배열(`demo/corpus.json`)로 제한합니다. PDF·웹 크롤러·OCR은 후속 어댑터입니다. 처음부터 파일 업로드·작업 큐까지 만들지 않고 `ai_ingest` CLI로 검증된 입력을 색인합니다.
 
@@ -203,7 +203,7 @@ query 입력은 질문과 허용된 검색 옵션, runs 입력은 목표와 허�
 
 초기 데모에서는 `POST /runs`가 in-process task를 생성하고 실행 저장소도 메모리입니다. 서버 재시작 시 실행·idempotency 기록은 사라집니다. 영속 큐·재시작 복구를 지원한다고 약속하지 않습니다. Live 평가에서 `lookup_fixture`는 실제 모델의 도구 사용 능력을 측정하기 위한 고정 도구이며, 외부 업무 API 연동의 정확성까지 검증한 것으로 보고하지 않습니다.
 
-업무 응답은 `{success:true,data:{...},meta:{trace_id,usage}}`, 오류는 `{success:false,error:{code,message},meta:{trace_id}}`로 통일합니다. 입력 오류 400, 신원 없음 401, 권한 없음 403, 없는 기능·리소스 404, 같은 idempotency 키의 다른 요청 409, 호출 예산·동시 실행 제한 429, 공급자 장애 502, deadline 초과 504, 모듈 내부 저장소 오류 500을 구분합니다. 현재 rag 0.1.0 데모는 이 목표 형식의 일부만 따릅니다. 오류는 `message` 없이 `error.code`와 `meta.trace_id`만, 성공 meta는 `usage` 대신 `trace_id`·`mock`·`calls`를 반환하고, 근거 변경·revision 충돌에 409, 16 KiB 초과 본문에 413을 씁니다. 이미 202로 생성된 run의 실행 중 오류는 상태 조회의 종료 상태로 표현합니다.
+업무 응답은 `{success:true,data:{...},meta:{trace_id,usage}}`, 오류는 `{success:false,error:{code,message},meta:{trace_id}}`로 통일합니다. 입력 오류 400, 신원 없음 401, 권한 없음 403, 없는 기능·리소스 404, 같은 idempotency 키의 다른 요청 409, 호출 예산·동시 실행 제한 429, 공급자 장애 502, deadline 초과 504, 모듈 내부 저장소 오류 500을 구분합니다. 현재 rag 0.2.0 데모는 이 목표 형식의 일부만 따릅니다. 오류는 `message` 없이 `error.code`와 `meta.trace_id`만, 성공 meta는 `usage` 대신 `trace_id`·`mock`·`calls`를 반환하고, 근거 변경·revision 충돌에 409, 16 KiB 초과 본문에 413을 씁니다. 이미 202로 생성된 run의 실행 중 오류는 상태 조회의 종료 상태로 표현합니다.
 
 UI를 선택했다면 첫 화면은 polling으로 구현하고 SSE는 필요할 때 추가합니다. RAG 화면은 질문·답변·열람 가능한 출처와 근거 부족 상태, Agent 화면은 목표·진행 상태·도구 결과 요약·취소를 보여줍니다. 내부 추론 원문을 타임라인에 노출하지 않습니다. mock 배지와 재시작 시 데이터 초기화 안내는 표시합니다.
 
@@ -213,7 +213,7 @@ UI를 선택했다면 첫 화면은 polling으로 구현하고 SSE는 필요할 
 
 ## 9. 신원·사용량·실행 기록
 
-현재 rag 0.1.0의 mock 데모 라우트(`POST /api/ai/v1/query`)는 기존 `app()`에 합쳐지므로, 백엔드가 열린 모든 곳(로컬·개발 실행의 8080 포트와 프로덕션 Compose의 Nginx `/api/` 프록시 포함)에서 접근됩니다. 고정 demo 신원과 가상 corpus만 쓰지만, 공개 배포 전에는 이 라우트를 제거하거나 실제 인증 뒤로 옮깁니다. 실제 프로젝트에서는 기존 인증 체계의 검증된 문맥을 주입합니다. 요청의 임의 tenant 헤더를 신뢰하지 않습니다. 현재 테스트는 `RequestContext::new`로 여러 tenant·reader 신원을 직접 만들어 접근 범위를 검증합니다. 공유·외부 공개 전에 실제 인증 어댑터와 문서 권한 저장소가 필요하며, 아직 기본 템플릿에 인증이 구현돼 있다고 가정하지 않습니다.
+현재 rag 0.2.0의 mock 데모 라우트(`POST /api/ai/v1/query`)는 기존 `app()`에 합쳐지므로, 백엔드가 열린 모든 곳(로컬·개발 실행의 8080 포트와 프로덕션 Compose의 Nginx `/api/` 프록시 포함)에서 접근됩니다. 고정 demo 신원과 가상 corpus만 쓰지만, 공개 배포 전에는 이 라우트를 제거하거나 실제 인증 뒤로 옮깁니다. 실제 프로젝트에서는 기존 인증 체계의 검증된 문맥을 주입합니다. 요청의 임의 tenant 헤더를 신뢰하지 않습니다. 현재 테스트는 `RequestContext::new`로 여러 tenant·reader 신원을 직접 만들어 접근 범위를 검증합니다. 공유·외부 공개 전에 실제 인증 어댑터와 문서 권한 저장소가 필요하며, 아직 기본 템플릿에 인증이 구현돼 있다고 가정하지 않습니다.
 
 Live 사용량은 입력·출력 토큰, 임베딩량, 모델·가격표 버전으로 계산합니다. 모델 호출 전에 최대 출력과 입력을 포함한 예상 상한을 예약하고, 실제 사용량으로 정산합니다. 가격표나 사용량을 얻지 못하면 비용 0으로 취급하지 않고 `unknown`·예약액 유지로 기록합니다. 예산을 집행할 수 없는 live 설정은 거부합니다.
 

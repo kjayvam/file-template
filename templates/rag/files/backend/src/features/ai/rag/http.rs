@@ -1,23 +1,23 @@
 //! Local mock demo. Replace this host boundary with verified application identity for real data.
 use super::{
+    Rag, RagConfig,
     document::Document,
     mock::{ExtractiveModel, HashedEmbedder},
-    Rag, RagConfig,
 };
 use crate::ai_common::{AiError, Budget, RequestContext};
 use axum::{
-    extract::{rejection::JsonRejection, DefaultBodyLimit, State},
+    Json, Router,
+    extract::{DefaultBodyLimit, State, rejection::JsonRejection},
     http::StatusCode,
     response::{IntoResponse, Response},
     routing::post,
-    Json, Router,
 };
 use serde::Deserialize;
 use serde_json::json;
 use std::{
     sync::{
-        atomic::{AtomicU64, Ordering},
         Arc,
+        atomic::{AtomicU64, Ordering},
     },
     time::Duration,
 };
@@ -75,7 +75,7 @@ async fn query(
         .get_or_try_init(|| async {
             let rag = Rag::new(RagConfig::default(), HashedEmbedder, ExtractiveModel)?;
             let docs: Vec<Document> = serde_json::from_str(include_str!("demo/corpus.json"))
-                .map_err(|_| AiError::InvalidInput)?;
+                .map_err(|_| AiError::StoreUnavailable)?;
             for doc in docs {
                 rag.ingest(doc).await?;
             }
@@ -84,7 +84,8 @@ async fn query(
         .await
     {
         Ok(rag) => rag,
-        Err(error) => return failure(error, &id),
+        // Building the bundled demo index never depends on the request, so any failure is internal (500).
+        Err(_) => return failure(AiError::StoreUnavailable, &id),
     };
     let context = match RequestContext::new("demo", "reader", &id, Duration::from_secs(5)) {
         Ok(context) => context,

@@ -62,7 +62,7 @@ flowchart LR
 | **서버형 DB 데이터** (`--profile postgres`) | `pg-data` | `p_db_data_<프로젝트명>` | 프로젝트 영속 데이터 |
 | **Rust Crate 다운로드 캐시** (개발 Compose) | `cargo-cache` | `sync_cargo_cache` | 호스트 단위 공유 시 빌드 속도 대폭 향상 |
 | **Rust 빌드 산출물** (개발 Compose) | `backend-target` | `p_backend_target_<프로젝트명>` | 호스트 `backend/target`과 분리 |
-| **프론트엔드 의존성** (개발 Compose) | 익명 볼륨(`/app/node_modules`) | `p_node_modules_<프로젝트명>` | 프로젝트별 의존성 격리 |
+| **프론트엔드 의존성** (개발 Compose) | `frontend-node-modules` (lock이 같으면 `npm ci` 생략) | `p_node_modules_<프로젝트명>` | 프로젝트별 의존성 격리 |
 | **에이전트 인증** | (해당 없음) | `sync_agent_auth` | 호스트 공용 에이전트 로그인 재사용 |
 | **에이전트 작업 상태** | (해당 없음) | `p_agent_state_<프로젝트명>_<인스턴스>` | 프로젝트별 세션/메모리 분리 |
 
