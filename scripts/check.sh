@@ -17,12 +17,13 @@ require_tool() {
 # --docker 내부 실행처럼 루트 파일이 마운트되지 않은 환경에서는 건너뜁니다.
 check_rust_pins() {
   [ -f "$toolchain_file" ] || return 0
-  local version file found
+  local version file found shown
   version="$(rust_version)"
   for file in backend/Dockerfile docker/docker-compose.dev.yml; do
     found="$( (grep -oE 'rust:[0-9][0-9.]*' "$project_root/$file" || true) | sort -u | tr '\n' ' ')"
     if [ "$found" != "rust:$version " ]; then
-      echo "[오류] $file의 Rust 이미지(${found:+${found% }}${found:-없음})가 rust-toolchain.toml의 $version과 다릅니다." >&2
+      shown="${found% }"
+      echo "[오류] $file의 Rust 이미지(${shown:-없음})가 rust-toolchain.toml의 $version과 다릅니다." >&2
       exit 1
     fi
   done

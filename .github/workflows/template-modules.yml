@@ -9,6 +9,7 @@ on:
       - "scripts/template-module.py"
       - "scripts/verify-template-modules.py"
       - "scripts/check-template-modules.sh"
+      - "scripts/docker-common.sh"
       - "rust-toolchain.toml"
       - ".github/workflows/template-modules.yml"
   pull_request:
@@ -18,6 +19,7 @@ on:
       - "scripts/template-module.py"
       - "scripts/verify-template-modules.py"
       - "scripts/check-template-modules.sh"
+      - "scripts/docker-common.sh"
       - "rust-toolchain.toml"
       - ".github/workflows/template-modules.yml"
 
