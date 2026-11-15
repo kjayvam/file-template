@@ -1,5 +1,5 @@
 use axum::{
-    body::{to_bytes, Body},
+    body::{Body, to_bytes},
     http::{Request, StatusCode},
 };
 use backend::{
@@ -7,18 +7,17 @@ use backend::{
         AiError, AiFuture, Budget, ChatModel, Embedder, ModelOutput, ModelRequest, RequestContext,
     },
     rag::{
-        chunk,
+        Rag, RagConfig, chunk,
         document::{AnswerStatus, Document},
         mock::{ExtractiveModel, HashedEmbedder},
         store::MemoryIndex,
-        Rag, RagConfig,
     },
 };
-use serde_json::{json, Value};
+use serde_json::{Value, json};
 use std::{
     sync::{
-        atomic::{AtomicBool, AtomicUsize, Ordering},
         Arc, Mutex,
+        atomic::{AtomicBool, AtomicUsize, Ordering},
     },
     time::Duration,
 };
@@ -192,10 +191,11 @@ async fn unchanged_reingest_does_not_call_the_embedder_again() {
     assert!(after_first > 0);
     assert!(!rag.ingest(original).await.unwrap());
     assert_eq!(calls.load(Ordering::SeqCst), after_first);
-    assert!(rag
-        .ingest(doc("t", "logs", 2, "alpha log retention is fourteen days"))
-        .await
-        .unwrap());
+    assert!(
+        rag.ingest(doc("t", "logs", 2, "alpha log retention is fourteen days"))
+            .await
+            .unwrap()
+    );
     assert!(calls.load(Ordering::SeqCst) > after_first);
 }
 

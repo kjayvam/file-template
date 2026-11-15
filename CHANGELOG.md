@@ -38,6 +38,12 @@
 - Dependabot이 Rust 이미지를 제안하지 않음(`rust-toolchain.toml`과 함께 수동 갱신), 개발 Compose의 PostgreSQL 포트를 `127.0.0.1`에만 열고 로컬 `npm run dev`는 Vite 기본값(localhost)만 사용
 - 프로덕션 Compose의 PostgreSQL 기본 비밀번호(`change-me`) 제거, cargo-chef 0.1.78 고정, 모듈 검증 CI에 Cargo 레지스트리 캐시 추가
 - `check.sh --docker`가 backend 소스를 읽기 전용으로 마운트
+- Docker 검사가 bash·python3·rustfmt를 설치한 `file-template-check-*` 로컬 이미지를 한 번 만들어 재사용(재실행 시 도구 다운로드 없음)
+- frontend 런타임 이미지를 root가 아닌 `nginxinc/nginx-unprivileged:1.31-alpine`으로 변경하고 컨테이너 포트 8080을 호스트 80에 연결
+- 백엔드 Rust edition 2024로 변경, ai-common·rag 원본을 rustfmt 2024 스타일로 맞추고 0.2.0으로 갱신
+- rag 데모가 내장 corpus 기반 인덱스 초기화 실패를 400 대신 500(`store_unavailable`)으로 반환
+- 개발 Compose의 frontend가 `package-lock.json`이 마지막 설치와 같으면 `npm ci`를 건너뛰고, `node_modules`를 이름 있는 볼륨(`frontend-node-modules`)에 보존
+- 프론트엔드 `tsconfig.json`의 target·lib를 설정 파일용 `tsconfig.node.json`과 같은 ES2022 계열로 맞춤
 
 ### Fixed
 - Nginx가 `/api/` 접두사를 잘라 프로덕션에서 `/api/v1/health`가 404가 되던 문제

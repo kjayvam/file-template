@@ -7,7 +7,7 @@
 | [ai-common](ai-common/README.md) | 없음 | 비동기 모델·임베딩 인터페이스, 신원 문맥·deadline, 호출 횟수 제한 |
 | [rag](rag/README.md) | ai-common | 메모리 벡터 검색, 문서 revision·접근 범위, 인용, 오프라인 발췌 데모 |
 
-Agent·UI·별도 서비스·실제 모델·영속 DB는 아직 제공하지 않습니다. 모듈은 기본 Rust 1.99.1, crate 이름 `backend`, 현재 `backend/src/lib.rs`의 라우터 구조를 기준으로 합니다. 그 구조를 변경한 프로젝트는 적용 전에 integration 블록과 테스트 import를 조정하세요.
+Agent·UI·별도 서비스·실제 모델·영속 DB는 아직 제공하지 않습니다. 모듈은 기본 Rust 1.99.1, edition 2024(rustfmt 2024 스타일), crate 이름 `backend`, 현재 `backend/src/lib.rs`의 라우터 구조를 기준으로 합니다. 그 구조를 변경한 프로젝트는 적용 전에 integration 블록과 테스트 import를 조정하세요.
 
 ## 정의와 소유권
 
@@ -83,4 +83,4 @@ rag가 남아 있으면 ai-common 제거는 거부됩니다. 소유 파일이나
 
 현재 체크아웃에 모듈을 적용하지 않고 임시 프로젝트에서 base → common → rag+common → common → base 순서로 Rust 포맷·컴파일·테스트와 라우트 상태를 확인합니다. 제거는 카탈로그가 없는 독립 도구 사본으로 검사합니다. 의존 순서·덮어쓰기·심볼릭 링크·사용자 변경·dry-run 거부 검사와 데이터·기존 Cargo 파일 보존도 확인합니다.
 
-Docker는 임시 프로젝트와 전용 `file-template-modules-target` 빌드 캐시, 기존 Cargo 다운로드 캐시를 사용합니다. 원본 backend·templates·scripts·`rust-toolchain.toml`은 읽기 전용으로 마운트하고, 임시 프로젝트에는 `backend/` 전체(`target`·`.env` 계열 제외)와 `rust-toolchain.toml`만 복사하므로 프로젝트가 추가한 backend 파일도 함께 검사합니다. `.env`·개인 설정은 복사하지 않습니다. 네이티브 검증은 Python 3.11+, Rust·rustfmt 설치 후 같은 명령에서 `--docker`를 빼면 됩니다.
+Docker는 임시 프로젝트와 전용 `file-template-modules-target` 빌드 캐시, 기존 Cargo 다운로드 캐시, python3·rustfmt를 한 번 설치해 두는 `file-template-check-modules` 로컬 이미지를 사용합니다. 원본 backend·templates·scripts·`rust-toolchain.toml`은 읽기 전용으로 마운트하고, 임시 프로젝트에는 `backend/` 전체(`target`·`.env` 계열 제외)와 `rust-toolchain.toml`만 복사하므로 프로젝트가 추가한 backend 파일도 함께 검사합니다. `.env`·개인 설정은 복사하지 않습니다. 네이티브 검증은 Python 3.11+, Rust·rustfmt 설치 후 같은 명령에서 `--docker`를 빼면 됩니다.

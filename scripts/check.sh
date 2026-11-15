@@ -17,6 +17,18 @@ rust_version() {
   sed -n 's/^channel *= *"\(.*\)"/\1/p' "$toolchain_file"
 }
 
+# 검사 도구를 설치한 로컬 이미지를 한 번만 만들고 재사용해 재실행 때 패키지를 내려받지 않습니다.
+# 태그에 기본 이미지와 설치 명령의 체크섬을 넣으므로 버전이나 설치 내용이 바뀌면 새 이미지를 만듭니다.
+# 사용: check_image 이름 기본이미지 "설치 명령" (결과 태그는 image 변수)
+check_image() {
+  local recipe
+  recipe="$(printf 'FROM %s\nRUN %s' "$2" "$3")"
+  image="$volume_prefix-check-$1:$(printf '%s' "$recipe" | cksum | cut -d ' ' -f 1)"
+  if ! docker image inspect "$image" >/dev/null 2>&1; then
+    printf '%s\n' "$recipe" | docker build --quiet --tag "$image" - >/dev/null
+  fi
+}
+
 # Dependabot 등이 한쪽만 올려 버전이 어긋나지 않도록 Docker 이미지의 Rust 버전을 rust-toolchain.toml과 비교합니다.
 # --docker 내부 실행처럼 루트 파일이 마운트되지 않은 환경에서는 건너뜁니다.
 check_rust_pins() {
@@ -69,6 +81,10 @@ case "${1:-}" in
   --docker)
     require_tool docker
     check_rust_pins
+    check_image rust "rust:$(rust_version)-alpine" "apk add --no-cache bash && rustup component add rustfmt"
+    rust_image="$image"
+    check_image node "node:22-alpine" "apk add --no-cache bash"
+    node_image="$image"
     # 빌드 산출물(target)과 node_modules는 Docker 볼륨에 두어 호스트용 빌드·의존성을 덮어쓰지 않습니다.
     # 백엔드 검사는 소스를 쓰지 않으므로 읽기 전용으로 마운트합니다. (프론트엔드 빌드는 dist를 만듭니다)
     docker run --rm \
@@ -77,15 +93,15 @@ case "${1:-}" in
       --mount "type=volume,src=$volume_prefix-check-cargo,dst=/usr/local/cargo/registry" \
       --mount "type=volume,src=$volume_prefix-check-target,dst=/check-target" \
       --env CARGO_TARGET_DIR=/check-target \
-      "rust:$(rust_version)-alpine" \
-      sh -ec 'apk add --no-cache bash; rustup component add rustfmt; /workspace/scripts/check.sh --backend'
+      "$rust_image" \
+      /workspace/scripts/check.sh --backend
     docker run --rm \
       --mount "type=bind,src=$project_root/frontend,dst=/workspace/frontend" \
       --mount "type=bind,src=$project_root/scripts,dst=/workspace/scripts,readonly" \
       --mount "type=volume,src=$volume_prefix-check-node-modules,dst=/workspace/frontend/node_modules" \
       --workdir /workspace/frontend \
-      node:22-alpine \
-      sh -ec 'apk add --no-cache bash; npm ci; /workspace/scripts/check.sh --frontend'
+      "$node_image" \
+      sh -ec 'npm ci; /workspace/scripts/check.sh --frontend'
     ;;
   *)
     echo "사용법: $0 [--backend|--frontend|--docker]" >&2

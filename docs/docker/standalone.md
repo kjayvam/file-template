@@ -41,6 +41,7 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml restart backend
 * `./backend` → 컨테이너 내부 `/app` (재시작 시 수정 코드로 재컴파일)
 * `cargo-cache` 볼륨 → Cargo 의존성 다운로드 캐싱
 * `backend-target` 볼륨 → 컨테이너용 빌드 산출물을 호스트 `backend/target`과 분리해 재컴파일 시간 단축
+* `frontend-node-modules` 볼륨 → 컨테이너용 `node_modules`. `package-lock.json`이 마지막 설치 때와 같으면 시작할 때 `npm ci`를 건너뜀
 
 ---
 

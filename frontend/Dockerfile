@@ -9,9 +9,10 @@ COPY . .
 RUN npm run build
 
 # 2. 런타임 스테이지 (Nginx)
+# root가 아닌 nginx 사용자로 실행하는 이미지입니다. 1024 미만 포트를 열 수 없어 컨테이너 안에서는 8080을 씁니다.
 # Dependabot이 갱신할 수 있도록 major.minor까지 고정합니다.
-FROM nginx:1.31-alpine AS runtime
+FROM nginxinc/nginx-unprivileged:1.31-alpine AS runtime
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

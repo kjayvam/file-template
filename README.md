@@ -40,13 +40,13 @@ Rust와 Node를 설치하지 않고 Docker로 동일한 검사를 실행할 수�
 ./scripts/check.sh --docker
 ```
 
-Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌드 산출물·`node_modules`는 `file-template-check-*` 볼륨에 두어 호스트의 `backend/target`, `frontend/node_modules`를 덮어쓰지 않습니다. 로컬 폴더에는 프론트엔드 빌드 결과(`frontend/dist`, `frontend/tsconfig.tsbuildinfo`)와, 호스트에 없을 때 만들어지는 빈 `frontend/node_modules` 마운트 지점만 생깁니다. 모두 `.gitignore` 대상입니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요. 이 템플릿으로 새 프로젝트를 만들 때 바꿀 자리표시자는 [시작하기의 새 프로젝트 항목](docs/getting-started.md#템플릿으로-새-프로젝트-시작하기)에 모아 두었습니다.
+Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌드 산출물·`node_modules`는 `file-template-check-*` 볼륨에 두어 호스트의 `backend/target`, `frontend/node_modules`를 덮어쓰지 않습니다. 검사 도구(bash·rustfmt 등)를 설치한 `file-template-check-*` 로컬 이미지를 처음 한 번 만들고 재사용하므로 다시 실행할 때는 도구 패키지를 내려받지 않습니다. Rust 버전을 올린 뒤 남는 이전 이미지는 `docker image ls 'file-template-check-*'`로 확인해 정리합니다. 로컬 폴더에는 프론트엔드 빌드 결과(`frontend/dist`, `frontend/tsconfig.tsbuildinfo`)와, 호스트에 없을 때 만들어지는 빈 `frontend/node_modules` 마운트 지점만 생깁니다. 모두 `.gitignore` 대상입니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요. 이 템플릿으로 새 프로젝트를 만들 때 바꿀 자리표시자는 [시작하기의 새 프로젝트 항목](docs/getting-started.md#템플릿으로-새-프로젝트-시작하기)에 모아 두었습니다.
 
 개인 설정인 `CLAUDE.local.md`, `.claude/settings.local.json`과 `.env` 계열은 Git에서 제외합니다. `backend/Cargo.lock`, `frontend/package-lock.json`, `.env.example`은 버전 관리합니다.
 
 ## 선택형 AI 확장 설계
 
-프로젝트에 필요한 RAG·Agent·화면·어댑터만 추가하고 제거하는 모듈형 템플릿을 제안합니다. 작은 프로젝트는 기존 Rust·React 안에 배치하고 별도 서버·workspace·콘솔은 필요할 때 선택합니다. ai-common·rag 0.1.0 원본과 추가·제거 도구를 제공합니다. 기본형에는 AI 모듈이 설치돼 있지 않으며 Agent·UI·live 공급자·품질 평가기는 후속 범위입니다.
+프로젝트에 필요한 RAG·Agent·화면·어댑터만 추가하고 제거하는 모듈형 템플릿을 제안합니다. 작은 프로젝트는 기존 Rust·React 안에 배치하고 별도 서버·workspace·콘솔은 필요할 때 선택합니다. ai-common·rag 0.2.0 원본과 추가·제거 도구를 제공합니다. 기본형에는 AI 모듈이 설치돼 있지 않으며 Agent·UI·live 공급자·품질 평가기는 후속 범위입니다.
 
 - [폴더·파일 구조, 활성화 방식, API·모듈 계약](docs/guides/ai-extensions.md)
 - [평가 데이터, 지표·통과 기준, offline/live CI](docs/guides/ai-evaluation.md)

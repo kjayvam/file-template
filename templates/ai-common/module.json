@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "id": "ai-common",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "requires": [],
   "existing_rust_dependencies": {},
   "new_rust_dependencies": [],
