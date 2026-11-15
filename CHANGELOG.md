@@ -24,7 +24,7 @@
 - Dependabot이 react·react-dom·타입 패키지와 vite·@vitejs/plugin-react를 한 PR로 묶고, Node 이미지의 22 계열 밖 major 갱신은 제안하지 않음
 - 개발 Compose의 `cargo run`도 `--locked`로 잠금 파일을 사용
 - axum 0.8.9, vite 8·@vitejs/plugin-react 6, react·react-dom 19로 갱신하고 rag 모듈의 기존 의존성 계열을 axum 0.8로 변경
-- 프로덕션 Compose가 백엔드 8080 포트를 호스트에 열지 않고 Nginx `/api/` 프록시로만 접근, frontend 런타임 이미지를 `nginx:1.31-alpine`으로 고정
+- 프로덕션 Compose가 백엔드 8080 포트를 호스트에 열지 않고 Nginx `/api/` 프록시로만 접근
 - `vite.config.ts`·`vitest.config.ts`를 `tsconfig.node.json`과 `@types/node` 22로 타입 검사
 - jsdom 31.0.1로 갱신하고 jsdom이 요구하는 Node 하한에 맞춰 `engines`와 문서의 Node 요구 사항을 22.22.2 이상(22 계열)으로 변경. 시작하기에 Node 버전 변경 시 함께 바꿀 파일 목록, 외부 자료에 jsdom 추가
 - @testing-library/jest-dom 7.0.1로 갱신, Dependabot이 `@types/node`의 22 계열 밖 major 갱신은 제안하지 않음
@@ -62,3 +62,4 @@
 - Nginx `/assets/` 응답에 `expires`와 `add_header`가 각각 `Cache-Control`을 붙여 두 줄로 나가던 부분(한 줄로 합침)
 - Docker 실행 안내의 `cp .env.example .env`가 기존 `.env`를 덮어쓰던 부분, Nginx 설정 주석이 upstream keepalive 없이 백엔드 연결이 재사용되는 것처럼 설명하던 부분
 - Docker 가이드의 에이전트 상태 볼륨 이름이 공유 템플릿 가이드(`p_agent_state_<프로젝트>_<인스턴스>`)와 다르던 부분, 새 프로젝트 정리 목록에서 빠진 볼륨 이름 문서·CodeQL Python 항목·외부 자료 정리
+- `check.sh`의 Rust 이미지 버전 불일치 오류가 이미지 이름을 두 번 출력하던 부분, 모듈 검증 CI가 `scripts/docker-common.sh` 변경에는 실행되지 않던 부분, ai-common 안내의 `mod.rs` 누락, 공유 템플릿 Keeper 예시가 기본 SQLite 데이터 볼륨(`app-data`)을 보호하지 않던 부분

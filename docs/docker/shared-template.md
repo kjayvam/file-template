@@ -61,10 +61,15 @@ services:
     <<: *keeper
     container_name: p-myproject-keeper
     volumes:
+      - p_app_data:/volumes/p_app_data:ro
       - p_db_data:/volumes/p_db_data:ro
       - p_agent_state:/volumes/p_agent_state:ro
 
 volumes:
+  # 기본 SQLite 파일(app-data)과, --profile postgres를 쓸 때의 PostgreSQL 데이터(pg-data)에 대응합니다.
+  p_app_data:
+    external: true
+    name: p_app_data_myproject
   p_db_data:
     external: true
     name: p_db_data_myproject

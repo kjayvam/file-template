@@ -4,6 +4,7 @@
 
 | 파일 | 역할 |
 | --- | --- |
+| `files/backend/src/features/ai/common/mod.rs` | 하위 모듈 선언과 `Budget`·`RequestContext`·`AiError`·모델 인터페이스 재공개 |
 | `files/backend/src/features/ai/common/model.rs` | Send Future 기반 ChatModel·Embedder, context 인덱스를 포함한 모델 응답 |
 | `files/backend/src/features/ai/common/context.rs` | 호스트가 검증한 tenant·principal·요청 ID, 남은 deadline |
 | `files/backend/src/features/ai/common/budget.rs` | 모델·임베딩 호출 전 횟수 예약; 실패해도 환급하지 않음 |
