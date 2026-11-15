@@ -30,7 +30,8 @@ docker compose --env-file .env -f docker/docker-compose.dev.yml --profile postgr
 ```
 * Frontend (Vite): `http://localhost:5173` (코드 수정 시 HMR)
 * Backend (Rust): `http://localhost:8080` (Rust 코드 수정 후 `docker compose --env-file .env -f docker/docker-compose.dev.yml restart backend`)
-* PostgreSQL(`--profile postgres`일 때만): `localhost:5432` (같은 PC에서만 접속, 다른 기기에서 쓰려면 `ports`의 `127.0.0.1:`을 직접 조정)
+* 개발 Compose의 포트는 모두 `127.0.0.1`에만 열려 같은 PC에서만 접속합니다. 다른 기기에서 확인하려면 해당 서비스 `ports`의 `127.0.0.1:`을 직접 조정합니다.
+* PostgreSQL(`--profile postgres`일 때만): `localhost:5432`
 
 ### 2. 프로덕션 빌드 및 실행
 
