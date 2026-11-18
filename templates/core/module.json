@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "core",
+  "version": "1.0.0",
+  "requires": [],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    ".editorconfig",
+    ".gitattributes",
+    ".github/workflows/ci.yml",
+    ".gitignore",
+    "scripts/build.sh",
+    "scripts/check.sh",
+    "scripts/modules.py",
+    "scripts/project-check.py",
+    "scripts/setup.sh"
+  ],
+  "seed_files": [
+    "README.md",
+    "CLAUDE.md",
+    "AGENTS.md",
+    "docs/structure.md",
+    ".env.example"
+  ],
+  "render_files": [
+    "README.md",
+    "CLAUDE.md"
+  ],
+  "integrations": [],
+  "checks": [
+    "./scripts/check.sh"
+  ]
+}

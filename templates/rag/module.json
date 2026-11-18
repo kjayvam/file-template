@@ -44,5 +44,6 @@
   ],
   "data_paths_to_preserve": [
     "var/ai/"
-  ]
+  ],
+  "rust_package": "backend"
 }

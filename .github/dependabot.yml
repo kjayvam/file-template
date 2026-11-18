@@ -7,11 +7,11 @@ updates:
       interval: "weekly"
   # 잠금 파일(Cargo.lock, package-lock.json)은 Dependabot PR에서 갱신되고 CI는 --locked·npm ci로 검증합니다.
   - package-ecosystem: "cargo"
-    directory: "/backend"
+    directory: "/templates/backend-rust/files/backend"
     schedule:
       interval: "weekly"
   - package-ecosystem: "npm"
-    directory: "/frontend"
+    directory: "/templates/frontend-react/files/frontend"
     schedule:
       interval: "weekly"
     # @types/node는 실행 Node와 같은 22 계열을 유지합니다. (engines, Docker 이미지와 함께 올립니다)
@@ -25,7 +25,7 @@ updates:
       vite:
         patterns: ["vite", "@vitejs/plugin-react"]
   - package-ecosystem: "docker"
-    directories: ["/backend", "/frontend"]
+    directories: ["/templates/docker-rust/files/backend", "/templates/docker-react/files/frontend"]
     schedule:
       interval: "weekly"
     ignore:
@@ -36,7 +36,7 @@ updates:
       # Dependabot은 rust-toolchain.toml을 바꾸지 않고 두 파일도 다른 PR로 나누므로 수동으로 갱신합니다.
       - dependency-name: "rust"
   - package-ecosystem: "docker-compose"
-    directory: "/docker"
+    directories: ["/templates/docker-rust/files/docker", "/templates/docker-react/files/docker", "/templates/docker-postgres/files/docker", "/templates/docker-web-api/files/docker"]
     schedule:
       interval: "weekly"
     ignore:

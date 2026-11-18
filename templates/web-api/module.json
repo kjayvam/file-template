@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "web-api",
+  "version": "1.0.0",
+  "requires": [
+    "backend-rust",
+    "frontend-react"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "frontend/src/features/api-health/ApiHealth.test.tsx",
+    "frontend/src/features/api-health/ApiHealth.tsx"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [
+    {
+      "path": "frontend/src/App.tsx",
+      "anchor": "// template:imports\n",
+      "position": "before",
+      "block": "// BEGIN template:web-api:import\nimport { ApiHealth } from \"./features/api-health/ApiHealth\";\n// END template:web-api:import\n"
+    },
+    {
+      "path": "frontend/src/App.tsx",
+      "anchor": "    {/* template:features */}\n",
+      "position": "before",
+      "block": "    {/* BEGIN template:web-api:view */}\n    <ApiHealth />\n    {/* END template:web-api:view */}\n"
+    }
+  ],
+  "checks": [
+    "./scripts/check.sh"
+  ]
+}

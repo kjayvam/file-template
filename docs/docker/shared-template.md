@@ -1,5 +1,7 @@
 # 도커 공유 템플릿 연계 가이드 (Shared Template Integration)
 
+> 이 문서는 공유 인프라를 직접 확장할 때의 설계 예시입니다. 현재 카탈로그는 공유 볼륨·에이전트 서버를 설치하지 않습니다. 생성 프로젝트에서는 scripts/compose.py와 설치된 docker/compose.* 파일을 기준으로 확장하며 아래 고정 docker-compose.dev.yml 경로는 예시로 읽으세요.
+
 본 템플릿은 `도커 공유 템플릿`(`agent-kit`, `p-tools`, `creative-toolkit` 등)이 구축된 호스트 서버에서 손쉽게 연계하여 사용할 수 있도록 설계되었습니다.
 
 이 가이드는 `도커 공유 템플릿`의 핵심 철학인 **자원 공유(`sync_*`)와 프로젝트 격리(`p_*`), 볼륨 보존(Keeper 패턴), AI 에이전트 연동**을 본 템플릿에 적용하는 방법을 설명합니다.
@@ -13,7 +15,7 @@
    * Crate 캐시처럼 호스트 전체에서 공유할 가치가 큰 자원만 `sync_`로 승격하고, DB 데이터나 앱 설정은 반드시 `p_*`로 프로젝트 단위를 격리합니다.
 2. **에이전트 러너와의 분리**:
    * 본 템플릿의 앱 서비스(Frontend, Backend, DB)와 에이전트 실행 환경(`agent-kit`)은 명확히 분리됩니다.
-   * 에이전트는 컨테이너 내부에서 [docker/mcp](../../docker/mcp/README.md)를 통해 격리된 네트워크 상의 앱이나 DB와 안전하게 상호작용합니다.
+   * 에이전트는 컨테이너 내부에서 [docker/mcp](mcp.md)를 통해 격리된 네트워크 상의 앱이나 DB와 안전하게 상호작용합니다.
 
 ---
 
@@ -109,5 +111,5 @@ volumes:
 
 에이전트가 컨테이너 내부에서 개발을 진행할 때, 프로젝트의 데이터베이스나 API 엔드포인트에 안전하게 접근할 수 있습니다.
 
-* 상세 설정 및 보안 지침: [`docker/mcp/README.md`](../../docker/mcp/README.md) 및 [`docs/guides/mcp.md`](../guides/mcp.md)
+* 상세 설정 및 보안 지침: [`docker/mcp/README.md`](mcp.md) 및 [`docs/guides/mcp.md`](../guides/mcp.md)
 * 컨테이너 네트워크 통신: `db:5432` 및 `backend:8080`을 통해 동일 도커 브리지 네트워크 상에서 직접 질의합니다.

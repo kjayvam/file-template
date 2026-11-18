@@ -1,83 +1,26 @@
-# 단독 실행 가이드 (Standalone Mode)
+# 생성 프로젝트의 Docker 단독 실행
 
-단독 실행 모드는 외부 공유 인프라나 특수 스크립트 없이, 표준 **Docker Engine**과 **Docker Compose**만으로 프로젝트를 개발하고 배포하는 방식입니다.
-
-템플릿을 새로 clone하여 개인 PC나 독립 서버에서 곧바로 작업할 때 기본으로 사용합니다.
-
----
-
-## 1. 사전 요구 사항
-
-- Docker Engine 24.0 이상
-- Docker Compose v2 (Compose CLI)
-- 로컬 환경 설정 파일:
-  ```bash
-  # .env가 없을 때만 예시를 복사합니다. (기존 .env를 덮어쓰지 않음)
-  [ -f .env ] || cp .env.example .env
-  ```
-
----
-
-## 2. 개발 환경 실행 (Dev Mode)
-
-개발 환경에서는 Vite 개발 서버(HMR)와 `cargo run`으로 실행한 Rust 서버를 사용합니다. Rust 코드를 바꾸면 `restart backend`로 다시 컴파일합니다.
+Python 3.11 이상, Docker Engine/Desktop, Compose v2가 필요합니다. 프로젝트에는 필요한 docker 실행 모듈이 설치돼 있어야 합니다. 루트 카탈로그에서 직접 앱을 실행하지 않습니다.
 
 ```bash
-# 개발용 Compose 실행 (Vite HMR + Rust 개발 빌드)
-docker compose --env-file .env -f docker/docker-compose.dev.yml up
-
-# Rust 코드 변경 반영
-docker compose --env-file .env -f docker/docker-compose.dev.yml restart backend
+# 카탈로그에서 백엔드 단독 생성
+python3 scripts/template-module.py init --name sample-api --project ../sample-api --modules docker-rust
+cd ../sample-api
+python3 scripts/compose.py dev --dry-run up
+python3 scripts/compose.py dev up
 ```
 
-* **Frontend**: `http://localhost:5173` (Vite 개발 서버 + HMR)
-* **Backend**: `http://localhost:8080` (Rust API 서버)
-* 개발 Compose는 모든 포트를 `127.0.0.1`에만 열어 같은 PC에서만 접속합니다. 다른 기기에서 확인할 때만 `ports`의 `127.0.0.1:`을 조정합니다.
-* **Database**:
-  * **SQLite 선택 시**: 별도 컨테이너 불필요 (로컬 볼륨/파일로 직접 I/O)
-  * **서버형 DB(PostgreSQL/MySQL) 선택 시**: `--profile postgres`를 붙여 `db` 서비스 실행 (`localhost:5432`, 같은 PC에서만 접속)
-
-### 개발 모드 볼륨 마운트 구조
-* `./frontend` → 컨테이너 내부 `/app` (코드 수정 시 브라우저 즉시 갱신)
-* `./backend` → 컨테이너 내부 `/app` (재시작 시 수정 코드로 재컴파일)
-* `cargo-cache` 볼륨 → Cargo 의존성 다운로드 캐싱
-* `backend-target` 볼륨 → 컨테이너용 빌드 산출물을 호스트 `backend/target`과 분리해 재컴파일 시간 단축
-* `frontend-node-modules` 볼륨 → 컨테이너용 `node_modules`. `package-lock.json`이 마지막 설치 때와 같으면 시작할 때 `npm ci`를 건너뜀
-
----
-
-## 3. 프로덕션 환경 실행 (Prod Mode)
-
-프로덕션 환경에서는 멀티스테이지 빌드를 통해 최적화된 경량 컨테이너를 구동합니다.
+React 단독은 --modules docker-react, 전체 연결은 --preset fullstack-docker로 생성합니다. 실행 파일은 설치 기록의 compose_files를 읽고 선행 서비스 뒤에 연결 조각을 합칩니다. config로 실제 설정을 확인할 수 있습니다.
 
 ```bash
-# 프로덕션 빌드 및 백그라운드 실행
-docker compose --env-file .env -f docker/docker-compose.yml up --build -d
+python3 scripts/compose.py dev config
+python3 scripts/compose.py dev restart backend
+python3 scripts/compose.py prod up --build -d
+python3 scripts/compose.py prod down
 ```
 
-* **Frontend**: Nginx가 React 빌드 산출물(정적 에셋)을 서빙하며, `/api/*` 경로 요청을 백엔드로 리버스 프록시합니다 (`http://localhost:80`).
-* **Backend**: 컴파일된 단일 바이너리만 포함된 초경량(수십 MB) 런타임 이미지로 동작합니다. 호스트 포트(8080)를 열지 않으므로 API는 Nginx의 `/api/` 경로로 접근합니다. (예: `http://localhost/api/v1/health`)
-* **재시작**: 프로덕션 Compose의 모든 서비스는 `restart: unless-stopped`로 Docker·서버 재시작 뒤 자동으로 다시 올라옵니다. 직접 `stop`·`down`한 서비스는 다시 시작하지 않습니다.
-* **Database**: SQLite 파일은 `app-data`, PostgreSQL(`--profile postgres`)은 `pg-data` 볼륨에 보존됩니다. 프로덕션 Compose는 DB 포트를 호스트에 열지 않으며, 기본 비밀번호가 없으므로 `.env`의 `DATABASE_PASSWORD`가 비어 있으면 PostgreSQL이 시작되지 않습니다.
+Rust 코드는 재시작하면 재컴파일합니다. React 개발 서버는 HMR을 사용합니다. 프로덕션 Rust는 cargo-chef 멀티스테이지, React는 Node 빌드→비특권 Nginx로 실행합니다. Nginx는 SPA fallback·정적 파일 캐시·기본 보안 헤더를 제공하고 docker-web-api 선택 시에만 API를 프록시합니다.
 
----
+DB는 docker-postgres를 추가하고 .env에 DATABASE_NAME·DATABASE_USER·DATABASE_PASSWORD를 지정합니다. dev에서는 localhost:5432, prod에서는 내부 네트워크만 사용합니다. DB 드라이버·스키마 적용기는 프로젝트에서 선택합니다. .env 파일은 커밋하지 않습니다.
 
-## 4. 환경 변수 주입 규칙
-
-* 모든 비밀 값과 서비스 설정은 저장소 루트의 `.env` 파일에서 주입됩니다. Compose는 기본적으로 첫 Compose 파일이 있는 `docker/`에서 `.env`를 찾으므로 `--env-file .env`를 붙여 실행합니다.
-* `.env` 파일은 절대 Git에 커밋하지 않으며, 신규 변수 추가 시 이름만 `.env.example`에 등록합니다.
-* 컨테이너 내부 통신 호스트명:
-  * 백엔드에서 DB 접속: `DATABASE_HOST=db` (Docker DNS)
-  * 프론트엔드 Nginx에서 백엔드 접속: `http://backend:8080`
-
----
-
-## 5. 컨테이너 정리 및 볼륨 관리
-
-```bash
-# 컨테이너 및 네트워크 종료 (데이터 볼륨 유지)
-docker compose --env-file .env -f docker/docker-compose.yml down
-
-# 주의: 데이터베이스 데이터까지 모두 초기화할 때만 -v 사용
-docker compose --env-file .env -f docker/docker-compose.yml down -v
-```
+Rust 다운로드·target, Node 의존성, PostgreSQL 데이터는 목적별 볼륨으로 분리합니다. down은 볼륨을 보존합니다. down -v는 데이터를 삭제하므로 필요한 경우에만 직접 실행합니다. 호스트 포트는 고정 기본값이므로 여러 앱을 동시에 실행할 때 조정하세요.

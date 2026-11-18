@@ -1,34 +1,18 @@
 name: CI
-
 on:
   push:
     branches: [main]
   pull_request:
-  # release.yml이 배포 전에 같은 검사를 재사용합니다.
   workflow_call:
-
 permissions:
   contents: read
-
 jobs:
-  build-and-test:
+  catalog-and-projects:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
-          node-version: "22"
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-      - name: Rust 도구 설치 (rust-toolchain.toml)
-        run: rustup toolchain install
-      # rustc 버전과 Cargo.lock을 키로 backend/target·Cargo 레지스트리를 재사용합니다.
-      - name: Rust 빌드 캐시
-        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
-        with:
-          workspaces: backend
-      - name: 프론트엔드 의존성 설치
-        working-directory: frontend
-        run: npm ci
-      - name: 포맷, 테스트 및 빌드
-        run: ./scripts/check.sh
+          python-version: "3.12"
+      - name: 모듈 계약·조합·수명주기·선택 앱 테스트와 빌드
+        run: ./scripts/check.sh --docker

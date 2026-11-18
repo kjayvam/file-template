@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "backend-rust",
+  "version": "1.0.0",
+  "requires": [
+    "core"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "backend/Cargo.lock",
+    "backend/Cargo.toml",
+    "backend/README.md",
+    "backend/src/lib.rs",
+    "backend/src/main.rs",
+    "backend/tests/health.rs",
+    "rust-toolchain.toml"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [
+    {
+      "path": ".env.example",
+      "anchor": "# 필요한 환경 변수의 이름을 여기에 기록합니다. 비밀 값은 .env에서 관리합니다.\n",
+      "position": "after",
+      "block": "# BEGIN template:backend-rust:env\nPORT=\nRUST_LOG=\n# END template:backend-rust:env\n"
+    }
+  ],
+  "checks": [
+    "./scripts/check.sh"
+  ]
+}

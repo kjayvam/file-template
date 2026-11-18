@@ -1,8 +1,10 @@
 {
   "schema_version": 1,
   "id": "ai-common",
-  "version": "0.2.0",
-  "requires": [],
+  "version": "0.3.0",
+  "requires": [
+    "backend-rust"
+  ],
   "existing_rust_dependencies": {},
   "new_rust_dependencies": [],
   "owned_files": [
@@ -28,5 +30,6 @@
   ],
   "data_paths_to_preserve": [
     "var/ai/"
-  ]
+  ],
+  "rust_package": "backend"
 }

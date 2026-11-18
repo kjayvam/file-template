@@ -1,87 +1,53 @@
 # 시작하기
 
-## 요구 사항
-
-- 로컬 실행: Rust 1.99.1 (`cargo`, `rustfmt`), Node.js 22.22.2 이상(22 계열)과 npm
-- 컨테이너 실행·검증: Docker Engine/Desktop과 Docker Compose v2
-- 아래 명령은 별도 설명이 없으면 저장소 루트에서 실행합니다.
-
-## 설치
-
-```bash
-rustup toolchain install
-./scripts/setup.sh
-```
-
-인자 없는 `rustup toolchain install`은 루트의 `rust-toolchain.toml`에 지정된 Rust 버전과 `rustfmt`를 설치합니다(rustup 1.28 이상). `rustup show`는 상태만 보여 주며 설치하지 않습니다. `setup.sh`는 `.env`가 없을 때만 `.env.example`을 복사하고 프론트엔드 의존성을 `npm ci`로 설치합니다. 기존 `.env`를 덮어쓰지 않습니다. 로컬 백엔드는 `.env`를 자동 로드하지 않으며 기본 포트 8080을 사용합니다. 다른 포트를 쓰려면 `PORT`를 프로세스 환경 변수로 지정하세요. 정수로 해석할 수 없는 값이면 8080으로 바꾸지 않고 시작 시 오류로 종료합니다. 로그 수준은 `RUST_LOG`가 없으면 info이며 `RUST_LOG=debug cargo run --locked`처럼 바꿉니다.
-
-## 로컬 실행
-
-터미널 두 개에서 각각 실행합니다.
-
-```bash
-cd backend
-cargo run --locked
-```
-
-```bash
-cd frontend
-npm run dev
-```
-
-- 프론트엔드: `http://localhost:5173` (로컬 실행은 같은 PC에서만 접속. 다른 기기에서 확인하려면 `npm run dev -- --host`)
-- 백엔드: `http://localhost:8080/health`, `http://localhost:8080/api/v1/health`
-- Vite는 `/api` 요청을 기본적으로 `http://localhost:8080`으로 전달합니다.
-- 백엔드 주소를 바꾸려면 `VITE_API_BACKEND_URL=http://localhost:다른포트 npm run dev`를 사용합니다. 개발 Compose에서는 `http://backend:8080`이 지정됩니다.
-
-## Docker 개발 환경
-
-Rust와 Node가 없어도 실행할 수 있습니다. `.env`가 없다면 `.env.example`을 복사한 뒤 실행합니다.
-
-```bash
-docker compose --env-file .env -f docker/docker-compose.dev.yml up
-```
-
-현재 API는 DB를 사용하지 않으므로 `db` 서비스는 기본으로 실행되지 않습니다. PostgreSQL이 필요하면 `--profile postgres`를 붙입니다. Rust 코드를 바꾼 뒤에는 `restart backend`로 다시 컴파일합니다. 프로덕션 실행은 [Docker 단독 실행 가이드](docker/standalone.md)를 참고하세요.
-
-## 검증
-
-```bash
-./scripts/check.sh
-```
-
-Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm run build`를 실행합니다. `backend/Dockerfile`·`docker/docker-compose.dev.yml`의 Rust 이미지 버전이 `rust-toolchain.toml`과 다르면 실패합니다. 도구가 없거나 검사가 실패하면 0이 아닌 종료 코드를 반환합니다. 빌드만 검사하려면 `./scripts/build.sh`를, 로컬 Rust·Node 없이 빌드만 검사하려면 `./scripts/build.sh --docker`를 사용합니다.
-
-```bash
-./scripts/check.sh --backend
-./scripts/check.sh --frontend
-./scripts/check.sh --docker
-```
-
-`--docker`는 Rust 1.99.1과 Node 22 컨테이너에서 같은 검사를 실행하며 프론트엔드 설치도 `npm ci`로 수행합니다. `.env`나 실행 중인 DB·백엔드는 필요하지 않습니다. Rust 빌드 산출물과 `node_modules`는 Docker 볼륨에 두므로 로컬 실행용 파일을 덮어쓰지 않습니다. 첫 실행에는 이미지·의존성 다운로드가 필요합니다. 테스트 파일 위치와 개별 명령은 [테스트 안내](../tests/README.md)를 참고하세요.
+이 저장소는 카탈로그입니다. 앱은 별도 경로에 생성합니다. Python 3.11 이상이 필요합니다.
 
 ## 템플릿으로 새 프로젝트 시작하기
 
-이 저장소를 복제해 새 프로젝트를 만들 때 아래 자리표시자와 템플릿 전용 내용을 정리합니다.
+```bash
+python3 scripts/template-module.py list
+python3 scripts/template-module.py init --name my-app --project ../my-app --preset fullstack --dry-run
+python3 scripts/template-module.py init --name my-app --project ../my-app --preset fullstack
+```
 
-| 위치 | 정리할 내용 |
-| --- | --- |
-| `README.md`, `CLAUDE.md` 제목 | 템플릿 이름(`file-template`, `my-project`)을 프로젝트 이름으로 변경 |
-| `frontend/index.html`, `frontend/src/App.tsx` | 페이지 제목 `App`과 시작 화면 문구(`Rust + React Template`)를 프로젝트에 맞게 변경 |
-| `.github/CODEOWNERS`, `.github/ISSUE_TEMPLATE/config.yml` | `@OWNER`, `OWNER/REPO`를 실제 사용자·저장소로 변경 |
-| `SECURITY.md`, `CODE_OF_CONDUCT.md` | `<보안 담당 이메일>`, `<연락처 이메일>` 채우기 |
-| `LICENSE` | `<소유자 이름>`을 저작권자로 바꾸거나 프로젝트에 맞는 라이선스로 교체 |
-| `ROADMAP.md` | `<...>` 항목을 프로젝트 목표와 일정으로 작성 |
-| `.github/FUNDING.yml` | 후원 링크가 없으면 파일 삭제 |
-| `config/*.yml`, `.env.example`, `docker/docker-compose*.yml` | 기본 이름 `my-project`, `my_project`와 DB 이름 변경 |
-| `scripts/docker-common.sh` | `volume_prefix`를 프로젝트 이름으로 변경. `check.sh`, `build.sh`, `check-template-modules.sh`가 함께 씁니다. 다른 프로젝트와 Docker 검증용 빌드 산출물·`node_modules` 볼륨과 검사 이미지를 공유하지 않게 합니다. 볼륨 이름(`file-template-*`)을 적은 `README.md`, `templates/README.md`도 함께 고칩니다 |
-| `CHANGELOG.md` | 템플릿 이력을 지우고 `[Unreleased]`부터 다시 시작 |
-| `migrations/0001_create_users.*` | PostgreSQL 예시입니다. 어느 DB에도 적용하기 전에 실제 스키마로 바꾸거나 삭제 |
-| `scripts/deploy.sh`, `scripts/seed-db.sh` | 실패로 끝나는 자리표시자. 실제 명령으로 작성 |
-| `external/README.md` | 템플릿 작성용 참고 자료 중 프로젝트와 무관한 항목 정리 |
+프리셋: minimal·api·web·fullstack·fullstack-docker·knowledge. `--modules`로 모듈을 더하거나 프리셋 없이 직접 선택할 수 있습니다. 의존 모듈은 함께 조립합니다. 대상은 새 경로 또는 빈 디렉터리이고 상위 디렉터리는 있어야 합니다. 경로에 공백이 있으면 셸에서 따옴표로 감쌉니다.
 
-선택형 AI 모듈을 쓰지 않으면 `templates/`, `scripts/template-module.py`, `scripts/verify-template-modules.py`, `scripts/check-template-modules.sh`, `.github/workflows/template-modules.yml`, `.github/workflows/codeql.yml`의 `python` 항목(남은 Python 코드가 없으면 CodeQL이 실패), AI 설계 문서(`docs/guides/ai-*.md`, `docs/adr/0001-optional-ai-extensions.md`)를 함께 지울 수 있습니다. 지운 뒤에는 `README.md`, `CLAUDE.md`, `docs/index.md`, `docs/architecture.md`(선택형 AI 확장 절), `docs/guides/agent-knowledge.md`(제품 RAG 확장 절), `tests/README.md`, `.claude/rules/tests.md`의 관련 설명과 `external/README.md`의 모듈 관련 항목도 정리합니다.
+프로젝트 이름·페이지 제목·Docker 프로젝트 이름·검사 볼륨은 자동 적용됩니다. 소유자·라이선스·배포 계정 같은 프로젝트별 정보는 프로젝트 요구에 맞게 추가합니다. 카탈로그의 Git 이력·개인 설정·.env·문서 전체를 복사하지 않습니다.
 
-Rust 버전을 올릴 때는 `rust-toolchain.toml`, `backend/Dockerfile`, `docker/docker-compose.dev.yml`을 함께 바꿉니다. 세 곳이 다르면 `check.sh`가 실패하므로 Dependabot은 Rust 이미지를 제안하지 않으며 [Rust 릴리스](https://blog.rust-lang.org/releases/)를 보고 직접 올립니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, `templates/README.md`, `docs/docker/build-optimization.md`)도 같이 갱신하고, `backend/Dockerfile`의 `CARGO_CHEF_VERSION`이 새 Rust에서 설치되는지 확인합니다.
+## 생성 프로젝트에서 실행
 
-Node 하한이나 계열을 바꿀 때는 `frontend/package.json`의 `engines`와 `frontend/package-lock.json`(루트 패키지의 `engines`), Node 이미지(`frontend/Dockerfile`, `docker/docker-compose.dev.yml`, `scripts/docker-common.sh`), CI의 `node-version`, `.github/dependabot.yml`의 Node 관련 주석과 `@types/node`·`node` 무시 규칙을 함께 바꿉니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, 계열을 바꾸면 `docs/docker/build-optimization.md`)도 같이 갱신합니다. 현재 하한 22.22.2는 jsdom 31의 요구 사항입니다.
+```bash
+cd ../my-app
+./scripts/setup.sh
+./scripts/check.sh --docker
+```
+
+구조 검사·스크립트에는 Python 3.11 이상이 필요합니다. 로컬 앱 실행에는 선택한 Rust 1.99.1(rustfmt 포함) 또는 Node 22.22.2 이상(22 계열)·npm이 필요합니다. Rust는 `rust-toolchain.toml`로 고정하고 두 앱의 잠금 파일을 버전 관리합니다. Docker 검사에는 로컬 Rust·Node가 필요 없습니다.
+
+- Rust: `cd backend && cargo run --locked`. 기본 8080, `PORT`로 변경. .env 자동 로드 없음
+- React: `cd frontend && npm run dev`. 기본 localhost:5173. 백엔드 없이 실행 가능
+- web-api를 선택하면 /api/v1/health를 조회하고 Vite가 localhost:8080으로 전달
+- Docker 실행 모듈을 선택하면 `python3 scripts/compose.py dev up` 또는 `prod up --build`
+- docker-web-api가 컨테이너 간 프록시 연결을 설정
+- docker-postgres를 선택하면 .env에 DATABASE_NAME·DATABASE_USER·DATABASE_PASSWORD를 지정. 앱 드라이버·스키마·접속 코드 별도 구현
+
+`setup.sh`는 .env가 없을 때만 .env.example을 복사합니다. 프론트엔드가 있을 때만 npm ci를 실행합니다.
+
+## 추가·제거·검사
+
+카탈로그 루트에서:
+
+```bash
+python3 scripts/template-module.py add rag --project ../my-app --with-dependencies --dry-run
+python3 scripts/template-module.py add rag --project ../my-app --with-dependencies
+python3 scripts/template-module.py check --project ../my-app
+python3 scripts/template-module.py remove rag --project ../my-app --dry-run
+```
+
+적용 후 생성 프로젝트에서 `./scripts/check.sh [--docker]`를 실행합니다. 빌드만은 `./scripts/build.sh [--docker]`, 앱 하나만은 `./scripts/check.sh --backend` 또는 `--frontend`입니다. 선택하지 않은 앱에 대한 검사는 실패합니다. core만 있으면 구조 검사만 합니다.
+
+추가에는 카탈로그가 필요합니다. 생성된 scripts/modules.py는 카탈로그 없이 check·status·remove를 지원합니다. 역의존 모듈을 먼저 제거하며 사용자 변경·데이터를 자동 삭제하지 않습니다. [모듈 계약](../templates/README.md)을 확인하세요.
+
+## 버전 변경
+
+Rust는 templates/backend-rust/files/rust-toolchain.toml과 templates/docker-rust의 Dockerfile·dev Compose를 함께 변경합니다. Node는 frontend-react의 package.json·package-lock.json·@types/node와 docker-react의 이미지, core의 project-check.py 이미지를 함께 검토합니다. 변경 후 `./scripts/check.sh --docker`를 실행합니다. 실행 환경 버전은 최신이라고 가정하지 않고 잠금 파일과 기존 검증 기준을 유지합니다.

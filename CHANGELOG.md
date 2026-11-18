@@ -5,6 +5,11 @@
 ## [Unreleased]
 
 ### Added
+- 루트 실행 앱을 templates 아래의 core·Rust·React·API 연결·설정·PostgreSQL·Docker 선택 모듈로 분리
+- init·프리셋·의존 자동 조립·프로젝트 이름 치환·설치 계약 검사 추가
+- 생성 프로젝트에 선택 모듈 전용 검사·CI와 카탈로그 없는 상태 조회·제거 제공
+- 9가지 조합·일괄 조립 실패·앱 제거·Compose 조합·독립 앱/풀스택 테스트 검증 추가
+- Obsidian·Claude Code·Codex용 선택형 llm-wiki 모듈(`templates/llm-wiki/`), 공통 도구의 추가·상태·제거·미리보기, 태그·노트 양식·지침 자동 연결, 위키 자료 보존·재추가 수명주기 검증
 - 프로젝트 초기 폴더 구조
 - `build.sh --docker`로 로컬 Rust·Node 없이 컴파일·빌드 검사. Docker 볼륨 접두사·검사 이미지 설정을 `scripts/docker-common.sh` 한곳으로 모음
 - ai-common·rag 선택형 모듈 원본과 추가·제거 도구(`scripts/template-module.py`), 임시 프로젝트 수명주기 검증

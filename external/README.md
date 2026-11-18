@@ -43,3 +43,6 @@
 | Axum State | https://docs.rs/axum/0.8.9/axum/extract/struct.State.html | 기본 app에 합치는 RAG 라우터의 상태 주입 |
 | Rust Future | https://doc.rust-lang.org/std/future/trait.Future.html | 공급자 독립 비동기 모델·임베딩 인터페이스 |
 | NextWork AI 지식 정리 단계 | https://www.instagram.com/p/DfCf5JvlPCk/?img_index=2 | 로컬 Markdown 수집·연결·분류·검색에서 AI 위키로 확장하는 선택형 운영 방식 검토 |
+| Karpathy LLM Wiki | https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f | 선택형 LLM Wiki의 원본·정리 문서·관리 지침, 수집·질의·점검 구조 참고 |
+| Obsidian Tags | https://help.obsidian.md/tags | YAML tags 목록과 계층형 태그 작성 방식 |
+| Obsidian Templates | https://help.obsidian.md/plugins/templates | 기본 Templates 플러그인의 폴더 지정, 제목·날짜 변수 사용 |

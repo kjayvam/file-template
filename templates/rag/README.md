@@ -20,7 +20,7 @@ ai-common에 의존하는 작은 오프라인 RAG 모듈입니다. [module.json]
 
 [카탈로그 안내](../README.md)의 명령으로 ai-common → rag 순서로 추가합니다. 공유 파일에는 `template:rag:module`, `template:rag:routes` 블록만 추가됩니다. 기존 `app()`이 mock 라우터를 merge하므로 main.rs·frontend·Docker·Cargo 파일은 수정하지 않습니다.
 
-적용 후 대상 backend에서 `cargo test --locked --test ai_rag`를 실행하고 프로젝트 루트의 `./scripts/check.sh --docker`로 기본형까지 확인합니다. API 요청 예시도 카탈로그에 있습니다.
+적용 후 대상 backend에서 `cargo test --locked --test ai_rag`를 실행하고 프로젝트 루트의 `./scripts/check.sh --docker`로 기본형까지 확인합니다. 데모 API는 POST /api/ai/v1/query에 {"question":"로그 보관 기간은 7일입니다.","top_k":1} JSON을 전달합니다. init --modules rag 또는 add rag --with-dependencies로 백엔드부터 함께 조립할 수 있습니다.
 
 제거는 rag부터 진행합니다. 모듈 소유 파일·두 연결 블록을 제거하면 query 라우트는 404이고 common과 기존 health 라우트는 유지됩니다. 기존 데이터를 삭제하거나 common을 함께 제거하지 않습니다. 변경된 파일은 자동 제거되지 않으므로 프로젝트 변경을 검토해야 합니다.
 

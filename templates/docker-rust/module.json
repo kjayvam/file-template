@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "docker-rust",
+  "version": "1.0.0",
+  "requires": [
+    "docker",
+    "backend-rust"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "backend/.dockerignore",
+    "backend/Dockerfile",
+    "docker/compose.backend.dev.yml",
+    "docker/compose.backend.prod.yml"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [],
+  "checks": [
+    "./scripts/check.sh"
+  ],
+  "compose_files": {
+    "dev": [
+      "docker/compose.backend.dev.yml"
+    ],
+    "prod": [
+      "docker/compose.backend.prod.yml"
+    ]
+  }
+}

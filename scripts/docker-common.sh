@@ -7,7 +7,7 @@ volume_prefix="file-template"
 node_base_image="node:22-alpine"
 
 rust_version() {
-  sed -n 's/^channel *= *"\(.*\)"/\1/p' "$project_root/rust-toolchain.toml"
+  sed -n 's/^channel *= *"\(.*\)"/\1/p' "$project_root/templates/backend-rust/files/rust-toolchain.toml"
 }
 
 # 검사 도구를 설치한 로컬 이미지를 한 번만 만들고 재사용해 재실행 때 패키지를 내려받지 않습니다.

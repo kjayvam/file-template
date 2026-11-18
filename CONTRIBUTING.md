@@ -17,7 +17,7 @@
 
 - 테스트 위치와 실행 명령은 [테스트 안내](tests/README.md)를 따릅니다.
 - 프론트엔드 의존성은 `cd frontend && npm ci`로 설치합니다.
-- 의존성을 변경할 때는 `backend/Cargo.lock` 또는 `frontend/package-lock.json`도 함께 갱신합니다. CI는 `--locked`와 `npm ci`로 잠금 파일을 사용합니다.
+- 의존성을 변경할 때는 `templates/backend-rust/files/backend/Cargo.lock` 또는 `templates/frontend-react/files/frontend/package-lock.json`도 함께 갱신합니다. CI는 `--locked`와 `npm ci`로 잠금 파일을 사용합니다.
 - `./scripts/build.sh`는 컴파일·빌드만 수행하며 테스트를 대신하지 않습니다.
 
 ## 이슈 등록
