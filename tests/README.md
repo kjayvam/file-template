@@ -19,8 +19,10 @@
 
 ## 템플릿 모듈 수명주기
 
-`./scripts/check-template-modules.sh --docker`는 임시 프로젝트에서 기본형 → ai-common → rag+ai-common → ai-common → 기본형 순서로 Rust 포맷·컴파일·테스트를 실행합니다. 각 단계에서 query 라우트의 존재·제거도 검사합니다. 원본 프로젝트에는 모듈을 설치하지 않습니다.
+`./scripts/check-template-modules.sh --docker`는 위키 단독 수명주기와 임시 프로젝트의 기본형 → ai-common → rag+ai-common+llm-wiki → ai-common → 기본형 순서로 Rust 포맷·컴파일·테스트를 실행합니다. 각 단계에서 query 라우트의 존재·제거도 검사합니다. 원본 프로젝트에는 모듈을 설치하지 않습니다.
 
 현재 ai-common 계약 테스트는 3개, rag 통합 테스트는 13개, rag HTTP 상태 매핑 단위 테스트는 1개입니다. 모듈 테스트 외에 기존 health 4개, `src/main.rs` 단위 테스트 2개(`PORT`·로그 수준)와 단계별 라우트 probe 1개를 함께 실행합니다. 파일 충돌·의존 순서·수정된 파일과 블록·심볼릭 링크·dry-run 등 9개의 거부/미리보기 검사도 수행합니다. 모듈 제거 뒤 기존 Cargo·lock·기존 코드 변경·사용자 파일·데이터가 보존되는지 확인합니다.
 
 정확한 적용 절차·소유 경로·한계는 [카탈로그](../templates/README.md)를 참고하세요. 가상 corpus는 rag 모듈의 `demo/corpus.json`에 있으며 실제 모델의 검색·생성 품질 성적으로 보고하지 않습니다. 네이티브 검증은 Python 3.11+·Rust·rustfmt가 필요합니다.
+
+`python3 scripts/verify-template-modules.py --wiki-only`는 Rust 없이 llm-wiki만 검사합니다. 백엔드 없는 임시 프로젝트에서 list·add·status·remove·dry-run, 중복 연결 지점·디렉터리·심볼릭 링크 충돌 거부, 카탈로그 없는 제거, 수정한 초기 문서·원본·Obsidian 설정 보존, 재추가 시 기존 문서 재사용과 없는 초기 파일 생성을 확인합니다. Obsidian 앱 자체의 화면 동작은 이 검사에 포함되지 않습니다.

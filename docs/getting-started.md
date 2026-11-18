@@ -80,7 +80,7 @@ Rust 포맷 검사, `cargo test --locked`(컴파일 포함), `npm test`, `npm ru
 | `scripts/deploy.sh`, `scripts/seed-db.sh` | 실패로 끝나는 자리표시자. 실제 명령으로 작성 |
 | `external/README.md` | 템플릿 작성용 참고 자료 중 프로젝트와 무관한 항목 정리 |
 
-선택형 AI 모듈을 쓰지 않으면 `templates/`, `scripts/template-module.py`, `scripts/verify-template-modules.py`, `scripts/check-template-modules.sh`, `.github/workflows/template-modules.yml`, `.github/workflows/codeql.yml`의 `python` 항목(남은 Python 코드가 없으면 CodeQL이 실패), AI 설계 문서(`docs/guides/ai-*.md`, `docs/adr/0001-optional-ai-extensions.md`)를 함께 지울 수 있습니다. 지운 뒤에는 `README.md`, `CLAUDE.md`, `docs/index.md`, `docs/architecture.md`(선택형 AI 확장 절), `docs/guides/agent-knowledge.md`(제품 RAG 확장 절), `tests/README.md`, `.claude/rules/tests.md`의 관련 설명과 `external/README.md`의 모듈 관련 항목도 정리합니다.
+선택형 모듈(ai-common·rag·llm-wiki)을 모두 쓰지 않으면 `templates/`, `scripts/template-module.py`, `scripts/verify-template-modules.py`, `scripts/check-template-modules.sh`, `.github/workflows/template-modules.yml`, `.github/workflows/codeql.yml`의 `python` 항목(남은 Python 코드가 없으면 CodeQL이 실패), AI 설계 문서(`docs/guides/ai-*.md`, `docs/adr/0001-optional-ai-extensions.md`)를 함께 지울 수 있습니다. 지운 뒤에는 `README.md`, `CLAUDE.md`, `docs/index.md`, `docs/architecture.md`(선택형 AI 확장 절), `docs/guides/agent-knowledge.md`(제품 RAG·위키 안내), `tests/README.md`, `.claude/rules/tests.md`의 관련 설명과 `external/README.md`의 모듈 관련 항목도 정리합니다.
 
 Rust 버전을 올릴 때는 `rust-toolchain.toml`, `backend/Dockerfile`, `docker/docker-compose.dev.yml`을 함께 바꿉니다. 세 곳이 다르면 `check.sh`가 실패하므로 Dependabot은 Rust 이미지를 제안하지 않으며 [Rust 릴리스](https://blog.rust-lang.org/releases/)를 보고 직접 올립니다. 문서의 버전 표기(`README.md`, `CLAUDE.md`, 이 문서, `templates/README.md`, `docs/docker/build-optimization.md`)도 같이 갱신하고, `backend/Dockerfile`의 `CARGO_CHEF_VERSION`이 새 Rust에서 설치되는지 확인합니다.
 

@@ -31,6 +31,8 @@ case "${1:-}" in
       --mount "type=bind,src=$project_root/templates,dst=/workspace/templates,readonly" \
       --mount "type=bind,src=$project_root/scripts,dst=/workspace/scripts,readonly" \
       --mount "type=bind,src=$project_root/rust-toolchain.toml,dst=/workspace/rust-toolchain.toml,readonly" \
+      --mount "type=bind,src=$project_root/CLAUDE.md,dst=/workspace/CLAUDE.md,readonly" \
+      --mount "type=bind,src=$project_root/AGENTS.md,dst=/workspace/AGENTS.md,readonly" \
       --mount "type=volume,src=$volume_prefix-check-cargo,dst=/usr/local/cargo/registry" \
       --mount "type=volume,src=$volume_prefix-modules-target,dst=/module-target" \
       --env CARGO_TARGET_DIR=/module-target \

@@ -5,6 +5,7 @@
 ## [Unreleased]
 
 ### Added
+- Obsidian·Claude Code·Codex용 선택형 llm-wiki 모듈(`templates/llm-wiki/`), 공통 도구의 추가·상태·제거·미리보기, 태그·노트 양식·지침 자동 연결, 위키 자료 보존·재추가 수명주기 검증
 - 프로젝트 초기 폴더 구조
 - `build.sh --docker`로 로컬 Rust·Node 없이 컴파일·빌드 검사. Docker 볼륨 접두사·검사 이미지 설정을 `scripts/docker-common.sh` 한곳으로 모음
 - ai-common·rag 선택형 모듈 원본과 추가·제거 도구(`scripts/template-module.py`), 임시 프로젝트 수명주기 검증

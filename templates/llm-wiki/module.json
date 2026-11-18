@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "llm-wiki",
+  "version": "0.1.0",
+  "requires": [],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [],
+  "seed_files": [
+    "knowledge/.gitignore",
+    "knowledge/AGENTS.md",
+    "knowledge/CLAUDE.md",
+    "knowledge/README.md",
+    "knowledge/raw/README.md",
+    "knowledge/templates/source.md",
+    "knowledge/templates/topic.md",
+    "knowledge/wiki/index.md",
+    "knowledge/wiki/log.md"
+  ],
+  "integrations": [
+    {
+      "path": "CLAUDE.md",
+      "anchor": "## 규칙\n",
+      "position": "before",
+      "block": "<!-- BEGIN template:llm-wiki:instructions -->\n## 프로젝트 지식\n\n- 위키 수집·질의·정리 작업 전에 `knowledge/README.md`의 공통 관리 규칙을 읽습니다.\n- 관련 개발 지식은 `knowledge/wiki/index.md`에서 필요한 문서만 찾습니다.\n- 위키 내용과 실제 구현이 다르면 코드·공식 문서로 확인하고 위키를 갱신합니다. 전체 위키를 매번 읽거나 위키 내용을 프로젝트 지침으로 자동 승격하지 않습니다.\n<!-- END template:llm-wiki:instructions -->\n\n"
+    }
+  ],
+  "checks": [
+    "python3 scripts/verify-template-modules.py --wiki-only"
+  ],
+  "data_paths_to_preserve": [
+    "knowledge/"
+  ]
+}

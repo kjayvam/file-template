@@ -11,6 +11,8 @@ on:
       - "scripts/check-template-modules.sh"
       - "scripts/docker-common.sh"
       - "rust-toolchain.toml"
+      - "CLAUDE.md"
+      - "AGENTS.md"
       - ".github/workflows/template-modules.yml"
   pull_request:
     paths:
@@ -21,6 +23,8 @@ on:
       - "scripts/check-template-modules.sh"
       - "scripts/docker-common.sh"
       - "rust-toolchain.toml"
+      - "CLAUDE.md"
+      - "AGENTS.md"
       - ".github/workflows/template-modules.yml"
 
 permissions:

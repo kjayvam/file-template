@@ -62,10 +62,16 @@ def plan_add(root, module, state):
     missing = set(definition["requires"]) - state["modules"].keys()
     if missing:
         raise Conflict(f"먼저 추가할 모듈: {', '.join(sorted(missing))}")
-    cargo = tomllib.loads(checked_path(root, "backend/Cargo.toml").read_text())
-    if cargo["package"]["name"] != "backend":
-        raise Conflict("이 recipe는 backend crate 이름 기준입니다. 이름을 바꾼 프로젝트는 테스트 import를 먼저 조정하세요.")
-    for name, prefix in definition["existing_rust_dependencies"].items():
+    rust_package = definition.get("rust_package", "backend")
+    rust_dependencies = definition["existing_rust_dependencies"]
+    if rust_package is None and rust_dependencies:
+        raise Conflict("Rust 의존성이 있는 모듈은 rust_package를 지정해야 합니다.")
+    cargo = {}
+    if rust_package is not None:
+        cargo = tomllib.loads(checked_path(root, "backend/Cargo.toml").read_text())
+        if cargo["package"]["name"] != rust_package:
+            raise Conflict(f"이 recipe는 {rust_package} crate 이름 기준입니다. 이름을 바꾼 프로젝트는 테스트 import를 먼저 조정하세요.")
+    for name, prefix in rust_dependencies.items():
         spec = cargo.get("dependencies", {}).get(name, "")
         version = spec.get("version", "") if isinstance(spec, dict) else spec
         parts = str(version).lstrip("^~=").split(".")
@@ -74,18 +80,22 @@ def plan_add(root, module, state):
             raise Conflict(f"기존 의존성 확인 필요: {name} {prefix} 계열")
     changes = {}
     owned = {}
+    seeds = definition.get("seed_files", [])
     source = CATALOG / module / "files"
     actual = sorted(p.relative_to(source).as_posix() for p in source.rglob("*") if p.is_file() and p.name != ".DS_Store")
-    if sorted(definition["owned_files"]) != actual:
-        raise Conflict("원본 파일과 owned_files 목록 불일치")
+    if sorted(definition["owned_files"] + seeds) != actual:
+        raise Conflict("원본 파일과 owned_files·seed_files 목록 불일치")
     for name in actual:
         target = checked_path(root, name)
         origin = checked_path(source.resolve(), name)
         if target.exists():
+            if name in seeds and target.is_file():
+                continue
             raise Conflict(f"기존 파일을 덮어쓰지 않습니다: {name}")
         data = origin.read_bytes()
         changes[name] = (None, data)
-        owned[name] = digest(data)
+        if name not in seeds:
+            owned[name] = digest(data)
     integrations = definition["integrations"]
     for item in integrations:
         name, anchor, block = item["path"], item["anchor"], item["block"]
@@ -97,6 +107,10 @@ def plan_add(root, module, state):
         replacement = block + anchor if item["position"] == "before" else anchor + block
         changes[name] = (before, current.replace(anchor, replacement, 1).encode())
     state["modules"][module] = {"version": definition["version"], "requires": definition["requires"], "files": owned, "integrations": integrations}
+    if seeds:
+        # Seeded knowledge belongs to the project after creation, including edits.
+        # Keep its paths in state for review, but never hash, overwrite or remove it.
+        state["modules"][module]["seed_files"] = seeds
     return changes
 
 
@@ -184,13 +198,18 @@ def main(argv=None):
         return 0
     if not args.module:
         parser.error("모듈 이름이 필요합니다")
+    retained = state["modules"].get(args.module, {}).get("seed_files", [])
     changes = (plan_add if args.action == "add" else plan_remove)(root, args.module, state)
+    if args.action == "add":
+        retained = [name for name in state["modules"][args.module].get("seed_files", []) if name not in changes]
     state_path = checked_path(root, STATE)
     before = state_path.read_bytes() if state_path.exists() else None
     after = (json.dumps(state, ensure_ascii=False, indent=2) + "\n").encode() if state["modules"] else None
     changes[STATE] = (before, after)
     for name, (old, new) in sorted(changes.items()):
         print(f"{'추가' if old is None else '제거' if new is None else '연결 수정'}: {name}")
+    for name in retained:
+        print(f"{'재사용' if args.action == 'add' else '자료 보존 대상'}: {name}")
     if not args.dry_run:
         write_changes(root, changes)
     print("미리보기 완료" if args.dry_run else "완료: 검증 명령을 실행하세요")

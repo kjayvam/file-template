@@ -15,11 +15,12 @@ Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스
 | `config/` | 환경별 설정 YAML |
 | `migrations/` | DB 마이그레이션 SQL |
 | `scripts/` | 환경·빌드·기본형 검증, Docker 실행 공용 설정(`docker-common.sh`), 모듈 추가·제거(`template-module.py`)와 임시 프로젝트 검증(`check-template-modules.sh`) |
-| [`templates/`](templates/README.md) | ai-common·rag의 선택형 원본, 의존·소유 파일 목록과 적용·제거 안내 |
+| [`templates/`](templates/README.md) | ai-common·rag·[llm-wiki](templates/llm-wiki/README.md) 선택형 모듈 원본과 공통 도구 적용·제거 안내 |
+| `knowledge/` (선택 적용 시) | Obsidian 보관함. `raw/` 원본, `wiki/` AI 정리 문서·색인·이력, `templates/` 노트 양식 |
 | `rust-toolchain.toml` | 로컬·CI가 사용할 Rust 버전과 rustfmt 고정 |
 | [`external/`](external/README.md) | GitHub 저장소와 기타 외부 자료 목록 |
 | `.github/` | GitHub 워크플로 및 협업 설정 |
-| `.claude/` | 에이전트 공용 설정: 서브에이전트(`agents/`), 스킬(`skills/`), 경로별 규칙(`rules/`), 출력 스타일, 권한(`settings.json`), 공유 에이전트 메모리(`agent-memory/`), 저장 워크플로(`workflows/`). 개인 메모리 `agent-memory-local/`과 에이전트 앱의 worktree(`worktrees/`)는 Git 제외 |
+| `.claude/` | Claude 전용 설정: 서브에이전트(`agents/`), 스킬(`skills/`), 경로별 규칙(`rules/`), 출력 스타일, 권한(`settings.json`), 공유 에이전트 메모리(`agent-memory/`), 저장 워크플로(`workflows/`). 개인 메모리 `agent-memory-local/`과 에이전트 앱의 worktree(`worktrees/`)는 Git 제외 |
 
 외부 자료의 이름, URL, 용도는 `external/`에서 관리합니다. 프로젝트 지침은 [CLAUDE.md](CLAUDE.md)를 참고하세요.
 
@@ -58,4 +59,18 @@ Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌
 ./scripts/check-template-modules.sh --docker
 ```
 
-Python 3.11+·Rust·rustfmt가 있으면 `--docker` 없이 검사할 수 있습니다. [에이전트 지식 정리 권장안](docs/guides/agent-knowledge.md)은 로컬 Markdown·연결·검토·검색 흐름을 선택적으로 적용하는 방법을 설명합니다.
+Python 3.11+·Rust·rustfmt가 있으면 `--docker` 없이 검사할 수 있습니다.
+
+## 선택형 LLM Wiki
+
+[LLM Wiki 모듈](templates/llm-wiki/README.md)은 Claude Code·Codex가 함께 정리하고 Obsidian에서 태그·링크로 탐색하는 최소 Markdown 보관함입니다. 다른 모듈과 같은 `module.json`·`files/` 구조이며 `template-module.py`의 list·add·status·remove·dry-run으로 관리합니다. Rust·RAG 모듈과 독립적으로 추가할 수 있습니다.
+
+추가하면 루트 `knowledge/`에 보관함을 만들고 에이전트 지침을 연결합니다. `raw/`에는 원본을, `wiki/`에는 AI 정리 문서·색인·로그를 둡니다. 두 노트 양식에는 Obsidian용 태그와 검증 상태 속성이 있습니다. Obsidian에서 `knowledge/`를 보관함으로 열고 에이전트에게 자료 수집을 요청하면 됩니다. remove는 지침 연결·설치 기록을 해제하고 위키 자료는 보존하며, 다시 add하면 기존 자료를 재사용합니다.
+
+```bash
+python3 scripts/template-module.py add llm-wiki --project /path/to/project --dry-run
+python3 scripts/template-module.py add llm-wiki --project /path/to/project
+python3 scripts/verify-template-modules.py --wiki-only
+```
+
+`--wiki-only`는 Rust 없이 위키의 설치·제거·자료 보존·재추가를 검사합니다. 전체 모듈 검사에는 기존 `check-template-modules.sh --docker`를 사용합니다. [에이전트 지식 정리 가이드](docs/guides/agent-knowledge.md)는 기존 `docs/`·ADR·메모리와의 역할 구분을 설명합니다.
