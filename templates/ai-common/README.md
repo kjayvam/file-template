@@ -1,6 +1,6 @@
-# ai-common 0.2.0
+# ai-common 0.3.0
 
-의존 모듈·추가 Rust 패키지·환경 변수·HTTP 라우트가 없는 공통 계약입니다. [module.json](module.json)에 소유 파일과 연결 블록을 기록합니다.
+backend-rust에 의존하는 공통 계약입니다. 추가 Rust 패키지·환경 변수·HTTP 라우트는 없습니다. [module.json](module.json)에 소유 파일과 연결 블록을 기록합니다.
 
 | 파일 | 역할 |
 | --- | --- |

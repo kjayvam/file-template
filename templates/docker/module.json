@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "id": "docker",
+  "version": "1.0.0",
+  "requires": [
+    "core"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "docker/README.md",
+    "scripts/compose.py"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [],
+  "checks": [
+    "./scripts/check.sh"
+  ]
+}

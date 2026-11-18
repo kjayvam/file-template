@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "id": "docker-web-api",
+  "version": "1.0.0",
+  "requires": [
+    "web-api",
+    "docker-rust",
+    "docker-react"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "docker/compose.web-api.dev.yml",
+    "docker/compose.web-api.prod.yml",
+    "docker/nginx/api.conf"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [],
+  "checks": [
+    "./scripts/check.sh"
+  ],
+  "compose_files": {
+    "dev": [
+      "docker/compose.web-api.dev.yml"
+    ],
+    "prod": [
+      "docker/compose.web-api.prod.yml"
+    ]
+  }
+}

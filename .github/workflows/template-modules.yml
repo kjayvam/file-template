@@ -1,50 +1,17 @@
-name: Template modules
-
+name: Template module structure
 on:
   push:
     branches: [main]
-    paths:
-      - "backend/**"
-      - "templates/**"
-      - "scripts/template-module.py"
-      - "scripts/verify-template-modules.py"
-      - "scripts/check-template-modules.sh"
-      - "scripts/docker-common.sh"
-      - "rust-toolchain.toml"
-      - "CLAUDE.md"
-      - "AGENTS.md"
-      - ".github/workflows/template-modules.yml"
   pull_request:
-    paths:
-      - "backend/**"
-      - "templates/**"
-      - "scripts/template-module.py"
-      - "scripts/verify-template-modules.py"
-      - "scripts/check-template-modules.sh"
-      - "scripts/docker-common.sh"
-      - "rust-toolchain.toml"
-      - "CLAUDE.md"
-      - "AGENTS.md"
-      - ".github/workflows/template-modules.yml"
-
 permissions:
   contents: read
-
 jobs:
-  add-and-remove:
+  structure:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
-      - name: Rust 도구 설치 (rust-toolchain.toml)
-        run: rustup toolchain install
-      # 검증은 매번 새 임시 프로젝트·target에서 컴파일하므로 Cargo 레지스트리 다운로드만 재사용합니다.
-      - name: Cargo 레지스트리 캐시
-        uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
-        with:
-          workspaces: backend
-          cache-targets: false
-      - name: 임시 프로젝트의 모듈 적용·제거 검증
-        run: ./scripts/check-template-modules.sh
+      - name: 구조·충돌·자료 보존
+        run: ./scripts/check.sh --structure

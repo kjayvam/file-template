@@ -1,76 +1,91 @@
-# file-template
+# 모듈형 프로젝트 템플릿
 
-Rust 백엔드(Axum)와 React(TypeScript, Vite) 프론트엔드 기반의 풀스택 파일 구조 템플릿입니다. 데이터베이스(SQLite, PostgreSQL 등)는 상황에 따라 유연하게 선택하여 사용할 수 있도록 엔진 중립적으로 설계되었습니다.
+필요한 모듈만 선택해 표준 폴더 구조의 프로젝트를 생성하는 카탈로그입니다. 이 저장소 자체는 앱이 아니며, Rust·React·DB·Docker·AI·위키를 모든 프로젝트에 강제하지 않습니다.
+
+## 프로젝트 생성
+
+Python 3.11 이상이 필요합니다. 저장소 루트에서 실행하며 대상은 새 경로 또는 빈 디렉터리여야 합니다.
+
+```bash
+# 최소 공통 구조만 생성
+python3 scripts/template-module.py init --name my-app --project ../my-app
+
+# 백엔드 단독 / 프론트엔드 단독 / 풀스택
+python3 scripts/template-module.py init --name my-api --project ../my-api --preset api
+python3 scripts/template-module.py init --name my-web --project ../my-web --preset web
+python3 scripts/template-module.py init --name my-fullstack --project ../my-fullstack --preset fullstack
+
+# Docker 풀스택 + PostgreSQL 실행 환경 + RAG + 위키
+python3 scripts/template-module.py init --name my-service --project ../my-service \
+  --preset fullstack-docker --modules docker-postgres rag llm-wiki --dry-run
+# 미리보기 확인 후 같은 명령에서 --dry-run을 빼고 생성합니다.
+```
+
+프로젝트 이름·페이지 제목·Docker 프로젝트 이름과 검사 볼륨 이름은 자동 적용됩니다. 기술 패키지 이름 `backend`, `frontend`는 모듈 연결 계약으로 유지합니다. 생성된 프로젝트는 이 카탈로그 없이 실행·검증할 수 있습니다. 모듈 추가 시에만 카탈로그가 필요합니다.
+
+## 모듈과 조립
+
+| 모듈 | 용도 | 직접 의존 |
+| --- | --- | --- |
+| `core` | 문서·에이전트 지침·검사·CI·환경 변수 양식 | 없음, init에서 항상 포함 |
+| `backend-rust` | Axum API와 테스트, Rust 버전 고정 | core |
+| `frontend-react` | 독립 React 앱과 테스트, Node 의존성 고정 | core |
+| `web-api` | React에서 Rust health API 조회 | backend-rust, frontend-react |
+| `config-yaml` | 환경별 설정 양식, 로더는 프로젝트에서 구현 | core |
+| `postgres` | PostgreSQL 마이그레이션 양식, 드라이버는 프로젝트에서 구현 | core |
+| `docker` | 선택한 Compose 조각을 합치는 실행 도구 | core |
+| `docker-rust` / `docker-react` | 각 앱의 Dockerfile과 dev/prod Compose | docker, 해당 앱 |
+| `docker-postgres` | PostgreSQL 컨테이너와 영속 볼륨 | docker, postgres |
+| `docker-web-api` | Docker 내 API 프록시 연결 | web-api, docker-rust, docker-react |
+| `ai-common` | 모델·임베딩 인터페이스, 요청 문맥·호출 제한 | backend-rust |
+| `rag` | 오프라인 검색·인용 데모, 실제 LLM·영속 DB 제외 | ai-common |
+| `llm-wiki` | Obsidian용 자료·정리 문서·공통 에이전트 지침 | 없음 |
+
+`init`은 의존 모듈을 함께 조립합니다. 기존 프로젝트의 `add`는 `--with-dependencies`를 지정할 때 의존 모듈을 자동으로 추가합니다. 모든 변경을 미리 검사한 뒤 한 번에 적용하며 충돌하면 일부 모듈만 설치하지 않습니다.
+
+```bash
+python3 scripts/template-module.py list
+python3 scripts/template-module.py add rag --project ../my-app --with-dependencies --dry-run
+python3 scripts/template-module.py add rag --project ../my-app --with-dependencies
+python3 scripts/template-module.py check --project ../my-app
+python3 scripts/template-module.py status --project ../my-app
+python3 scripts/template-module.py remove rag --project ../my-app --dry-run
+```
+
+설치 기록 `.template-modules.json`은 커밋합니다. 기존 파일을 덮어쓰지 않으며, 수정한 소유 파일은 자동 제거하지 않습니다. 역의존 모듈을 먼저 제거하고 `core`는 유지합니다. 위키 초기 자료와 사용자 파일·실행 데이터는 보존합니다. 상세 규약은 [카탈로그 안내](templates/README.md)를 참고하세요.
 
 ## 폴더 구조
 
 | 경로 | 용도 |
 | --- | --- |
-| `backend/` | Rust 백엔드 API 서버 (Axum, Tokio), `src/lib.rs`의 라우터와 `tests/`의 API 통합 테스트 |
-| `frontend/` | React + TypeScript 프론트엔드 (Vite), `src/**/*.test.tsx`의 컴포넌트 테스트와 `src/test/setup.ts`의 공통 설정 |
-| `docker/` | Docker 실행 설정 및 컨테이너 MCP (`docker/mcp/`) |
-| `docs/` | 프로젝트 문서와 선택형 AI 구조·평가 설계 (`guides/ai-extensions.md`, `guides/ai-evaluation.md`) |
-| `docs/docker/` | Docker 단독 실행 및 도커 공유 템플릿 연계 가이드 |
-| `tests/` | 테스트 배치 안내, 공용 테스트 데이터와 향후 E2E 테스트 자리 |
-| `config/` | 환경별 설정 YAML |
-| `migrations/` | DB 마이그레이션 SQL |
-| `scripts/` | 환경·빌드·기본형 검증, Docker 실행 공용 설정(`docker-common.sh`), 모듈 추가·제거(`template-module.py`)와 임시 프로젝트 검증(`check-template-modules.sh`) |
-| [`templates/`](templates/README.md) | ai-common·rag·[llm-wiki](templates/llm-wiki/README.md) 선택형 모듈 원본과 공통 도구 적용·제거 안내 |
-| `knowledge/` (선택 적용 시) | Obsidian 보관함. `raw/` 원본, `wiki/` AI 정리 문서·색인·이력, `templates/` 노트 양식 |
-| `rust-toolchain.toml` | 로컬·CI가 사용할 Rust 버전과 rustfmt 고정 |
-| [`external/`](external/README.md) | GitHub 저장소와 기타 외부 자료 목록 |
-| `.github/` | GitHub 워크플로 및 협업 설정 |
-| `.claude/` | Claude 전용 설정: 서브에이전트(`agents/`), 스킬(`skills/`), 경로별 규칙(`rules/`), 출력 스타일, 권한(`settings.json`), 공유 에이전트 메모리(`agent-memory/`), 저장 워크플로(`workflows/`). 개인 메모리 `agent-memory-local/`과 에이전트 앱의 worktree(`worktrees/`)는 Git 제외 |
+| `templates/<모듈>/module.json` | 버전·의존 관계·소유권·연결 지점·검사·Compose 파일 계약 |
+| `templates/<모듈>/files/` | 생성 대상 프로젝트의 루트 기준 파일 원본 |
+| `scripts/template-module.py` | 프로젝트 생성·모듈 추가·제거·상태·구조 검사 |
+| `scripts/check.sh` | 카탈로그 계약, 조합, 모듈 수명주기와 앱 검사 |
+| `scripts/verify-projects.py` | 임시 프로젝트의 독립 앱·풀스택·Docker 조합 검사 |
+| `scripts/verify-template-modules.py` | 위키 보존 및 AI 모듈 추가·제거 회귀 검사 |
+| `scripts/check-template-modules.sh`, `scripts/docker-common.sh` | Rust 수명주기 검증과 Docker 검사 캐시 |
+| `docs/` | 카탈로그 사용법, 생성 프로젝트의 개발·아키텍처 가이드 |
+| `tests/` | 검증 배치 안내와 향후 공용 fixture·E2E 자리 |
+| `external/` | 외부 자료의 이름·URL·용도 |
+| `.github/` | 카탈로그 자체의 CI·의존성 관리·협업 설정 |
+| `.claude/` | 카탈로그 작업용 에이전트 설정·스킬·규칙 |
 
-외부 자료의 이름, URL, 용도는 `external/`에서 관리합니다. 프로젝트 지침은 [CLAUDE.md](CLAUDE.md)를 참고하세요.
+실행할 `backend/`, `frontend/`, `docker/`, `config/`, `migrations/`는 생성 프로젝트에 선택적으로 만들어집니다. 카탈로그 원본은 `templates/`에만 둡니다. 과거 체크아웃의 무시된 빌드 산출물·개인 파일은 자동 삭제하지 않습니다.
 
-## 시작과 검증
-
-로컬 개발에는 Rust 1.99.1(`rustfmt` 포함), Node.js 22.22.2 이상(22 계열)과 npm이 필요합니다. Rust는 `rust-toolchain.toml`로 고정됩니다. 루트에서 실행합니다.
+## 검증
 
 ```bash
-./scripts/setup.sh
-./scripts/check.sh
-```
-
-`check.sh`는 Rust 포맷·컴파일·API 통합 테스트와 React 컴포넌트 테스트·프로덕션 빌드를 실행하고, Docker 이미지의 Rust 버전이 `rust-toolchain.toml`과 같은지 확인합니다. 필요한 도구가 없거나 검사가 실패하면 오류로 종료합니다. 빌드만 확인하려면 `./scripts/build.sh`(로컬 도구 없이는 `./scripts/build.sh --docker`)를 사용합니다.
-
-Rust와 Node를 설치하지 않고 Docker로 동일한 검사를 실행할 수도 있습니다.
-
-```bash
+# Python + Docker로 소스 계약·9가지 조합·Rust/React 테스트·빌드 검증
 ./scripts/check.sh --docker
-```
 
-Docker 검증은 `.env` 없이 실행되며, Cargo 다운로드 캐시·Rust 빌드 산출물·`node_modules`는 `file-template-check-*` 볼륨에 두어 호스트의 `backend/target`, `frontend/node_modules`를 덮어쓰지 않습니다. 검사 도구(bash·rustfmt 등)를 설치한 `file-template-check-*` 로컬 이미지를 처음 한 번 만들고 재사용하므로 다시 실행할 때는 도구 패키지를 내려받지 않습니다. Rust 버전을 올린 뒤 남는 이전 이미지는 `docker image ls 'file-template-check-*'`로 확인해 정리합니다. 로컬 폴더에는 프론트엔드 빌드 결과(`frontend/dist`, `frontend/tsconfig.tsbuildinfo`)와, 호스트에 없을 때 만들어지는 빈 `frontend/node_modules` 마운트 지점만 생깁니다. 모두 `.gitignore` 대상입니다. 상세 실행 방법은 [시작하기](docs/getting-started.md), 테스트 위치는 [테스트 안내](tests/README.md)를 참고하세요. 이 템플릿으로 새 프로젝트를 만들 때 바꿀 자리표시자는 [시작하기의 새 프로젝트 항목](docs/getting-started.md#템플릿으로-새-프로젝트-시작하기)에 모아 두었습니다.
+# Python만으로 구조·충돌·자료 보존 검사 (Docker가 있으면 Compose 설정도 검사)
+./scripts/check.sh --structure
 
-개인 설정인 `CLAUDE.local.md`, `.claude/settings.local.json`과 `.env` 계열은 Git에서 제외합니다. `backend/Cargo.lock`, `frontend/package-lock.json`, `.env.example`은 버전 관리합니다.
-
-## 선택형 AI 확장 설계
-
-프로젝트에 필요한 RAG·Agent·화면·어댑터만 추가하고 제거하는 모듈형 템플릿을 제안합니다. 작은 프로젝트는 기존 Rust·React 안에 배치하고 별도 서버·workspace·콘솔은 필요할 때 선택합니다. ai-common·rag 0.2.0 원본과 추가·제거 도구를 제공합니다. 기본형에는 AI 모듈이 설치돼 있지 않으며 Agent·UI·live 공급자·품질 평가기는 후속 범위입니다.
-
-- [폴더·파일 구조, 활성화 방식, API·모듈 계약](docs/guides/ai-extensions.md)
-- [평가 데이터, 지표·통과 기준, offline/live CI](docs/guides/ai-evaluation.md)
-- [구조 선택 이유와 대안 비교](docs/adr/0001-optional-ai-extensions.md)
-
-모듈별 적용·제거 명령은 [템플릿 카탈로그](templates/README.md)에 있습니다. 실제 프로젝트를 수정하지 않고 전체 수명주기를 검사하려면 다음을 실행합니다.
-
-```bash
+# Rust 모듈 추가·제거만 검사
 ./scripts/check-template-modules.sh --docker
 ```
 
-Python 3.11+·Rust·rustfmt가 있으면 `--docker` 없이 검사할 수 있습니다.
+생성 프로젝트에서는 `./scripts/setup.sh`, `./scripts/check.sh [--docker]`, `./scripts/build.sh [--docker]`를 사용합니다. `check.sh`는 설치 기록에 있는 앱만 검사합니다. Docker 검증은 비밀 값을 읽지 않으며 Rust·Node를 로컬에 설치할 필요가 없습니다. 프론트엔드 빌드 산출물은 임시 생성 프로젝트 안에 생성되고 검사 캐시는 Docker 볼륨에 남습니다.
 
-## 선택형 LLM Wiki
-
-[LLM Wiki 모듈](templates/llm-wiki/README.md)은 Claude Code·Codex가 함께 정리하고 Obsidian에서 태그·링크로 탐색하는 최소 Markdown 보관함입니다. 다른 모듈과 같은 `module.json`·`files/` 구조이며 `template-module.py`의 list·add·status·remove·dry-run으로 관리합니다. Rust·RAG 모듈과 독립적으로 추가할 수 있습니다.
-
-추가하면 루트 `knowledge/`에 보관함을 만들고 에이전트 지침을 연결합니다. `raw/`에는 원본을, `wiki/`에는 AI 정리 문서·색인·로그를 둡니다. 두 노트 양식에는 Obsidian용 태그와 검증 상태 속성이 있습니다. Obsidian에서 `knowledge/`를 보관함으로 열고 에이전트에게 자료 수집을 요청하면 됩니다. remove는 지침 연결·설치 기록을 해제하고 위키 자료는 보존하며, 다시 add하면 기존 자료를 재사용합니다.
-
-```bash
-python3 scripts/template-module.py add llm-wiki --project /path/to/project --dry-run
-python3 scripts/template-module.py add llm-wiki --project /path/to/project
-python3 scripts/verify-template-modules.py --wiki-only
-```
-
-`--wiki-only`는 Rust 없이 위키의 설치·제거·자료 보존·재추가를 검사합니다. 전체 모듈 검사에는 기존 `check-template-modules.sh --docker`를 사용합니다. [에이전트 지식 정리 가이드](docs/guides/agent-knowledge.md)는 기존 `docs/`·ADR·메모리와의 역할 구분을 설명합니다.
+[시작하기](docs/getting-started.md) · [구조와 계약](docs/architecture.md) · [모듈 작성](templates/README.md#새-모듈-작성) · [테스트](tests/README.md)

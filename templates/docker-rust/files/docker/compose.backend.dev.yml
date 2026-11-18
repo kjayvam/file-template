@@ -1,0 +1,28 @@
+{
+  "services": {
+    "backend": {
+      "image": "rust:1.99.1-alpine",
+      "working_dir": "/app",
+      "command": [
+        "cargo",
+        "run",
+        "--locked"
+      ],
+      "volumes": [
+        "./backend:/app",
+        "cargo-cache:/usr/local/cargo/registry",
+        "backend-target:/app/target"
+      ],
+      "environment": {
+        "PORT": "8080"
+      },
+      "ports": [
+        "127.0.0.1:8080:8080"
+      ]
+    }
+  },
+  "volumes": {
+    "cargo-cache": {},
+    "backend-target": {}
+  }
+}

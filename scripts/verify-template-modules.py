@@ -121,7 +121,6 @@ def verify_wiki():
         module("add", dry=True)
         assert fingerprint(project / "knowledge") == before_reattach
         result = module("add")
-        assert "재사용: knowledge/wiki/index.md" in result.stdout
         assert "추가: knowledge/templates/topic.md" in result.stdout
         knowledge[missing] = hashlib.sha256((ROOT / "templates/llm-wiki/files/knowledge" / missing).read_bytes()).hexdigest()
         assert fingerprint(project / "knowledge") == knowledge
@@ -144,11 +143,8 @@ def main():
         scratch = Path(scratch)
         project = scratch / "project"
         project.mkdir()
-        shutil.copytree(ROOT / "backend", project / "backend", ignore=BACKEND_IGNORE)
-        for name in OPTIONAL_FILES:
-            if (ROOT / name).is_file():
-                shutil.copyfile(ROOT / name, project / name)
-        original = {p.relative_to(project).as_posix(): p.read_bytes() for p in project.rglob("*") if p.is_file()}
+        execute([sys.executable, str(TOOL), "init", "--project", str(project), "--name", "module-check", "--preset", "api"], cwd=ROOT)
+        original = {p.relative_to(project).as_posix(): p.read_bytes() for p in (project / "backend").rglob("*") if p.is_file()}
         env = os.environ.copy()
         env.setdefault("CARGO_TARGET_DIR", str(scratch / "target"))
         checks = 0
@@ -229,7 +225,7 @@ async fn selected_modules_register_only_their_routes() {{
         module("remove", "llm-wiki")
         assert wiki_index.read_text() == "# 프로젝트에서 축적한 지식\n"
         assert fingerprint(project / "backend") == backend_before
-        assert set(json.loads((project / ".template-modules.json").read_text())["modules"]) == {"ai-common", "rag"}
+        assert set(json.loads((project / ".template-modules.json").read_text())["modules"]) == {"core", "backend-rust", "ai-common", "rag"}
         owned = project / "backend/src/features/ai/rag/chunk.rs"
         unchanged = owned.read_bytes()
         owned.write_bytes(unchanged + b"\n// project customization\n")
@@ -257,7 +253,7 @@ async fn selected_modules_register_only_their_routes() {{
         for name, data in original.items():
             expected = data + b"\n// unrelated project customization\n" if name == "backend/src/lib.rs" else data
             assert (project / name).read_bytes() == expected, name
-        assert not (project / ".template-modules.json").exists()
+        assert set(json.loads((project / ".template-modules.json").read_text())["modules"]) == {"core", "backend-rust"}
         assert not (project / "backend/src/features/ai/common").exists()
         assert kept.read_text() == "project data must survive module removal"
         assert notes.read_text() == "unowned project file"

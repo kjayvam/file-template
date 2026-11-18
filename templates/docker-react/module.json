@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "docker-react",
+  "version": "1.0.0",
+  "requires": [
+    "docker",
+    "frontend-react"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "docker/compose.frontend.dev.yml",
+    "docker/compose.frontend.prod.yml",
+    "frontend/.dockerignore",
+    "frontend/Dockerfile",
+    "frontend/nginx.conf"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [],
+  "checks": [
+    "./scripts/check.sh"
+  ],
+  "compose_files": {
+    "dev": [
+      "docker/compose.frontend.dev.yml"
+    ],
+    "prod": [
+      "docker/compose.frontend.prod.yml"
+    ]
+  }
+}

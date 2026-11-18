@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "id": "config-yaml",
+  "version": "1.0.0",
+  "requires": [
+    "core"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "config/README.md",
+    "config/default.yml",
+    "config/development.yml",
+    "config/production.yml",
+    "config/test.yml"
+  ],
+  "seed_files": [],
+  "render_files": [
+    "config/default.yml"
+  ],
+  "integrations": [],
+  "checks": [
+    "./scripts/check.sh"
+  ]
+}

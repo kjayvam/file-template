@@ -1,0 +1,11 @@
+name: Project CI
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  selected-modules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: 선택한 모듈의 구조·테스트·빌드
+        run: ./scripts/check.sh --docker

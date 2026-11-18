@@ -1,6 +1,6 @@
 ---
 paths:
-  - "migrations/**/*"
+  - "templates/postgres/files/migrations/**/*"
 ---
 
 # 마이그레이션 규칙

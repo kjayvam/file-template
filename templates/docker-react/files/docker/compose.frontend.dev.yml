@@ -1,0 +1,23 @@
+{
+  "services": {
+    "frontend": {
+      "image": "node:22-alpine",
+      "working_dir": "/app",
+      "command": [
+        "sh",
+        "-ec",
+        "npm ci && exec npm run dev -- --host 0.0.0.0"
+      ],
+      "volumes": [
+        "./frontend:/app",
+        "frontend-node-modules:/app/node_modules"
+      ],
+      "ports": [
+        "127.0.0.1:5173:5173"
+      ]
+    }
+  },
+  "volumes": {
+    "frontend-node-modules": {}
+  }
+}

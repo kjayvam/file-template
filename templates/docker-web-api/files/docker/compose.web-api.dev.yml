@@ -1,0 +1,12 @@
+{
+  "services": {
+    "frontend": {
+      "depends_on": [
+        "backend"
+      ],
+      "environment": {
+        "VITE_API_BACKEND_URL": "http://backend:8080"
+      }
+    }
+  }
+}

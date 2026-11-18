@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "id": "postgres",
+  "version": "1.0.0",
+  "requires": [
+    "core"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "migrations/0001_create_users.down.sql",
+    "migrations/0001_create_users.up.sql",
+    "migrations/README.md"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [],
+  "checks": [
+    "./scripts/check.sh"
+  ]
+}

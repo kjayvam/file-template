@@ -1,0 +1,12 @@
+app:
+  name: __PROJECT_NAME__
+  port: 8080
+
+log:
+  level: info
+
+database:
+  host: localhost
+  port: 5432
+  name: __PROJECT_NAME__
+  # user, password는 환경 변수로 주입합니다 (DATABASE_USER, DATABASE_PASSWORD)

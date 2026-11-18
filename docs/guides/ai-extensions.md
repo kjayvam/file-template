@@ -1,10 +1,10 @@
 # 프로젝트별로 조합하는 RAG·Agent 템플릿 설계
 
-상태: ai-common·rag 0.2.0의 원본·추가·제거 도구·임시 프로젝트 검증은 구현했습니다. 실제 사용은 [템플릿 카탈로그](../../templates/README.md)를 따릅니다. 아래 Agent·UI·별도 서비스·live 평가·영속 저장소는 후속 설계입니다.
+상태: ai-common 0.3.0·rag 0.2.0의 원본·추가·제거 도구·임시 프로젝트 검증은 구현했습니다. 실제 사용은 [템플릿 카탈로그](../../templates/README.md)를 따릅니다. 아래 Agent·UI·별도 서비스·live 평가·영속 저장소는 후속 설계입니다.
 
 ## 1. 템플릿의 사용 원칙
 
-이 저장소는 프로젝트를 시작하는 재료입니다. Rust·React 기본형에서 출발하되 필요한 기능만 추가하고, 사용하지 않는 기능은 코드·의존성·설정·테스트·CI까지 제거할 수 있어야 합니다. 모든 프로젝트에 동일한 AI 서비스·콘솔·배포 구성을 요구하지 않습니다.
+이 저장소는 프로젝트를 시작하는 재료입니다. core에서 출발해 backend-rust·frontend-react 등 필요한 기능만 선택하고, 사용하지 않는 기능은 코드·의존성·설정·테스트·CI까지 제거할 수 있어야 합니다. 모든 프로젝트에 동일한 AI 서비스·콘솔·배포 구성을 요구하지 않습니다.
 
 기본 배치는 기존 backend 안의 기능 모듈과 기존 frontend 안의 선택 화면입니다. 별도 Rust workspace·AI 서버·독립 React 콘솔은 처리량·운영 경계·체험 목적에 따라 선택하는 배치 대안입니다. RAG·Agent·둘의 조합은 예시 조합이며 고정된 제품 모드 목록이 아닙니다.
 
@@ -90,7 +90,7 @@ templates/
 
 ai-ui는 선택된 기능의 하위 파일만 적용합니다. Rag만 쓰는 프로젝트에 Agent 화면·타입·테스트를 복사하지 않습니다. 별도 모델 어댑터를 만들 때는 common 아래 providers/에 구현하고 실제 공유가 생겼을 때만 별도 crate로 추출합니다.
 
-예를 들어 RAG만 선택한 소규모 프로젝트의 확장 목표 구조는 다음과 같습니다. 템플릿 원본 폴더는 결과물에 없어도 됩니다. 현재 ai-common·rag 0.2.0을 적용하면 이 중 `src/lib.rs` 연결 블록, `src/features/ai/{common/,rag/}`, `tests/ai_common.rs`·`tests/ai_rag.rs`와 루트의 적용 기록 `.template-modules.json`만 생기고 Cargo 파일은 바뀌지 않습니다. 수집 CLI·`evals/ai/`·`config/ai/`·`scripts/{check-ai.sh,eval-ai.sh}`는 아직 없습니다.
+예를 들어 RAG만 선택한 소규모 프로젝트의 확장 목표 구조는 다음과 같습니다. 템플릿 원본 폴더는 결과물에 없어도 됩니다. 현재 ai-common 0.3.0·rag 0.2.0을 적용하면 이 중 `src/lib.rs` 연결 블록, `src/features/ai/{common/,rag/}`, `tests/ai_common.rs`·`tests/ai_rag.rs`와 루트의 적용 기록 `.template-modules.json`만 생기고 Cargo 파일은 바뀌지 않습니다. 수집 CLI·`evals/ai/`·`config/ai/`·`scripts/{check-ai.sh,eval-ai.sh}`는 아직 없습니다.
 
 ```text
 backend/
@@ -243,6 +243,6 @@ Live 사용량은 입력·출력 토큰, 임베딩량, 모델·가격표 버전�
 ./scripts/eval-ai.sh --suite rag --profile project-rag --budget-usd 5
 ```
 
-기존 기본형의 ./scripts/check.sh는 그대로 둡니다. 템플릿을 복제한 프로젝트가 기본 frontend·Docker 등까지 제거하는 경우에는 그 프로젝트가 선택한 구성에 맞게 README·검사·CI도 함께 조정합니다. 검사 대상을 조용히 건너뛰어 성공으로 보고하는 방식은 사용하지 않습니다.
+현재 생성 프로젝트의 ./scripts/check.sh와 CI는 설치 기록에 있는 앱만 검사합니다. check는 선택한 모듈의 파일·의존·연결이 누락되면 실패합니다. 카탈로그 자체의 ./scripts/check.sh --docker는 독립 앱·풀스택·선택 모듈 조합을 검증합니다.
 
 세부 지표는 [AI 평가 기준](ai-evaluation.md)의 카탈로그를 참고하고 프로젝트별 데이터·시간·비용·품질 기준을 설정합니다. 선택하지 않은 모듈은 평가 대상 밖이라고 기록하며 선택한 모듈의 필수 검사를 누락한 것과 구분합니다. 구조 선택 이유는 [ADR-0001](../adr/0001-optional-ai-extensions.md)에 기록합니다.

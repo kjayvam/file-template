@@ -18,7 +18,7 @@
 | 용어 | 영문 표기 | 정의 및 설명 | 비고 |
 | --- | --- | --- | --- |
 | **마이그레이션** | Migration | 데이터베이스 스키마의 형상 관리 및 변경 작업 | `migrations/` |
-| **시드 데이터** | Seed Data | 개발 및 테스트 환경 구축을 위해 사전에 삽입하는 초기 기초 데이터 | `scripts/seed-db.sh` |
+| **시드 데이터** | Seed Data | 개발 및 테스트 환경 구축을 위해 사전에 삽입하는 초기 기초 데이터 | 프로젝트에서 선택한 시드 실행기 |
 | **ADR** | Architecture Decision Record | 중요한 아키텍처 및 기술적 의사결정을 기록한 문서 | `docs/adr/` |
 | **MCP** | Model Context Protocol | LLM 및 AI 에이전트가 외부 도구/데이터와 상호작용하기 위한 개방형 프로토콜 | `.mcp.json` |
 

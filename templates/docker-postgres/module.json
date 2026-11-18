@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "id": "docker-postgres",
+  "version": "1.0.0",
+  "requires": [
+    "docker",
+    "postgres"
+  ],
+  "rust_package": null,
+  "existing_rust_dependencies": {},
+  "new_rust_dependencies": [],
+  "owned_files": [
+    "docker/compose.postgres.dev.yml",
+    "docker/compose.postgres.prod.yml"
+  ],
+  "seed_files": [],
+  "render_files": [],
+  "integrations": [
+    {
+      "path": ".env.example",
+      "anchor": "# 필요한 환경 변수의 이름을 여기에 기록합니다. 비밀 값은 .env에서 관리합니다.\n",
+      "position": "after",
+      "block": "# BEGIN template:docker-postgres:env\nDATABASE_NAME=\nDATABASE_USER=\nDATABASE_PASSWORD=\n# END template:docker-postgres:env\n"
+    }
+  ],
+  "checks": [
+    "./scripts/check.sh"
+  ],
+  "compose_files": {
+    "dev": [
+      "docker/compose.postgres.dev.yml"
+    ],
+    "prod": [
+      "docker/compose.postgres.prod.yml"
+    ]
+  }
+}

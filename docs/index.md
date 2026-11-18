@@ -20,10 +20,10 @@
 ## 개발 가이드
 
 - [테스트 배치 및 검증](../tests/README.md)
-- [ai-common·rag 템플릿 적용·제거](../templates/README.md)
+- [프로젝트 조립·모듈 적용·제거](../templates/README.md)
 - [llm-wiki 모듈: Obsidian·Claude Code·Codex](../templates/llm-wiki/README.md)
 - [에이전트 지식 정리 권장안](guides/agent-knowledge.md)
-- [선택형 RAG·Agent 확장 설계 (ai-common·rag 0.2.0 구현, 나머지 제안)](guides/ai-extensions.md)
+- [선택형 RAG·Agent 확장 설계 (ai-common 0.3.0·rag 0.2.0 구현, 나머지 제안)](guides/ai-extensions.md)
 - [AI 평가 지표·데이터·통과 기준 (구현 제안)](guides/ai-evaluation.md)
 - [데이터베이스 가이드](guides/database.md)
 - [코드 스타일 가이드](guides/code-style.md)

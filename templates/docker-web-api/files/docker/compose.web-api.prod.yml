@@ -1,0 +1,12 @@
+{
+  "services": {
+    "frontend": {
+      "depends_on": [
+        "backend"
+      ],
+      "volumes": [
+        "./docker/nginx/api.conf:/etc/nginx/conf.d/default.conf:ro"
+      ]
+    }
+  }
+}
